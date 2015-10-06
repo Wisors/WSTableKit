@@ -155,6 +155,10 @@
     return _bottomSeparatorInsets;
 }
 
+- (void)setSeparatorInset:(UIEdgeInsets)separatorInset {
+    [self setSeparatorsInsets:separatorInset];
+}
+
 - (void)setSeparatorsInsets:(UIEdgeInsets)separatorInsets {
     
     [self setTopSeparatorInsets:separatorInsets];
