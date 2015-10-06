@@ -185,10 +185,6 @@
 
 @implementation WSTableViewCell (SeparatorsShowing)
 
-- (UIEdgeInsets)bottomSeparatorInsets {
-    return _bottomSeparatorInsets;
-}
-
 - (BOOL)topSeparatorHidden {
     return self.topBorderLayer.hidden;
 }
