@@ -266,14 +266,18 @@
     NSString *identifier = [cellClass cellIdentifier];
     WSTableViewCell *cell = [_cellPrototypes objectForKey:identifier];
     if (!cell) {
-        
-        if ([[NSBundle mainBundle] pathForResource:identifier ofType:@"nib"] != nil) {
-            [tableView registerNib:[UINib nibWithNibName:identifier bundle:nil] forCellReuseIdentifier:identifier];
-        } else {
-            [tableView registerClass:cellClass forCellReuseIdentifier:identifier];
 
+        cell = [tableView dequeueReusableCellWithIdentifier:identifier]; // Deque from Storyboard
+        if (!cell) {
+            
+            if ([[NSBundle mainBundle] pathForResource:identifier ofType:@"nib"] != nil) {// Xib
+                [tableView registerNib:[UINib nibWithNibName:identifier bundle:nil] forCellReuseIdentifier:identifier];
+            } else {
+                [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
+            }
+            cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         }
-        cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        
         cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.width);
         [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you forgot to register your cell for table view.
     }
