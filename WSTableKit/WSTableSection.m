@@ -276,10 +276,10 @@
                 [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
             }
             cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+            
+            [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you has some mess with your identifiers
         }
-        
-        cell.frame = CGRectMake(0, 0, tableView.frame.size.width, cell.frame.size.width);
-        [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you forgot to register your cell for table view.
+        cell.bounds = CGRectMake(0, 0, tableView.bounds.size.width, cell.bounds.size.height);
     }
     
     return cell;
