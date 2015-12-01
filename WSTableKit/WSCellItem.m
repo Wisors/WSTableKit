@@ -10,7 +10,7 @@
 @interface WSCellItem()
 
 @property (nonatomic, assign) Class<WSCellClass> cellClass;
-@property (nonatomic, strong) id item;
+@property (nonatomic, strong) id object;
 @property (nonatomic, strong) NSMutableArray *customActions;
 @property (nonatomic, strong) NSLock *lock;
 
