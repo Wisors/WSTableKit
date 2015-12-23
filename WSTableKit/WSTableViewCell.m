@@ -48,7 +48,6 @@
 
 - (void)doInit {
     
-    _hasAutolayout = NO;
     _baseSize = 1 / [UIScreen mainScreen].scale;
     [self setSeparatorsInsets:UIEdgeInsetsMake(0, 12, 0, 0)];
     
