@@ -48,6 +48,7 @@
 
 - (void)doInit {
     
+    _hasAutolayout = NO;
     _baseSize = 1 / [UIScreen mainScreen].scale;
     [self setSeparatorsInsets:UIEdgeInsetsMake(0, 12, 0, 0)];
     
@@ -71,8 +72,8 @@
     return NSStringFromClass([self class]);
 }
 
-- (CGFloat)heightWithItem:(WSCellItem *)item {
-    return 44; //Default iOS UI
+- (CGFloat)cellHeight {
+    return (_hasAutolayout) ? [self calculateHeightForAutolayoutCell] : 44; // Autolayout or default table cell size.
 }
 
 - (void)applyItem:(WSCellItem *)item {

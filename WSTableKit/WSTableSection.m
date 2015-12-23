@@ -8,12 +8,12 @@
 #import "WSTableSection.h"
 
 #import "WSCellItem.h"
-#import "WSTableViewCell.h"
 
 @interface WSTableSection()
 
 @property (nonatomic, strong) NSMutableArray *items;
 @property (nonatomic, strong) NSMutableDictionary *cellPrototypes;
+@property (nonatomic, strong) NSMutableSet *registedCells;
 @property (nonatomic, strong) NSLock *lock;
 @property (nonatomic, weak) id<UIScrollViewDelegate> scrollDelegate;
 
@@ -52,6 +52,7 @@
         _items              = [cellItems mutableCopy];;
         _adjustmentBlock    = adjustmentBlock;
         _cellPrototypes     = [NSMutableDictionary new];
+        _registedCells      = [NSMutableSet set];
         _lock               = [NSLock new];
         _scrollDelegate     = delegate;
     }
@@ -101,11 +102,11 @@
     return (!_sectionFooter.customView && _sectionFooter.title.length > 0) ? _sectionFooter.title : nil;
 }
 
-- (WSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell<WSCellClass> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    WSTableViewCell *cell = (WSTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[item.cellClass cellIdentifier]
-                                                                       forIndexPath:indexPath];
+    UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:[item.cellClass cellIdentifier]
+                                                                         forIndexPath:indexPath];
     [cell applyItem:item];
     if (_adjustmentBlock) {
         _adjustmentBlock(cell, item, indexPath);
@@ -139,19 +140,43 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    Class<WSCellClass> cellClass = [self itemAtIndex:indexPath.row].cellClass;
-    if ([cellClass instancesRespondToSelector:@selector(heightWithItem:)]) {
-        
-        WSTableViewCell *proto = (WSTableViewCell *)[self ws_cellPrototypeInTableView:tableView withCellClass:cellClass];
-        WSCellItem *item = [self itemAtIndex:indexPath.row];
+    WSCellItem *item = [self itemAtIndex:indexPath.row];
+    Class<WSCellClass> cellClass = item.cellClass;
+    [self registerCellIfNeededInTableView:tableView withCellClass:cellClass];
+    
+    if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
+        UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Call registration
+        if ([proto respondsToSelector:@selector(applyItem:heightCalculation:)]) {
+            [proto applyItem:item heightCalculation:YES];
+        } else {
+            [proto applyItem:item];
+        }
         if (_adjustmentBlock) {
             _adjustmentBlock(proto, item, indexPath);
         }
         if (item.adjustmentBlock) {
             item.adjustmentBlock(proto, item, indexPath);
         }
+        
+        return [proto cellHeight];
+    }
+    // Backward compatibility, tmp
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    else if ([cellClass instancesRespondToSelector:@selector(heightWithItem:)]) {
+        
+        UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Call registration
+        if (_adjustmentBlock) {
+            _adjustmentBlock(proto, item, indexPath);
+        }
+        if (item.adjustmentBlock) {
+            item.adjustmentBlock(proto, item, indexPath);
+        }
+        
         return [proto heightWithItem:item];
-    } else {
+    }
+#pragma clang diagnostic pop
+    else {
         return tableView.rowHeight;
     }
 }
@@ -261,28 +286,34 @@
 
 #pragma mark - Prototyping -
 
-- (WSTableViewCell *)ws_cellPrototypeInTableView:(UITableView *)tableView withCellClass:(Class<WSCellClass>)cellClass {
+- (UITableViewCell<WSCellClass> *)ws_cellPrototypeInTableView:(UITableView *)tableView withCellClass:(Class<WSCellClass>)cellClass {
     
     NSString *identifier = [cellClass cellIdentifier];
-    WSTableViewCell *cell = [_cellPrototypes objectForKey:identifier];
+    UITableViewCell<WSCellClass> *cell = [_cellPrototypes objectForKey:identifier];
     if (!cell) {
-
         cell = [tableView dequeueReusableCellWithIdentifier:identifier]; // Deque from Storyboard
         if (!cell) {
-            
-            if ([[NSBundle mainBundle] pathForResource:identifier ofType:@"nib"] != nil) {// Xib
-                [tableView registerNib:[UINib nibWithNibName:identifier bundle:nil] forCellReuseIdentifier:identifier];
-            } else {
-                [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
-            }
             cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-            
             [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you has some mess with your identifiers
         }
         cell.bounds = CGRectMake(0, 0, tableView.bounds.size.width, cell.bounds.size.height);
     }
     
     return cell;
+}
+
+- (void)registerCellIfNeededInTableView:(UITableView *)tableView withCellClass:(Class<WSCellClass>)cellClass {
+    
+    if (![_registedCells containsObject:cellClass]) {
+        [_registedCells addObject:cellClass];
+        
+        NSString *identifier = [cellClass cellIdentifier];
+        if ([[NSBundle mainBundle] pathForResource:identifier ofType:@"nib"] != nil) {// Xib
+            [tableView registerNib:[UINib nibWithNibName:identifier bundle:nil] forCellReuseIdentifier:identifier];
+        } else {
+            [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
+        }
+    }
 }
 
 @end

@@ -7,13 +7,13 @@
 
 #import <UIKit/UIKit.h>
 
-#import "WSCellClass.h"
 #import "WSCellItem.h"
 
 @interface WSTableViewCell : UITableViewCell<WSCellClass>
 
 @property (nonatomic, strong, readonly) WSCellItem *item;
 @property (nonatomic, strong) UIColor *customSeparatorColor;
+@property (nonatomic, assign) IBInspectable BOOL hasAutolayout;
 
 - (CGFloat)calculateHeightForAutolayoutCell;
 

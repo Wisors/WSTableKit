@@ -7,11 +7,13 @@
 
 #import <Foundation/Foundation.h>
 
+#import "WSCellClass.h"
+
 @class WSCellItem, WSTableViewCell;
 
-typedef void (^WSCellAdjustmentBlock)(WSTableViewCell *cell, WSCellItem *item, NSIndexPath *path);
+typedef void (^WSCellAdjustmentBlock)(id<WSCellClass> cell, WSCellItem *item, NSIndexPath *path);
 
-typedef void (^WSCellDisplayBlock)(BOOL display, WSTableViewCell *cell, NSIndexPath *path);
+typedef void (^WSCellDisplayBlock)(BOOL display, id<WSCellClass> cell, NSIndexPath *path);
 
 typedef NS_ENUM(NSInteger, WSCellEvent) {
     WSCellShouldHightlightBlock = 0,

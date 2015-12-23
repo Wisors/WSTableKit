@@ -150,10 +150,10 @@
     return [[self sectionAtIndex:section] tableView:tableView numberOfRowsInSection:section];
 }
 
-- (WSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell<WSCellClass> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     WSTableSection *section = [self sectionAtIndex:indexPath.section];
-    WSTableViewCell *cell = (WSTableViewCell *)[section tableView:tableView cellForRowAtIndexPath:indexPath];
+    UITableViewCell<WSCellClass> *cell = (UITableViewCell<WSCellClass> *)[section tableView:tableView cellForRowAtIndexPath:indexPath];
     if (self.adjustmentBlock) {
         WSCellItem *item = [section itemAtIndex:indexPath.row];
         self.adjustmentBlock(cell, item, indexPath);
@@ -234,7 +234,7 @@
 
 #pragma mark - UITableViewDelegate Displaing -
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(WSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.displayBlock) {
         self.displayBlock(YES, cell, indexPath);
@@ -243,7 +243,7 @@
     [[self sectionAtIndex:indexPath.section] tableView:tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:indexPath];
 }
 
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(WSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.displayBlock) {
         self.displayBlock(NO, cell, indexPath);
