@@ -142,10 +142,9 @@
     
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     Class<WSCellClass> cellClass = item.cellClass;
-    [self registerCellIfNeededInTableView:tableView withCellClass:cellClass];
+    UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Need to register cell
     
     if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
-        UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Call registration
         if ([proto respondsToSelector:@selector(applyItem:heightCalculation:)]) {
             [proto applyItem:item heightCalculation:YES];
         } else {
@@ -164,8 +163,6 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     else if ([cellClass instancesRespondToSelector:@selector(heightWithItem:)]) {
-        
-        UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Call registration
         if (_adjustmentBlock) {
             _adjustmentBlock(proto, item, indexPath);
         }
@@ -291,6 +288,7 @@
     NSString *identifier = [cellClass cellIdentifier];
     UITableViewCell<WSCellClass> *cell = [_cellPrototypes objectForKey:identifier];
     if (!cell) {
+        [self ws_registerCell:identifier tableView:tableView cellClass:cellClass];
         cell = [tableView dequeueReusableCellWithIdentifier:identifier]; // Deque from Storyboard
         if (!cell) {
             cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -302,17 +300,12 @@
     return cell;
 }
 
-- (void)registerCellIfNeededInTableView:(UITableView *)tableView withCellClass:(Class<WSCellClass>)cellClass {
+- (void)ws_registerCell:(NSString *)identifier tableView:(UITableView *)tableView cellClass:(Class<WSCellClass>)cellClass {
     
-    if (![_registedCells containsObject:cellClass]) {
-        [_registedCells addObject:cellClass];
-        
-        NSString *identifier = [cellClass cellIdentifier];
-        if ([[NSBundle mainBundle] pathForResource:identifier ofType:@"nib"] != nil) {// Xib
-            [tableView registerNib:[UINib nibWithNibName:identifier bundle:nil] forCellReuseIdentifier:identifier];
-        } else {
-            [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
-        }
+    if ([[NSBundle mainBundle] pathForResource:identifier ofType:@"nib"] != nil) {// Xib
+        [tableView registerNib:[UINib nibWithNibName:identifier bundle:nil] forCellReuseIdentifier:identifier];
+    } else {
+        [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
     }
 }
 
