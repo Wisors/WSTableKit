@@ -286,9 +286,9 @@
     NSString *identifier = [cellClass cellIdentifier];
     UITableViewCell<WSCellClass> *cell = [_cellPrototypes objectForKey:identifier];
     if (!cell) {
-        [self ws_registerCell:identifier tableView:tableView cellClass:cellClass];
         cell = [tableView dequeueReusableCellWithIdentifier:identifier]; // Deque from Storyboard
         if (!cell) {
+            [self ws_registerCell:identifier tableView:tableView cellClass:cellClass];
             cell = [tableView dequeueReusableCellWithIdentifier:identifier];
             [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you has some mess with your identifiers
         }
