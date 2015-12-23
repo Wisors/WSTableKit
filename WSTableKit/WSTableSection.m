@@ -13,7 +13,6 @@
 
 @property (nonatomic, strong) NSMutableArray *items;
 @property (nonatomic, strong) NSMutableDictionary *cellPrototypes;
-@property (nonatomic, strong) NSMutableSet *registedCells;
 @property (nonatomic, strong) NSLock *lock;
 @property (nonatomic, weak) id<UIScrollViewDelegate> scrollDelegate;
 
@@ -52,7 +51,6 @@
         _items              = [cellItems mutableCopy];;
         _adjustmentBlock    = adjustmentBlock;
         _cellPrototypes     = [NSMutableDictionary new];
-        _registedCells      = [NSMutableSet set];
         _lock               = [NSLock new];
         _scrollDelegate     = delegate;
     }
