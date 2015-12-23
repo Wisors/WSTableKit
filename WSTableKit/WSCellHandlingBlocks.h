@@ -9,7 +9,7 @@
 
 #import "WSCellClass.h"
 
-@class WSCellItem, WSTableViewCell;
+@class WSCellItem;
 
 typedef void (^WSCellAdjustmentBlock)(id<WSCellClass> cell, WSCellItem *item, NSIndexPath *path);
 

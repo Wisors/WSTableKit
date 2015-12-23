@@ -243,14 +243,14 @@
 
 #pragma mark - UITableViewDelegate Displaing -
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(WSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_displayBlock) {
         _displayBlock(YES, cell, indexPath);
     }
 }
 
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(WSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_displayBlock) {
         _displayBlock(NO, cell, indexPath);
