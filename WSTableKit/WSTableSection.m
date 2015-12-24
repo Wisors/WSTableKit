@@ -141,7 +141,20 @@
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     Class<WSCellClass> cellClass = item.cellClass;
     UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Need to register cell
-    
+    // Backward compatibility, tmp
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    if ([cellClass instancesRespondToSelector:@selector(heightWithItem:)]) {
+        if (_adjustmentBlock) {
+            _adjustmentBlock(proto, item, indexPath);
+        }
+        if (item.adjustmentBlock) {
+            item.adjustmentBlock(proto, item, indexPath);
+        }
+        
+        return [proto heightWithItem:item];
+    } else
+#pragma clang diagnostic pop
     if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
         if ([proto respondsToSelector:@selector(applyItem:heightCalculation:)]) {
             [proto applyItem:item heightCalculation:YES];
@@ -156,22 +169,7 @@
         }
         
         return [proto cellHeight];
-    }
-    // Backward compatibility, tmp
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    else if ([cellClass instancesRespondToSelector:@selector(heightWithItem:)]) {
-        if (_adjustmentBlock) {
-            _adjustmentBlock(proto, item, indexPath);
-        }
-        if (item.adjustmentBlock) {
-            item.adjustmentBlock(proto, item, indexPath);
-        }
-        
-        return [proto heightWithItem:item];
-    }
-#pragma clang diagnostic pop
-    else {
+    } else {
         return tableView.rowHeight;
     }
 }
