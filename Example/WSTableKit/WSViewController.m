@@ -30,7 +30,10 @@
         cell.bottomSeparatorInsets = UIEdgeInsetsMake(0, 4, 1, 5);
         cell.topSeparatorInsets = UIEdgeInsetsMake(1, 4, 0, 5);
     }];
-    
+    WSCellAction *action = [WSCellAction actionWithKey:WSButtonClickedActionKey actionBlock:^id(WSTableViewCell *cell, NSDictionary *userInfo) {
+        NSLog(@"Button pressed");
+
+    }];
     self.tableView.dataSource = self.section;
     self.tableView.delegate = self.section;
     self.tableView.sectionFooterHeight = self.tableView.sectionHeaderHeight = 0;

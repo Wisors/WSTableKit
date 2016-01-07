@@ -68,7 +68,7 @@ Your can populate your custom/subclassed cell with provided entity or make some 
 
 // Controller
 NSArray *data = @[@"One", @"Two", @"Three"]; 
-NSArray *cells = [WSCellItem cellItemsWithClass:[WSTableViewCell class] objects:data]; 
+NSArray *cells = [WSCellItem cellItemsWithClass:[CustomTableViewCell class] objects:data]; 
 self.section = [WSTableSection sectionWithItems:cells];
 ```
 
