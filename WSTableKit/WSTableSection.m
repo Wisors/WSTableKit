@@ -139,6 +139,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     WSCellItem *item = [self itemAtIndex:indexPath.row];
+    if (!item) {
+        NSAssert(item, @"Something goes wrong, you have to have an item here.");
+        return .0f;
+    }
     Class<WSCellClass> cellClass = item.cellClass;
     UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Need to register cell
     // Backward compatibility, tmp
@@ -279,7 +283,7 @@
 
 #pragma mark - Prototyping -
 
-- (UITableViewCell<WSCellClass> *)ws_cellPrototypeInTableView:(UITableView *)tableView withCellClass:(Class<WSCellClass>)cellClass {
+- (UITableViewCell<WSCellClass> *)ws_cellPrototypeInTableView:(UITableView *)tableView withCellClass:(nonnull Class<WSCellClass>)cellClass {
     
     NSString *identifier = [cellClass cellIdentifier];
     UITableViewCell<WSCellClass> *cell = [_cellPrototypes objectForKey:identifier];
@@ -288,8 +292,11 @@
         if (!cell) {
             [self ws_registerCell:identifier tableView:tableView cellClass:cellClass];
             cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-            [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you has some mess with your identifiers
+            if (!cell) { // Last resort case
+                cell = [[(Class)cellClass alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+            }
         }
+        [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you has some mess with your identifiers
         cell.bounds = CGRectMake(0, 0, tableView.bounds.size.width, cell.bounds.size.height);
     }
     

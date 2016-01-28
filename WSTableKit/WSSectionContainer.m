@@ -380,7 +380,7 @@
             continue;
         }
         
-        if (![key isEqualToString:lastKey]) {
+        if (![lastKey isEqualToString:key]) {
 
             currentSection = [WSTableSection new];
             currentSection.sectionHeader = [[WSSectionSupplementaryItem alloc] initWithTitle:[key uppercaseString]];

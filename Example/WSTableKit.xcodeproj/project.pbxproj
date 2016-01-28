@@ -21,14 +21,15 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
-		6D5FF9301BBADC61001DDD91 /* WSCellAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9201BBADC61001DDD91 /* WSCellAction.m */; settings = {ASSET_TAGS = (); }; };
-		6D5FF9311BBADC61001DDD91 /* WSCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9241BBADC61001DDD91 /* WSCellItem.m */; settings = {ASSET_TAGS = (); }; };
-		6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9261BBADC61001DDD91 /* WSSectionContainer.m */; settings = {ASSET_TAGS = (); }; };
-		6D5FF9331BBADC61001DDD91 /* WSSectionSupplementaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */; settings = {ASSET_TAGS = (); }; };
-		6D5FF9341BBADC61001DDD91 /* WSTableSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92C1BBADC61001DDD91 /* WSTableSection.m */; settings = {ASSET_TAGS = (); }; };
-		6D5FF9351BBADC61001DDD91 /* WSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
-		6D5FF9371BBAF15D001DDD91 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D5FF9361BBAF15D001DDD91 /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
-		6D816B691BBBBF5C00F175AC /* NSArray+WSSortable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D816B681BBBBF5C00F175AC /* NSArray+WSSortable.m */; settings = {ASSET_TAGS = (); }; };
+		6D5FF9301BBADC61001DDD91 /* WSCellAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9201BBADC61001DDD91 /* WSCellAction.m */; };
+		6D5FF9311BBADC61001DDD91 /* WSCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9241BBADC61001DDD91 /* WSCellItem.m */; };
+		6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9261BBADC61001DDD91 /* WSSectionContainer.m */; };
+		6D5FF9331BBADC61001DDD91 /* WSSectionSupplementaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */; };
+		6D5FF9341BBADC61001DDD91 /* WSTableSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92C1BBADC61001DDD91 /* WSTableSection.m */; };
+		6D5FF9351BBADC61001DDD91 /* WSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */; };
+		6D5FF9371BBAF15D001DDD91 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D5FF9361BBAF15D001DDD91 /* Launch Screen.storyboard */; };
+		6D7034BA1C5A175E005B178C /* CellWithButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7034B91C5A175E005B178C /* CellWithButton.m */; };
+		6D816B691BBBBF5C00F175AC /* NSArray+WSSortable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D816B681BBBBF5C00F175AC /* NSArray+WSSortable.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +81,8 @@
 		6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSTableViewCell.m; sourceTree = "<group>"; };
 		6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTableViewDirector.h; sourceTree = "<group>"; };
 		6D5FF9361BBAF15D001DDD91 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		6D7034B81C5A175E005B178C /* CellWithButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellWithButton.h; sourceTree = "<group>"; };
+		6D7034B91C5A175E005B178C /* CellWithButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellWithButton.m; sourceTree = "<group>"; };
 		6D816B671BBBBF5C00F175AC /* NSArray+WSSortable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+WSSortable.h"; sourceTree = "<group>"; };
 		6D816B681BBBBF5C00F175AC /* NSArray+WSSortable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+WSSortable.m"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -156,6 +159,8 @@
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 				6D5FF9361BBAF15D001DDD91 /* Launch Screen.storyboard */,
+				6D7034B81C5A175E005B178C /* CellWithButton.h */,
+				6D7034B91C5A175E005B178C /* CellWithButton.m */,
 			);
 			name = "Example for WSTableKit";
 			path = WSTableKit;
@@ -266,7 +271,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = WS;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Alex Nikishin";
 				TargetAttributes = {
 					6003F5AD195388D20070C39A = {
@@ -373,6 +378,7 @@
 				6D5FF9301BBADC61001DDD91 /* WSCellAction.m in Sources */,
 				6D5FF9311BBADC61001DDD91 /* WSCellItem.m in Sources */,
 				6D5FF9351BBADC61001DDD91 /* WSTableViewCell.m in Sources */,
+				6D7034BA1C5A175E005B178C /* CellWithButton.m in Sources */,
 				6003F5A7195388D20070C39A /* WSViewController.m in Sources */,
 				6D816B691BBBBF5C00F175AC /* NSArray+WSSortable.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
@@ -437,6 +443,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -501,6 +508,7 @@
 				INFOPLIST_FILE = "WSTableKit/WSTableKit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -516,6 +524,7 @@
 				INFOPLIST_FILE = "WSTableKit/WSTableKit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -537,6 +546,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WSTableKit_Example.app/WSTableKit_Example";
 				WRAPPER_EXTENSION = xctest;
@@ -555,6 +565,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WSTableKit_Example.app/WSTableKit_Example";
 				WRAPPER_EXTENSION = xctest;

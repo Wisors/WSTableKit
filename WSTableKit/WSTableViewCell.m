@@ -67,7 +67,7 @@
 
 #pragma mark - CellClass protocol -
 
-+ (NSString *)cellIdentifier {
++ (nonnull NSString *)cellIdentifier {
     return NSStringFromClass([self class]);
 }
 

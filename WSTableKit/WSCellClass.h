@@ -19,14 +19,14 @@
  *
  *  @return Cell identifier.
  */
-+ (NSString *)cellIdentifier;
++ (nonnull NSString *)cellIdentifier;
 
 /**
  *  Apply item to cell to proper configure it and make design adjustment.
  *
  *  @param item WSCellItem object for this cell.
  */
-- (void)applyItem:(WSCellItem *)item;
+- (void)applyItem:(nullable WSCellItem *)item;
 
 @optional
 
@@ -36,7 +36,7 @@
  *  @param item              WSCellItem object for this cell.
  *  @param heightCalculation YES means the cell is preparing for cell height calculation, NO - cell is preparing for showing in a tableview.
  */
-- (void)applyItem:(WSCellItem *)item heightCalculation:(BOOL)heightCalculation;
+- (void)applyItem:(nullable WSCellItem *)item heightCalculation:(BOOL)heightCalculation;
 
 /**
  *  Calculated cell height for some item. It's will only called on prototype cells, so you might want to optimized this call and omit some adjustment, that will not cause cell to change it size.
@@ -45,7 +45,7 @@
  *
  *  @return Calculated height.
  */
-- (CGFloat)heightWithItem:(WSCellItem *)item __attribute__((deprecated("Use -cellHeight instead and implement -applyItem:heightCalculation: if you need performance oprimizations")));
+- (CGFloat)heightWithItem:(nullable WSCellItem *)item __attribute__((deprecated("Use -cellHeight instead and implement -applyItem:heightCalculation: if you need performance oprimizations")));
 
 /**
  *  Return proper cell height in current state
@@ -55,7 +55,7 @@
 - (CGFloat)cellHeight;
 
 // All NSObject classes responds to this methods, but not expose it in a <NSObject> protocol
-+ (BOOL)instancesRespondToSelector:(SEL)aSelector;
-+ (BOOL)respondsToSelector:(SEL)selector;
++ (BOOL)instancesRespondToSelector:(nonnull SEL)aSelector;
++ (BOOL)respondsToSelector:(nonnull SEL)selector;
 
 @end

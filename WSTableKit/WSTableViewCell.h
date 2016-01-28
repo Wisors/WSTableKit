@@ -11,8 +11,8 @@
 
 @interface WSTableViewCell : UITableViewCell<WSCellClass>
 
-@property (nonatomic, strong, readonly) WSCellItem *item;
-@property (nonatomic, strong) UIColor *customSeparatorColor;
+@property (nonatomic, strong, readonly, nullable) WSCellItem *item;
+@property (nonatomic, strong, nonnull) UIColor *customSeparatorColor;
 @property (nonatomic, assign) IBInspectable BOOL hasAutolayout;
 
 - (CGFloat)calculateHeightForAutolayoutCell;
