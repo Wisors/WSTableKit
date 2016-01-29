@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = 'WSTableKit'
-    s.version      = '0.3.5'
+    s.version      = '0.3.6'
     s.license      = 'MIT'
     s.author       = { "Alex Nikishin" => "wisdoomer@gmail.com" }
     s.summary      = 'Simple table framework.'

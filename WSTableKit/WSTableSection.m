@@ -305,8 +305,9 @@
 
 - (void)ws_registerCell:(NSString *)identifier tableView:(UITableView *)tableView cellClass:(Class<WSCellClass>)cellClass {
     
-    if ([[NSBundle mainBundle] pathForResource:identifier ofType:@"nib"] != nil) {// Xib
-        [tableView registerNib:[UINib nibWithNibName:identifier bundle:nil] forCellReuseIdentifier:identifier];
+    NSBundle *bundle = [NSBundle bundleForClass:cellClass];
+    if ([bundle pathForResource:identifier ofType:@"nib"] != nil) {// Xib
+        [tableView registerNib:[UINib nibWithNibName:identifier bundle:bundle] forCellReuseIdentifier:identifier];
     } else {
         [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
     }
