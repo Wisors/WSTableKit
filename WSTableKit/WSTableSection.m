@@ -13,7 +13,6 @@
 
 @property (nonatomic, strong) NSMutableArray *items;
 @property (nonatomic, strong) NSMutableDictionary *cellPrototypes;
-@property (nonatomic, strong) NSLock *lock;
 @property (nonatomic, weak) id<UIScrollViewDelegate> scrollDelegate;
 
 @end
@@ -51,7 +50,6 @@
         _items              = [cellItems mutableCopy];;
         _adjustmentBlock    = adjustmentBlock;
         _cellPrototypes     = [NSMutableDictionary new];
-        _lock               = [NSLock new];
         _scrollDelegate     = delegate;
     }
     
@@ -321,82 +319,58 @@
 #pragma mark - Add & Insert & Update Items -
 
 - (void)updateWithItems:(NSArray *)items {
-    
-    [self.lock lock];
     self.items = (items) ? [items mutableCopy] : [NSMutableArray new];;
-    [self.lock unlock];
 }
 
 - (void)addItem:(WSCellItem *)item {
-    
     if (item != nil) {
-        
-        [self.lock lock];
         [self.items addObject:item];
-        [self.lock unlock];
     }
 }
 
 - (void)addItems:(NSArray *)items {
-    
     if ([items count] == 0) {
         return;
     }
-    
-    [self.lock lock];
     [self.items addObjectsFromArray:items];
-    [self.lock unlock];
 }
 
 - (void)insertItem:(WSCellItem *)item atIndex:(NSInteger)index {
-    
     if (!item) {
         return;
     }
     
-    [self.lock lock];
     if (index <= [self.items count]) {
         [self.items insertObject:item atIndex:index];
     }
-    [self.lock unlock];
 }
 
 - (void)replaceItemAtIndex:(NSInteger)index withItem:(WSCellItem *)item {
-    
     if (!item) {
         return;
     }
     
-    [self.lock lock];
     if (index < [self.items count]) {
         [self.items replaceObjectAtIndex:index withObject:item];
     }
-    [self.lock unlock];
 }
 
 #pragma mark - Remove Items -
 
 - (void)removeItemAtIndex:(NSInteger)index {
-    
-    [self.lock lock];
     if (index < [self.items count]) {
         [self.items removeObjectAtIndex:index];
     }
-    [self.lock unlock];
 }
 
 - (void)removeItemsAtIndexes:(NSIndexSet *)set {
-    
     [set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
         [self removeItemAtIndex:idx];
     }];
 }
 
 - (void)removeAllItems {
-    
-    [self.lock lock];
     self.items = [NSMutableArray new];
-    [self.lock unlock];
 }
 
 #pragma mark - Access Items -
@@ -406,7 +380,6 @@
 }
 
 - (WSCellItem *)itemAtIndex:(NSInteger)index {
-    
     if ([self.items count] > index) {
         return [self.items objectAtIndex:index];
     }

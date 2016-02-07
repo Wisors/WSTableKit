@@ -14,7 +14,6 @@
 @interface WSSectionContainer()
 
 @property (nonatomic, strong) NSMutableArray *sections;
-@property (nonatomic, strong) NSLock *lock;
 @property (nonatomic, weak) id<UIScrollViewDelegate> scrollDelegate;
 
 @end
@@ -62,7 +61,6 @@
     if ((self = [super init])) {
         _sections           = [sections mutableCopy];
         _adjustmentBlock    = adjustmentBlock;
-        _lock               = [NSLock new];
         _scrollDelegate     = scrollDelegate;
     }
     
@@ -289,12 +287,9 @@
 @implementation WSSectionContainer(SectionAccess)
 
 - (void)replaceSectionAtIndex:(NSInteger)index withSection:(WSTableSection *)section {
-    
-    [self.lock lock];
     if ([self.sections count] > index) {
         [self.sections replaceObjectAtIndex:index withObject:section];
     }
-    [self.lock unlock];
 }
 
 - (void)updateSectionAtIndex:(NSInteger)index withItems:(NSArray *)items {
@@ -302,21 +297,15 @@
 }
 
 - (void)addSection:(WSTableSection *)section {
-    
-    [self.lock lock];
     [self.sections addObject:section];
-    [self.lock unlock];
 }
 
 - (void)addSection:(WSTableSection *)section atIndex:(NSInteger)index {
-    
-    [self.lock lock];
     if (index >= [self.sections count]) {
         [self.sections addObject:section];
     } else {
         [self.sections insertObject:section atIndex:index];
     }
-    [self.lock unlock];
 }
 
 - (NSInteger)numberOfSections {
@@ -328,7 +317,6 @@
 }
 
 - (WSTableSection *)sectionAtIndex:(NSInteger)index {
-    
     if ([self.sections count] > index) {
         return [self.sections objectAtIndex:index];
     }
@@ -337,19 +325,21 @@
 }
 
 - (void)enumerateObjectsUsingBlock:(void (^)(WSTableSection *section, NSUInteger idx, BOOL *stop))block {
-    
-    [self.lock lock];
     [self.sections enumerateObjectsUsingBlock:block];
-    [self.lock unlock];
 }
 
 - (NSInteger)indexOfSection:(WSTableSection *)item {
-    
-    [self.lock lock];
-    NSInteger index = [self.sections indexOfObject:item];
-    [self.lock unlock];
-    
-    return index;
+    return [self.sections indexOfObject:item];
+}
+
+- (void)removeSectionAtIndex:(NSInteger)index {
+    if (index < [self.sections count]) {
+        [self.sections removeObjectAtIndex:index];
+    }
+}
+
+- (void)removeAllSections {
+    [self.sections removeAllObjects];
 }
 
 - (WSCellItem *)itemAtIndexPath:(NSIndexPath *)path {

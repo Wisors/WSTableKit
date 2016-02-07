@@ -56,6 +56,9 @@
 - (WSCellItem *)itemAtIndexPath:(NSIndexPath *)path;
 - (NSInteger)indexOfSection:(WSTableSection *)item;
 
+- (void)removeSectionAtIndex:(NSInteger)index;
+- (void)removeAllSections;
+
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfItemsInSection:(NSInteger)section;
 
