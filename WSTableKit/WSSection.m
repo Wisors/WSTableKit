@@ -5,49 +5,53 @@
 //  Copyright © 2015 Alex Nikishin. All rights reserved.
 //
 
-#import "WSTableSection.h"
+#import "WSSection.h"
 
 #import "WSCellItem.h"
 
-@interface WSTableSection()
+@interface WSSection()
 
-@property (nonatomic, strong) NSMutableArray *items;
-@property (nonatomic, strong) NSMutableDictionary *cellPrototypes;
-@property (nonatomic, weak) id<UIScrollViewDelegate> scrollDelegate;
+@property (nonatomic, strong, nonnull) NSMutableArray *items;
+@property (nonatomic, strong, nonnull) NSMutableDictionary *cellPrototypes;
+@property (nonatomic, weak, nullable) id<UIScrollViewDelegate> scrollDelegate;
+@property (nonatomic, weak, nullable) UITableView *tableView;
 
 @end
 
-@implementation WSTableSection
+@implementation WSSection
 @synthesize adjustmentBlock = _adjustmentBlock;
 @synthesize displayBlock = _displayBlock;
 @synthesize eventBlock = _eventBlock;
 
-+ (instancetype)sectionWithCellClass:(Class<WSCellClass>)cellClass objects:(NSArray *)objects {
++ (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
+                                     objects:(nullable NSArray *)objects {
     NSArray *cellItems = [WSCellItem cellItemsWithClass:cellClass objects:objects];
     return [self sectionWithItems:cellItems];
 }
 
-+ (instancetype)sectionWithItems:(NSArray *)cellItems {
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems {
     return [[self alloc] initWithItems:cellItems adjustmentBlock:nil];
 }
 
-+ (instancetype)sectionWithItems:(NSArray *)cellItems adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock {
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                         adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
     return [[self alloc] initWithItems:cellItems adjustmentBlock:adjustmentBlock];
 }
 
 - (instancetype)init {
-    return [self initWithItems:@[] adjustmentBlock:nil];
+    return [self initWithItems:nil adjustmentBlock:nil];
 }
 
-- (instancetype)initWithItems:(NSArray *)cellItems adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock {
+- (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                      adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
     return [self initWithItems:cellItems adjustmentBlock:adjustmentBlock scrollDelegate:nil];
 }
 
-- (instancetype)initWithItems:(NSArray *)cellItems adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock scrollDelegate:(id<UIScrollViewDelegate>)delegate {
-    
+- (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                      adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock
+                       scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate {
     if ((self = [super init])) {
-        NSAssert(cellItems != nil, @"You can't initialize section with nil");
-        _items              = [cellItems mutableCopy];;
+        _items              = (cellItems) ? [cellItems mutableCopy] : [NSMutableArray new];;
         _adjustmentBlock    = adjustmentBlock;
         _cellPrototypes     = [NSMutableDictionary new];
         _scrollDelegate     = delegate;
@@ -56,19 +60,19 @@
     return self;
 }
 
-- (void)setAdjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock {
+- (void)setAdjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
     if (_adjustmentBlock != adjustmentBlock) {
         _adjustmentBlock = adjustmentBlock;
     }
 }
 
-- (void)setDisplayBlock:(WSCellDisplayBlock)displayBlock {
+- (void)setDisplayBlock:(nullable WSCellDisplayBlock)displayBlock {
     if (_displayBlock != displayBlock) {
         _displayBlock = displayBlock;
     }
 }
 
-- (void)setEventBlock:(WSCellEventBlock)eventBlock {
+- (void)setEventBlock:(nullable WSCellEventBlock)eventBlock {
     if (_eventBlock != eventBlock) {
         _eventBlock = eventBlock;
     }
@@ -99,17 +103,16 @@
 }
 
 - (UITableViewCell<WSCellClass> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:[item.cellClass cellIdentifier]
                                                                          forIndexPath:indexPath];
-    [cell applyItem:item];
     if (_adjustmentBlock) {
         _adjustmentBlock(cell, item, indexPath);
     }
     if (item.adjustmentBlock) {
         item.adjustmentBlock(cell, item, indexPath);
     }
+    [cell applyItem:item];
     
     return cell;
 }
@@ -137,37 +140,21 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    if (!item) {
-        NSAssert(item, @"Something goes wrong, you have to have an item here.");
-        return .0f;
-    }
+    NSAssert(item, @"Something goes wrong, you have to have an item here.");
+
     Class<WSCellClass> cellClass = item.cellClass;
     UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Need to register cell
-    // Backward compatibility, tmp
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    if ([cellClass instancesRespondToSelector:@selector(heightWithItem:)]) {
+    if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
         if (_adjustmentBlock) {
             _adjustmentBlock(proto, item, indexPath);
         }
         if (item.adjustmentBlock) {
             item.adjustmentBlock(proto, item, indexPath);
         }
-        
-        return [proto heightWithItem:item];
-    } else
-#pragma clang diagnostic pop
-    if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
         if ([proto respondsToSelector:@selector(applyItem:heightCalculation:)]) {
             [proto applyItem:item heightCalculation:YES];
         } else {
             [proto applyItem:item];
-        }
-        if (_adjustmentBlock) {
-            _adjustmentBlock(proto, item, indexPath);
-        }
-        if (item.adjustmentBlock) {
-            item.adjustmentBlock(proto, item, indexPath);
         }
         
         return [proto cellHeight];
@@ -187,14 +174,12 @@
 #pragma mark - UITableViewDelegate Editing -
 
 - (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_eventBlock) {
         _eventBlock(WSCellWillBeginEditing, indexPath, nil);
     }
 }
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    
     if (_eventBlock) {
         _eventBlock(WSCellDidEndEditing, indexPath, nil);
     }
@@ -203,7 +188,6 @@
 #pragma mark - UITableViewDelegate Selection -
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_eventBlock) {
         return _eventBlock(WSCellWillSelect, indexPath, indexPath);
     }
@@ -212,7 +196,6 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_eventBlock) {
         return _eventBlock(WSCellWillDeselect, indexPath, indexPath);
     }
@@ -221,7 +204,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     if (item.selectionBlock) {
         item.selectionBlock(YES, item, indexPath);
@@ -229,7 +211,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     if (item.selectionBlock) {
         item.selectionBlock(NO, item, indexPath);
@@ -239,14 +220,12 @@
 #pragma mark - UITableViewDelegate Displaing -
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_displayBlock) {
         _displayBlock(YES, cell, indexPath);
     }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_displayBlock) {
         _displayBlock(NO, cell, indexPath);
     }
@@ -255,25 +234,23 @@
 #pragma mark - UITableViewDelegate Higlighting -
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_eventBlock) {
         id result = _eventBlock(WSCellShouldHightlightBlock, indexPath, @(YES));
         if ([result isKindOfClass:[NSNumber class]]) {
             return [result boolValue];
         }
     }
+    
     return YES;
 }
 
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_eventBlock) {
         _eventBlock(WSCellDidHighlight, indexPath, nil);
     }
 }
 
 - (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_eventBlock) {
         _eventBlock(WSCellDidUnhighlight, indexPath, nil);
     }
@@ -281,8 +258,7 @@
 
 #pragma mark - Prototyping -
 
-- (UITableViewCell<WSCellClass> *)ws_cellPrototypeInTableView:(UITableView *)tableView withCellClass:(nonnull Class<WSCellClass>)cellClass {
-    
+- (nonnull UITableViewCell<WSCellClass> *)ws_cellPrototypeInTableView:(nonnull UITableView *)tableView withCellClass:(nonnull Class<WSCellClass>)cellClass {
     NSString *identifier = [cellClass cellIdentifier];
     UITableViewCell<WSCellClass> *cell = [_cellPrototypes objectForKey:identifier];
     if (!cell) {
@@ -302,7 +278,6 @@
 }
 
 - (void)ws_registerCell:(NSString *)identifier tableView:(UITableView *)tableView cellClass:(Class<WSCellClass>)cellClass {
-    
     NSBundle *bundle = [NSBundle bundleForClass:cellClass];
     if ([bundle pathForResource:identifier ofType:@"nib"] != nil) {// Xib
         [tableView registerNib:[UINib nibWithNibName:identifier bundle:bundle] forCellReuseIdentifier:identifier];
@@ -314,7 +289,7 @@
 @end
 
 
-@implementation WSTableSection(ItemAccess)
+@implementation WSSection(ItemAccess)
 
 #pragma mark - Add & Insert & Update Items -
 

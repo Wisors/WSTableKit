@@ -25,7 +25,7 @@
 		6D5FF9311BBADC61001DDD91 /* WSCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9241BBADC61001DDD91 /* WSCellItem.m */; };
 		6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9261BBADC61001DDD91 /* WSSectionContainer.m */; };
 		6D5FF9331BBADC61001DDD91 /* WSSectionSupplementaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */; };
-		6D5FF9341BBADC61001DDD91 /* WSTableSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92C1BBADC61001DDD91 /* WSTableSection.m */; };
+		6D5FF9341BBADC61001DDD91 /* WSSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92C1BBADC61001DDD91 /* WSSection.m */; };
 		6D5FF9351BBADC61001DDD91 /* WSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */; };
 		6D5FF9371BBAF15D001DDD91 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D5FF9361BBAF15D001DDD91 /* Launch Screen.storyboard */; };
 		6D7034BA1C5A175E005B178C /* CellWithButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7034B91C5A175E005B178C /* CellWithButton.m */; };
@@ -75,8 +75,8 @@
 		6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSectionSupplementaryItem.m; sourceTree = "<group>"; };
 		6D5FF9291BBADC61001DDD91 /* WSSortable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSortable.h; sourceTree = "<group>"; };
 		6D5FF92A1BBADC61001DDD91 /* WSTableKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTableKit.h; sourceTree = "<group>"; };
-		6D5FF92B1BBADC61001DDD91 /* WSTableSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTableSection.h; sourceTree = "<group>"; };
-		6D5FF92C1BBADC61001DDD91 /* WSTableSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSTableSection.m; sourceTree = "<group>"; };
+		6D5FF92B1BBADC61001DDD91 /* WSSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSection.h; sourceTree = "<group>"; };
+		6D5FF92C1BBADC61001DDD91 /* WSSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSection.m; sourceTree = "<group>"; };
 		6D5FF92D1BBADC61001DDD91 /* WSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTableViewCell.h; sourceTree = "<group>"; };
 		6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSTableViewCell.m; sourceTree = "<group>"; };
 		6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTableViewDirector.h; sourceTree = "<group>"; };
@@ -213,8 +213,8 @@
 				6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */,
 				6D5FF9291BBADC61001DDD91 /* WSSortable.h */,
 				6D5FF92A1BBADC61001DDD91 /* WSTableKit.h */,
-				6D5FF92B1BBADC61001DDD91 /* WSTableSection.h */,
-				6D5FF92C1BBADC61001DDD91 /* WSTableSection.m */,
+				6D5FF92B1BBADC61001DDD91 /* WSSection.h */,
+				6D5FF92C1BBADC61001DDD91 /* WSSection.m */,
 				6D5FF92D1BBADC61001DDD91 /* WSTableViewCell.h */,
 				6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */,
 				6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */,
@@ -382,7 +382,7 @@
 				6003F5A7195388D20070C39A /* WSViewController.m in Sources */,
 				6D816B691BBBBF5C00F175AC /* NSArray+WSSortable.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				6D5FF9341BBADC61001DDD91 /* WSTableSection.m in Sources */,
+				6D5FF9341BBADC61001DDD91 /* WSSection.m in Sources */,
 				6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

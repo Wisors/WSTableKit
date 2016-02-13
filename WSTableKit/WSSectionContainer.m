@@ -8,7 +8,7 @@
 #import "WSSectionContainer.h"
 
 #import "NSArray+WSSortable.h"
-#import "WSTableSection.h"
+#import "WSSection.h"
 #import "WSSortable.h"
 
 @interface WSSectionContainer()
@@ -39,7 +39,7 @@
     return [self initWithSections:@[]];
 }
 
-- (instancetype)initWithSection:(WSTableSection *)section {
+- (instancetype)initWithSection:(WSSection *)section {
     return [self initWithSections:@[section] adjustmentBlock:nil scrollDelegate:nil];
 }
 
@@ -110,7 +110,7 @@
     if (self.enableAlphabet) {
         
         NSMutableSet *set = [NSMutableSet set];
-        [self enumerateObjectsUsingBlock:^(WSTableSection *section, NSUInteger idx, BOOL *stop) {
+        [self enumerateObjectsUsingBlock:^(WSSection *section, NSUInteger idx, BOOL *stop) {
             
             WSSectionSupplementaryItem *header = section.sectionHeader;
             if ([header.title length] > 0) {
@@ -127,7 +127,7 @@
     if (self.enableAlphabet) {
         
         __block NSUInteger index = 0;
-        [self enumerateObjectsUsingBlock:^(WSTableSection *section, NSUInteger idx, BOOL *stop) {
+        [self enumerateObjectsUsingBlock:^(WSSection *section, NSUInteger idx, BOOL *stop) {
             
             WSSectionSupplementaryItem *header = section.sectionHeader;
             if ([header.title length] > 0 && [[header.title substringToIndex:1] isEqualToString:title]) {
@@ -150,7 +150,7 @@
 
 - (UITableViewCell<WSCellClass> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    WSTableSection *section = [self sectionAtIndex:indexPath.section];
+    WSSection *section = [self sectionAtIndex:indexPath.section];
     UITableViewCell<WSCellClass> *cell = (UITableViewCell<WSCellClass> *)[section tableView:tableView cellForRowAtIndexPath:indexPath];
     if (self.adjustmentBlock) {
         WSCellItem *item = [section itemAtIndex:indexPath.row];
@@ -286,7 +286,7 @@
 
 @implementation WSSectionContainer(SectionAccess)
 
-- (void)replaceSectionAtIndex:(NSInteger)index withSection:(WSTableSection *)section {
+- (void)replaceSectionAtIndex:(NSInteger)index withSection:(WSSection *)section {
     if ([self.sections count] > index) {
         [self.sections replaceObjectAtIndex:index withObject:section];
     }
@@ -296,11 +296,11 @@
     [[self sectionAtIndex:index] updateWithItems:items];
 }
 
-- (void)addSection:(WSTableSection *)section {
+- (void)addSection:(WSSection *)section {
     [self.sections addObject:section];
 }
 
-- (void)addSection:(WSTableSection *)section atIndex:(NSInteger)index {
+- (void)addSection:(WSSection *)section atIndex:(NSInteger)index {
     if (index >= [self.sections count]) {
         [self.sections addObject:section];
     } else {
@@ -316,7 +316,7 @@
     return [[self sectionAtIndex:section] numberOfItems];
 }
 
-- (WSTableSection *)sectionAtIndex:(NSInteger)index {
+- (WSSection *)sectionAtIndex:(NSInteger)index {
     if ([self.sections count] > index) {
         return [self.sections objectAtIndex:index];
     }
@@ -324,11 +324,11 @@
     return nil;
 }
 
-- (void)enumerateObjectsUsingBlock:(void (^)(WSTableSection *section, NSUInteger idx, BOOL *stop))block {
+- (void)enumerateObjectsUsingBlock:(void (^)(WSSection *section, NSUInteger idx, BOOL *stop))block {
     [self.sections enumerateObjectsUsingBlock:block];
 }
 
-- (NSInteger)indexOfSection:(WSTableSection *)item {
+- (NSInteger)indexOfSection:(WSSection *)item {
     return [self.sections indexOfObject:item];
 }
 
@@ -362,7 +362,7 @@
     NSMutableArray *sections = [NSMutableArray array];
     
     NSString *lastKey;
-    WSTableSection *currentSection;
+    WSSection *currentSection;
     for (id<WSSortable> item in [objects sortSortableObjects]) {
         
         NSString *key = [self itemKeyForSection:item];
@@ -372,7 +372,7 @@
         
         if (![lastKey isEqualToString:key]) {
 
-            currentSection = [WSTableSection new];
+            currentSection = [WSSection new];
             currentSection.sectionHeader = [[WSSectionSupplementaryItem alloc] initWithTitle:[key uppercaseString]];
             [sections addObject:currentSection];
         }

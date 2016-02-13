@@ -15,7 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (nonatomic, strong) WSTableSection *section;
+@property (nonatomic, strong) WSSection *section;
 
 @end
 

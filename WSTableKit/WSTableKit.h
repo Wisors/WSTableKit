@@ -11,7 +11,7 @@
 #import "WSCellClass.h"
 #import "WSCellItem.h"
 #import "WSSectionContainer.h"
-#import "WSTableSection.h"
+#import "WSSection.h"
 #import "WSTableViewCell.h"
 
 #endif

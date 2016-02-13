@@ -31,7 +31,7 @@
 @optional
 
 /**
- *  Apply item to cell to proper configure it and make design adjustment if needed with additional flag of current applying behavior: design adjustment or adjustment for height calculation
+ *  Apply item to cell to proper configure it and make design adjustment with possibility of performance optimization. No need to fully adjust your cell design for height calculation, just height dependent attributes.
  *
  *  @param item              WSCellItem object for this cell.
  *  @param heightCalculation YES means the cell is preparing for cell height calculation, NO - cell is preparing for showing in a tableview.
@@ -39,16 +39,7 @@
 - (void)applyItem:(nullable WSCellItem *)item heightCalculation:(BOOL)heightCalculation;
 
 /**
- *  Calculated cell height for some item. It's will only called on prototype cells, so you might want to optimized this call and omit some adjustment, that will not cause cell to change it size.
- *
- *  @param item WSCellItem object for this cell.
- *
- *  @return Calculated height.
- */
-- (CGFloat)heightWithItem:(nullable WSCellItem *)item __attribute__((deprecated("Use -cellHeight instead and implement -applyItem:heightCalculation: if you need performance oprimizations")));
-
-/**
- *  Return proper cell height in current state
+ *  Calculate and return custom cell height.
  *
  *  @return Value of cell height to proper showing in tableview.
  */

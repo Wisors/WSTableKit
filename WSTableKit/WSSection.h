@@ -13,10 +13,11 @@
 
 @class WSCellItem;
 
-@interface WSTableSection : NSObject <WSTableViewDirector>
+@interface WSSection : NSObject <WSTableViewDirector>
 
-@property (nonatomic, strong) WSSectionSupplementaryItem *sectionHeader;
-@property (nonatomic, strong) WSSectionSupplementaryItem *sectionFooter;
+@property (nonatomic, strong, nullable) WSSectionSupplementaryItem *sectionHeader;
+@property (nonatomic, strong, nullable) WSSectionSupplementaryItem *sectionFooter;
+@property (nonatomic, weak, readonly, nullable) UITableView *tableView;
 
 /**
  *  Fast factory method to create TableSection with specific CellClass and array of objects that fit this cell class.
@@ -26,7 +27,8 @@
  *
  *  @return Instance of TableSection class.
  */
-+ (instancetype)sectionWithCellClass:(Class<WSCellClass>)cellClass objects:(NSArray *)objects;
++ (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
+                                     objects:(nullable NSArray *)objects;
 
 /**
  *  Factory method with CellItem objects.
@@ -35,17 +37,18 @@
  *
  *  @return Instance of TableSection class.
  */
-+ (instancetype)sectionWithItems:(NSArray *)cellItems;
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems;
 
 /**
- *  Factory method with CellItem objects.
+ *  Init flat colletion of table view CellItem objects and cell adjustment block. This object may behave as UITableView dataSource and delegate(optionaly).
  *
  *  @param cellItems       Array if CellItem objects.
  *  @param adjustmentBlock CellAdjustmentBlock that will be invoked during cell preparating process. This is optional parameter, that can recieve nil.
  *
  *  @return Instance of TableSection class.
  */
-+ (instancetype)sectionWithItems:(NSArray *)cellItems adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                         adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock;
 
 /**
  *  Init flat colletion of table view CellItem objects and cell adjustment block. This object may behave as UITableView dataSource and delegate(optionaly).
@@ -54,20 +57,23 @@
  *
  *  @return Instance of TableSection class.
  */
-- (instancetype)initWithItems:(NSArray *)cellItems adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
+- (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                      adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock;
 
 /**
  *  Call thit initializer if you with to forward UIScrollVideDelegate event forwarded to you custom delegate.
  */
-- (instancetype)initWithItems:(NSArray *)cellItems adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock scrollDelegate:(id<UIScrollViewDelegate>)delegate NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                      adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock
+                       scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate NS_DESIGNATED_INITIALIZER;
 
-- (void)setAdjustmentBlock:(WSCellAdjustmentBlock)cellAdjustmentBlock;
-- (void)setDisplayBlock:(WSCellDisplayBlock)displayBlock;
-- (void)setEventBlock:(WSCellEventBlock)eventBlock;
+- (void)setAdjustmentBlock:(nullable WSCellAdjustmentBlock)cellAdjustmentBlock;
+- (void)setDisplayBlock:(nullable WSCellDisplayBlock)displayBlock;
+- (void)setEventBlock:(nullable WSCellEventBlock)eventBlock;
 
 @end
 
-@interface WSTableSection(ItemAccess)
+@interface WSSection(ItemAccess)
 
 /**
  *  Update section with completely new array of CellItem objects.
