@@ -18,56 +18,40 @@
 
 @implementation WSCellItem : NSObject
 
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:nil selectionBlock:nil adjustmentBlock:nil];
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass object:(nullable id)object {
+    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustmentBlock:nil];
 }
 
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object customAction:(WSCellAction *)action {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:(action)? @[action] : nil selectionBlock:nil adjustmentBlock:nil];
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                             customAction:(nonnull WSAction *)action {
+    NSAssert(action == nil, @"Action missing");
+    return [[self alloc] initWithCellClass:cellClass object:object actions:@[action] adjustmentBlock:nil];
 }
 
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object customActions:(NSArray *)actions {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:actions selectionBlock:nil adjustmentBlock:nil];
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                            customActions:(nullable NSArray<WSAction *> *)actions {
+    return [[self alloc] initWithCellClass:cellClass object:object actions:actions adjustmentBlock:nil];
 }
 
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:nil selectionBlock:nil adjustmentBlock:adjustmentBlock];
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                          adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
+    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustmentBlock:adjustmentBlock];
 }
 
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object selectionBlock:(WSCellSelectionBlock)selectionBlock {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:nil selectionBlock:selectionBlock adjustmentBlock:nil];
+- (instancetype)init NS_UNAVAILABLE {
+    return nil;
 }
 
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object {
-    return [self initWithCellClass:cellClass object:object actions:nil selectionBlock:nil adjustmentBlock:nil];
-}
-
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object customActions:(NSArray *)actions {
-    return [self initWithCellClass:cellClass object:object actions:actions selectionBlock:nil adjustmentBlock:nil];
-}
-
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock {
-    return [self initWithCellClass:cellClass object:object actions:nil selectionBlock:nil adjustmentBlock:adjustmentBlock];
-}
-
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object selectionBlock:(WSCellSelectionBlock)selectionBlock {
-    return [self initWithCellClass:cellClass object:object actions:nil selectionBlock:selectionBlock adjustmentBlock:nil];
-}
-
-- (instancetype)init {
-    return [self initWithCellClass:nil object:nil actions:nil selectionBlock:nil adjustmentBlock:nil];
-}
-
-- (instancetype)initWithCellClass:(Class)cellClass
-                           object:(id)object
-                          actions:(NSArray *)actions
-                   selectionBlock:(WSCellSelectionBlock)selectionBlock
-                  adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock {
+- (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                                  actions:(nullable NSArray<WSAction *> *)actions
+                          adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
     
     if ((self = [super init])) {
-        
         NSAssert([cellClass conformsToProtocol:@protocol(WSCellClass)], @"Cell class must conform to CellClass protocol");
-        _selectionBlock = selectionBlock;
         _adjustmentBlock= adjustmentBlock;
         _cellClass      = cellClass;
         _object         = object;
@@ -80,11 +64,20 @@
     return self;
 }
 
+- (nonnull instancetype)addAction:(WSActionType)type
+                      actionBlock:(nullable WSCellActionShortBlock)block {
+    
+    [self addAction:[WSAction actionWithKey:@"select" shortActionBlock:^(WSTableViewCell *cell) {
+        
+    }]];
+    return self;
+}
+
 @end
 
 @implementation WSCellItem(Actions)
 
-- (void)addAction:(WSCellAction *)action {
+- (void)addAction:(WSAction *)action {
     
     if (!action) {
         return;
@@ -105,7 +98,7 @@
     if ([_customActions count] == 0) {
         _customActions = [actions mutableCopy];
     } else {
-        for (WSCellAction *action in actions) {
+        for (WSAction *action in actions) {
             [self addAction:action];
         }
     }
@@ -119,7 +112,7 @@
     
     [_lock lock];
     NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
-    [_customActions enumerateObjectsUsingBlock:^(WSCellAction *action, NSUInteger idx, BOOL *stop) {
+    [_customActions enumerateObjectsUsingBlock:^(WSAction *action, NSUInteger idx, BOOL *stop) {
         
         if ([action.key isEqualToString:key]) {
             [set addIndex:idx];
@@ -129,11 +122,11 @@
     [_lock unlock];
 }
 
-- (WSCellAction *)actionForKey:(NSString *)key {
+- (WSAction *)actionForKey:(NSString *)key {
     
-    __block WSCellAction *foundAction;
+    __block WSAction *foundAction;
     [_lock lock];
-    [_customActions enumerateObjectsUsingBlock:^(WSCellAction *action, NSUInteger idx, BOOL *stop) {
+    [_customActions enumerateObjectsUsingBlock:^(WSAction *action, NSUInteger idx, BOOL *stop) {
         if ([action.key isEqualToString:key]) {
             foundAction = action;
             *stop = YES;
@@ -146,12 +139,12 @@
 
 - (id)invokeActionForKey:(NSString *)key withCell:(WSTableViewCell *)cell {
     
-    WSCellAction *action = [self actionForKey:key];
+    WSAction *action = [self actionForKey:key];
     return [action invokeActionWithCell:cell];
 }
 - (id)invokeActionForKey:(NSString *)key withCell:(WSTableViewCell *)cell userInfo:(NSDictionary *)userInfo {
     
-    WSCellAction *action = [self actionForKey:key];
+    WSAction *action = [self actionForKey:key];
     return [action invokeActionWithCell:cell userInfo:userInfo];
 }
 

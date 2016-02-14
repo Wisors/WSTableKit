@@ -7,50 +7,45 @@
 
 #import <Foundation/Foundation.h>
 
-#import "WSCellAction.h"
+#import "WSActionTypes.h"
+#import "WSAction.h"
 #import "WSCellClass.h"
 #import "WSCellHandlingBlocks.h"
 
-/**
- *  Cell selection block invoked during tableview default selection/deselection proccess.
- *
- *  @param selected Selection state, YES - selected.
- *  @param item     WSCellItem associated with selected/deselected cell.
- *  @param path     IndexPath of selected/deselected cell.
- */
-typedef void (^WSCellSelectionBlock)(BOOL selected, WSCellItem *item, NSIndexPath *path);
-
 @interface WSCellItem : NSObject
 
-@property (nonatomic, assign, readonly) Class<WSCellClass> cellClass;
-@property (nonatomic, strong, readonly) id object;
-@property (nonatomic, copy) WSCellSelectionBlock selectionBlock;
-@property (nonatomic, copy) WSCellAdjustmentBlock adjustmentBlock;
+@property (nonatomic, assign, nonnull, readonly) Class<WSCellClass> cellClass;
+@property (nonatomic, nullable, readonly) id object;
+@property (nonatomic, nullable, copy) WSCellAdjustmentBlock adjustmentBlock;
 
 ///-------------------------------------------------
 /// @name Base initilizers
 ///-------------------------------------------------
 
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object;
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object customAction:(WSCellAction *)action;
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object customActions:(NSArray *)actions;
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
-+ (instancetype)itemWithCellClass:(Class)cellClass object:(id)object selectionBlock:(WSCellSelectionBlock)selectionBlock;
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass object:(nullable id)object;
 
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object;
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object customActions:(NSArray *)actions;
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
-- (instancetype)initWithCellClass:(Class)cellClass object:(id)object selectionBlock:(WSCellSelectionBlock)selectionBlock;
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                             customAction:(nonnull WSAction *)action;
 
-- (instancetype)initWithCellClass:(Class)cellClass
-                           object:(id)object
-                          actions:(NSArray *)actions
-                   selectionBlock:(WSCellSelectionBlock)selectionBlock
-                  adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock NS_DESIGNATED_INITIALIZER;
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                            customActions:(nullable NSArray<WSAction *> *)actions;
+
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                          adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock;
+
+- (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                                  actions:(nullable NSArray<WSAction *> *)actions
+                          adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock NS_DESIGNATED_INITIALIZER;
 
 // Autocompletion syntax helpers for XCode
-- (void)setSelectionBlock:(WSCellSelectionBlock)selectionBlock;
-- (void)setAdjustmentBlock:(WSCellAdjustmentBlock)cellAdjustmentBlock;
+- (void)setAdjustmentBlock:(nullable WSCellAdjustmentBlock)cellAdjustmentBlock;
+
+- (nonnull instancetype)addAction:(WSActionType)type
+                      actionBlock:(nullable WSCellActionShortBlock)block;
 
 @end
 
@@ -62,7 +57,7 @@ typedef void (^WSCellSelectionBlock)(BOOL selected, WSCellItem *item, NSIndexPat
  *
  *  @param action Custom CellAction.
  */
-- (void)addAction:(WSCellAction *)action;
+- (void)addAction:(WSAction *)action;
 - (void)addActions:(NSArray *)actions;
 
 // Access
@@ -73,7 +68,7 @@ typedef void (^WSCellSelectionBlock)(BOOL selected, WSCellItem *item, NSIndexPat
  *
  *  @return Custom action object.
  */
-- (WSCellAction *)actionForKey:(NSString *)key;
+- (WSAction *)actionForKey:(NSString *)key;
 
 // Remove
 - (void)removeActionForKey:(NSString *)key;

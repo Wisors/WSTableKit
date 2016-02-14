@@ -24,12 +24,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    WSCellAction *action = [WSCellAction actionWithKey:WSButtonClickedActionKey shortActionBlock:^(WSTableViewCell *cell) {
+    WSAction *action = [WSAction actionWithKey:WSButtonClickedActionKey shortActionBlock:^(WSTableViewCell *cell) {
         NSLog(@"Button pressed");
     }];
     
     NSArray *cells = [WSCellItem cellItemsWithClass:[CellWithButton class] objects:@[@"One", @"Two", @"Three"] customActions:@[action]];
-    self.section = [WSTableSection sectionWithItems:cells adjustmentBlock:^(WSTableViewCell *cell, WSCellItem *item, NSIndexPath *path) {
+    self.section = [WSSection sectionWithItems:cells adjustmentBlock:^(WSTableViewCell *cell, WSCellItem *item, NSIndexPath *path) {
         cell.textLabel.text = item.object;
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.bottomSeparatorHidden = cell.topSeparatorHidden = NO;
@@ -37,6 +37,14 @@
         cell.topSeparatorInsets = UIEdgeInsetsMake(1, 4, 0, 5);
     }];
 
+    WSCellItem *item = [[[WSCellItem itemWithCellClass:[CellWithButton class] object:@"one"]
+    addAction:WSActionSelect actionBlock:^(WSTableViewCell *cell) {
+        
+    }]
+    addAction:WSActionDeselect actionBlock:^(WSTableViewCell *cell) {
+        
+    }];
+    
     self.tableView.dataSource = self.section;
     self.tableView.delegate = self.section;
     self.tableView.sectionFooterHeight = self.tableView.sectionHeaderHeight = 0;
