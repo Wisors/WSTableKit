@@ -9,7 +9,6 @@
 
 #import "WSActionInfo.h"
 #import "WSActionTypes.h"
-#import "WSCellClass.h"
 
 /**
  *  Action block. Should be invoked by some event inside cell (button click, textfield changes, etc.). It is possible to have only one block of this type per one action key.
@@ -57,6 +56,6 @@ typedef void (^WSActionBlock)(WSActionInfo * _Nonnull actionInfo);
 
 @interface WSAction(Invocation)
 
-- (nullable id)invokeActionWithCell:(nonnull id<WSCellClass>)cell actionInfo:(nonnull WSActionInfo *)actionInfo;
+- (nullable id)invokeActionWithInfo:(nonnull WSActionInfo *)actionInfo;
 
 @end

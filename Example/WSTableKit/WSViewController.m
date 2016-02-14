@@ -24,25 +24,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    WSAction *action = [WSAction actionWithKey:WSButtonClickedActionKey shortActionBlock:^(WSTableViewCell *cell) {
+    WSAction *action = [WSAction actionWithKey:WSButtonClickedActionKey actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
         NSLog(@"Button pressed");
     }];
     
     NSArray *cells = [WSCellItem cellItemsWithClass:[CellWithButton class] objects:@[@"One", @"Two", @"Three"] customActions:@[action]];
-    self.section = [WSSection sectionWithItems:cells adjustmentBlock:^(WSTableViewCell *cell, WSCellItem *item, NSIndexPath *path) {
+
+    self.section = [WSSection sectionWithItems:cells tableView:self.tableView adjustmentBlock:^(CellWithButton *cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path) {
         cell.textLabel.text = item.object;
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.bottomSeparatorHidden = cell.topSeparatorHidden = NO;
         cell.bottomSeparatorInsets = UIEdgeInsetsMake(0, 4, 1, 5);
         cell.topSeparatorInsets = UIEdgeInsetsMake(1, 4, 0, 5);
-    }];
-
-    WSCellItem *item = [[[WSCellItem itemWithCellClass:[CellWithButton class] object:@"one"]
-    addAction:WSActionSelect actionBlock:^(WSTableViewCell *cell) {
-        
-    }]
-    addAction:WSActionDeselect actionBlock:^(WSTableViewCell *cell) {
-        
     }];
     
     self.tableView.dataSource = self.section;

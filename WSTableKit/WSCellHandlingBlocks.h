@@ -10,9 +10,4 @@
 #import "WSCellClass.h"
 #import "WSActionTypes.h"
 
-@class WSCellItem;
-
-typedef void (^WSAdjustmentBlock)(WSActionInfo * _Nonnull actionInfo);
-
-
-
+typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path);

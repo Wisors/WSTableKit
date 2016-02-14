@@ -19,13 +19,13 @@
 @property (nonatomic, readonly, nullable) NSIndexPath *path;
 @property (nonatomic, readonly, nullable) NSDictionary *userInfo;
 
-+ (nonnull instancetype)actionInfoWithCell:(nullable UITableViewCell<WSCellClass> *)cell
-                                      path:(nonnull NSIndexPath *)path
++ (nonnull instancetype)actionInfoWithCell:(nonnull UITableViewCell<WSCellClass> *)cell
+                                      path:(nullable NSIndexPath *)path
                                       item:(nonnull WSCellItem *)item
                                   userInfo:(nullable NSDictionary *)userInfo;
 
-- (nonnull instancetype)initWithCell:(nullable UITableViewCell<WSCellClass> *)cell
-                                path:(nonnull NSIndexPath *)path
+- (nonnull instancetype)initWithCell:(nonnull UITableViewCell<WSCellClass> *)cell
+                                path:(nullable NSIndexPath *)path
                                 item:(nonnull WSCellItem *)item
                             userInfo:(nullable NSDictionary *)userInfo NS_DESIGNATED_INITIALIZER;
 

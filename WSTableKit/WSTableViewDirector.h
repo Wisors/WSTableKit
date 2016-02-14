@@ -14,8 +14,6 @@
 
 @protocol WSTableViewDirector <NSObject, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, copy) WSCellAdjustmentBlock adjustmentBlock;
-@property (nonatomic, copy) WSCellDisplayBlock displayBlock;
-@property (nonatomic, copy) WSCellEventBlock eventBlock;
+@property (nonatomic, nullable, copy) WSAdjustmentBlock adjustmentBlock;
 
 @end

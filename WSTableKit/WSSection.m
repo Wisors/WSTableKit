@@ -20,36 +20,33 @@
 
 @implementation WSSection
 @synthesize adjustmentBlock = _adjustmentBlock;
-@synthesize displayBlock = _displayBlock;
-@synthesize eventBlock = _eventBlock;
 
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
-                                     objects:(nullable NSArray *)objects {
+                                     objects:(nullable NSArray *)objects
+                                   tableView:(nullable UITableView *)tableView {
     NSArray *cellItems = [WSCellItem cellItemsWithClass:cellClass objects:objects];
-    return [self sectionWithItems:cellItems];
+    return [[self alloc] initWithItems:cellItems tableView:tableView scrollDelegate:nil adjustmentBlock:nil];
 }
 
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems {
-    return [[self alloc] initWithItems:cellItems adjustmentBlock:nil];
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nullable UITableView *)tableView {
+    return [[self alloc] initWithItems:cellItems tableView:tableView scrollDelegate:nil adjustmentBlock:nil];
 }
 
 + (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                         adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
-    return [[self alloc] initWithItems:cellItems adjustmentBlock:adjustmentBlock];
+                               tableView:(nullable UITableView *)tableView
+                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    return [[self alloc] initWithItems:cellItems tableView:tableView scrollDelegate:nil adjustmentBlock:adjustmentBlock];
 }
 
 - (instancetype)init {
-    return [self initWithItems:nil adjustmentBlock:nil];
+    return [self initWithItems:nil tableView:nil scrollDelegate:nil adjustmentBlock:nil];
 }
 
 - (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                      adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
-    return [self initWithItems:cellItems adjustmentBlock:adjustmentBlock scrollDelegate:nil];
-}
-
-- (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                      adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock
-                       scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate {
+                            tableView:(nullable UITableView *)tableView
+                       scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate
+                      adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    
     if ((self = [super init])) {
         _items              = (cellItems) ? [cellItems mutableCopy] : [NSMutableArray new];;
         _adjustmentBlock    = adjustmentBlock;
@@ -60,22 +57,16 @@
     return self;
 }
 
-- (void)setAdjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock {
+- (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    [self applyAdjustmentBlock:adjustmentBlock];
+}
+
+- (nonnull instancetype)applyAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     if (_adjustmentBlock != adjustmentBlock) {
         _adjustmentBlock = adjustmentBlock;
     }
-}
-
-- (void)setDisplayBlock:(nullable WSCellDisplayBlock)displayBlock {
-    if (_displayBlock != displayBlock) {
-        _displayBlock = displayBlock;
-    }
-}
-
-- (void)setEventBlock:(nullable WSCellEventBlock)eventBlock {
-    if (_eventBlock != eventBlock) {
-        _eventBlock = eventBlock;
-    }
+    
+    return self;
 }
 
 #pragma mark - UIScrollViewDelegate forwarding -
@@ -138,7 +129,6 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     NSAssert(item, @"Something goes wrong, you have to have an item here.");
 
@@ -171,89 +161,83 @@
     return _sectionFooter.customView;
 }
 
-#pragma mark - UITableViewDelegate Editing -
-
-- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_eventBlock) {
-        _eventBlock(WSCellWillBeginEditing, indexPath, nil);
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if (_eventBlock) {
-        _eventBlock(WSCellDidEndEditing, indexPath, nil);
-    }
-}
-
 #pragma mark - UITableViewDelegate Selection -
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_eventBlock) {
-        return _eventBlock(WSCellWillSelect, indexPath, indexPath);
-    }
-    
-    return indexPath;
+    return ws_invokeIndexPathReturnActionWithType(WSActionWillSelect, tableView, indexPath, self);
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_eventBlock) {
-        return _eventBlock(WSCellWillDeselect, indexPath, indexPath);
-    }
-    
-    return indexPath;
+    return ws_invokeIndexPathReturnActionWithType(WSActionWillDisplay, tableView, indexPath, self);
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    if (item.selectionBlock) {
-        item.selectionBlock(YES, item, indexPath);
+    WSAction *action = [item actionForType:WSActionClick];
+    if (action) {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    } else {
+        action = [item actionForType:WSActionSelect];
+    }
+    if (action) {
+        ws_findCellAndinvokeAction(action, tableView, indexPath, item);
     }
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    WSCellItem *item = [self itemAtIndex:indexPath.row];
-    if (item.selectionBlock) {
-        item.selectionBlock(NO, item, indexPath);
-    }
+    ws_invokeIndexPathReturnActionWithType(WSActionDeselect, tableView, indexPath, self);
 }
 
 #pragma mark - UITableViewDelegate Displaing -
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_displayBlock) {
-        _displayBlock(YES, cell, indexPath);
+    WSCellItem *item = [self itemAtIndex:indexPath.row];
+    WSAction *action = [item actionForType:WSActionWillDisplay];
+    if (action) {
+        ws_invokeAction(action, cell, indexPath, item);
     }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_displayBlock) {
-        _displayBlock(NO, cell, indexPath);
+    WSCellItem *item = [self itemAtIndex:indexPath.row];
+    WSAction *action = [item actionForType:WSActionEndDisplay];
+    if (action) {
+        ws_invokeAction(action, cell, indexPath, item);
     }
 }
 
 #pragma mark - UITableViewDelegate Higlighting -
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_eventBlock) {
-        id result = _eventBlock(WSCellShouldHightlightBlock, indexPath, @(YES));
-        if ([result isKindOfClass:[NSNumber class]]) {
-            return [result boolValue];
-        }
+    WSCellItem *item = [self itemAtIndex:indexPath.row];
+    WSAction *action = [item actionForType:WSActionShouldHiglight];
+    if (action) {
+        return ws_findCellAndinvokeAction(action, tableView, indexPath, item);
     }
     
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_eventBlock) {
-        _eventBlock(WSCellDidHighlight, indexPath, nil);
-    }
+#pragma mark - Actions -
+
+static inline id ws_findCellAndinvokeAction(WSAction *action, UITableView *tableView, NSIndexPath *indexPath, WSCellItem *item) {
+    UITableViewCell<WSCellClass> *cell = [tableView cellForRowAtIndexPath:indexPath];
+    return ws_invokeAction(action, cell, indexPath, item);
 }
 
-- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_eventBlock) {
-        _eventBlock(WSCellDidUnhighlight, indexPath, nil);
+static inline id ws_invokeAction(WSAction *action, UITableViewCell<WSCellClass> *cell, NSIndexPath *indexPath, WSCellItem *item) {
+    WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell path:indexPath item:item  userInfo:nil];
+    return [action invokeActionWithInfo:actionInfo];
+}
+
+static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITableView *tableView, NSIndexPath *indexPath, WSSection *section) {
+    WSCellItem *item = [section itemAtIndex:indexPath.row];
+    WSAction *action = [item actionForType:type];
+    if (action) {
+        return ws_findCellAndinvokeAction(action, tableView, indexPath, item);
     }
+    
+    return indexPath;
 }
 
 #pragma mark - Prototyping -

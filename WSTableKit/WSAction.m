@@ -9,9 +9,9 @@
 
 @interface WSAction()
 
-@property (nonatomic) NSString *key;
-@property (nonatomic) NSMutableArray *actionBlocks;
-@property (nonatomic, copy) WSReturnValueBlock returnValueBlock;
+@property (nonatomic, nonnull) NSString *key;
+@property (nonatomic, nonnull) NSMutableArray *actionBlocks;
+@property (nonatomic, nullable, copy) WSReturnValueBlock returnValueBlock;
 
 @end
 
@@ -63,16 +63,21 @@
     }
 }
 
+- (void)removeAllBlocks {
+    _returnValueBlock = nil;
+    [_actionBlocks removeAllObjects];
+}
+
 @end
 
 @implementation WSAction(Invocation)
 
-- (nullable id)invokeActionWithCell:(nonnull id<WSCellClass>)cell actionInfo:(nonnull WSActionInfo *)actionInfo {
+- (nullable id)invokeActionWithInfo:(nonnull WSActionInfo *)actionInfo {
     for (WSActionBlock actionBlock in _actionBlocks) {
         actionBlock(actionInfo);
     }
     
-    return (self.returnValueBlock) ? self.returnValueBlock(actionInfo) : nil;
+    return (_returnValueBlock) ? _returnValueBlock(actionInfo) : nil;
 }
 
 @end

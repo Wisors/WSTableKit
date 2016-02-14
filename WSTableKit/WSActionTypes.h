@@ -12,9 +12,12 @@
 typedef enum : NSUInteger {
     WSActionSelect,
     WSActionDeselect,
+    WSActionWillSelect,
+    WSActionWillDeselect,
     WSActionClick,
     WSActionWillDisplay,
-    
+    WSActionEndDisplay,
+    WSActionShouldHiglight
 } WSActionType;
 
 static inline NSString* ws_convertEnumTypeToString(WSActionType type) {
@@ -23,10 +26,18 @@ static inline NSString* ws_convertEnumTypeToString(WSActionType type) {
             return @"WSActionSelect";
         case WSActionDeselect:
             return @"WSActionDeselect";
+        case WSActionWillSelect:
+            return @"WSActionWillSelect";
+        case WSActionWillDeselect:
+            return @"WSActionWillDeselect";
         case WSActionClick:
             return @"WSActionClick";
         case WSActionWillDisplay:
             return @"WSActionDisplay";
+        case WSActionEndDisplay:
+            return @"WSActionEndDisplay";
+        case WSActionShouldHiglight:
+            return @"WSActionShouldHiglight";
     }
 }
 

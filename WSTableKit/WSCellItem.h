@@ -7,16 +7,14 @@
 
 #import <Foundation/Foundation.h>
 
-#import "WSActionTypes.h"
 #import "WSAction.h"
-#import "WSCellClass.h"
 #import "WSCellHandlingBlocks.h"
 
 @interface WSCellItem : NSObject
 
 @property (nonatomic, assign, nonnull, readonly) Class<WSCellClass> cellClass;
 @property (nonatomic, nullable, readonly) id object;
-@property (nonatomic, nullable, copy) WSCellAdjustmentBlock adjustmentBlock;
+@property (nonatomic, nullable, copy) WSAdjustmentBlock adjustmentBlock;
 
 ///-------------------------------------------------
 /// @name Base initilizers
@@ -26,7 +24,7 @@
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
                                    object:(nullable id)object
-                             customAction:(nonnull WSAction *)action;
+                             customAction:(nullable WSAction *)action;
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
                                    object:(nullable id)object
@@ -34,31 +32,35 @@
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
                                    object:(nullable id)object
-                          adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock;
+                          adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
 - (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
                                    object:(nullable id)object
                                   actions:(nullable NSArray<WSAction *> *)actions
-                          adjustmentBlock:(nullable WSCellAdjustmentBlock)adjustmentBlock NS_DESIGNATED_INITIALIZER;
+                          adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock NS_DESIGNATED_INITIALIZER;
 
 // Autocompletion syntax helpers for XCode
-- (void)setAdjustmentBlock:(nullable WSCellAdjustmentBlock)cellAdjustmentBlock;
-
-- (nonnull instancetype)addAction:(WSActionType)type
-                      actionBlock:(nullable WSCellActionShortBlock)block;
+- (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)cellAdjustmentBlock;
 
 @end
 
 @interface WSCellItem(Actions)
 
-// Add
+- (nullable NSArray<WSAction *> *)cellActions;
+
+- (nonnull instancetype)addAction:(WSActionType)type
+                      actionBlock:(nullable WSActionBlock)block;
+
+- (nonnull instancetype)addAction:(WSActionType)type
+                 returnValueBlock:(nullable WSReturnValueBlock)block;
+
 /**
  *  Add new custom action. If CellItem already contains action with the same key - it will override previous action with new one.
  *
  *  @param action Custom CellAction.
  */
-- (void)addAction:(WSAction *)action;
-- (void)addActions:(NSArray *)actions;
+- (void)addAction:(nullable WSAction *)action;
+- (void)addActions:(nullable NSArray<WSAction *> *)actions;
 
 // Access
 /**
@@ -68,21 +70,56 @@
  *
  *  @return Custom action object.
  */
-- (WSAction *)actionForKey:(NSString *)key;
+- (nullable WSAction *)actionForKey:(nonnull NSString *)key;
+- (nullable WSAction *)actionForType:(WSActionType)type;
 
 // Remove
-- (void)removeActionForKey:(NSString *)key;
+- (void)removeActionForKey:(nonnull NSString *)key;
 
 // Invoke
 /**
- *  Invoke custom action for specific key. Does nothing if action is not exist.
+ *  Cell contains actions with specific keys. This method convert type to appropriet key and invoke action associated with key.
  *
- *  @param key  Action key.
+ *  @param type Action type.
+ *  @param cell Cell will be passed to executed action.
  *
- *  @return Result of action invocation.
+ *  @return Result of action invocation or nil
  */
-- (id)invokeActionForKey:(NSString *)key withCell:(WSTableViewCell *)cell;
-- (id)invokeActionForKey:(NSString *)key withCell:(WSTableViewCell *)cell userInfo:(NSDictionary *)userInfo;
+- (nullable id)invokeActionForType:(WSActionType)type withCell:(nonnull UITableViewCell<WSCellClass> *)cell;
+/**
+ *  Cell contains actions with specific keys. This method convert type to appropriet key and invoke action associated with key and pass additional information.
+ *
+ *  @param type     Action type.
+ *  @param cell     Cell will be passed to executed action.
+ *  @param userInfo You may pass an optional information for your custom cell action.
+ *
+ *  @return Result of action invocation or nil
+ */
+- (nullable id)invokeActionForType:(WSActionType)type
+                          withCell:(nonnull UITableViewCell<WSCellClass> *)cell
+                          userInfo:(nullable NSDictionary *)userInfo;
+
+/**
+ *  Cell contains actions with specific keys. This method invoke action associated with key.
+ *
+ *  @param type Action type.
+ *  @param cell Cell will be passed to executed action.
+ *
+ *  @return Result of action invocation or nil
+ */
+- (nullable id)invokeActionForKey:(nonnull NSString *)key withCell:(nonnull UITableViewCell<WSCellClass> *)cell;
+/**
+ *  Cell contains actions with specific keys. This method invoke action associated with key and pass additional information.
+ *
+ *  @param type     Action type.
+ *  @param cell     Cell will be passed to executed action.
+ *  @param userInfo You may pass an optional information for your custom cell action.
+ *
+ *  @return Result of action invocation or nil
+ */
+- (nullable id)invokeActionForKey:(nonnull NSString *)key
+                         withCell:(nonnull UITableViewCell<WSCellClass> *)cell
+                         userInfo:(nullable NSDictionary *)userInfo;
 
 @end
 
@@ -92,14 +129,19 @@
 /// @name Fabric methods for mass cell item creation
 ///-------------------------------------------------
 /// All methods are nil-save, so if you pass empty or nil objects it will return an empty array;
-+ (NSArray *)cellItemsWithClass:(Class)cellClass objects:(NSArray *)objects;
-+ (NSArray *)cellItemsWithClass:(Class)cellClass objects:(NSArray *)objects customActions:(NSArray *)actions;
-+ (NSArray *)cellItemsWithClass:(Class)cellClass objects:(NSArray *)objects selectionBlock:(WSCellSelectionBlock)selectionBlock;
-+ (NSArray *)cellItemsWithClass:(Class)cellClass objects:(NSArray *)objects adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
-+ (NSArray *)cellItemsWithClass:(Class)cellClass
-                        objects:(NSArray *)objects
-                        actions:(NSArray *)actions
-                 selectionBlock:(WSCellSelectionBlock)selectionBlock
-                adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass objects:(nullable NSArray *)objects;
+
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
+                                objects:(nullable NSArray *)objects
+                          customActions:(nullable NSArray *)actions;
+
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
+                                objects:(nullable NSArray *)objects
+                        adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
+
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
+                                objects:(nullable NSArray *)objects
+                                actions:(nullable NSArray *)actions
+                        adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
 @end

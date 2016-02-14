@@ -13,21 +13,21 @@
 
 @interface WSSectionContainer : NSObject <WSTableViewDirector>
 
+@property (nonatomic, weak, nullable, readonly) UITableView *tableView;
 @property (nonatomic, assign) BOOL enableAlphabet;
 
 + (instancetype)containerWithSections:(NSArray *)sestions;
-+ (instancetype)containerWithSections:(NSArray *)sections adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
++ (instancetype)containerWithSections:(NSArray *)sections adjustmentBlock:(WSAdjustmentBlock)adjustmentBlock;
 + (instancetype)containerWithSections:(NSArray *)sections scrollDelegate:(id<UIScrollViewDelegate>)scrollDelegate;
 
 
 - (instancetype)initWithSection:(WSSection *)section;
 - (instancetype)initWithSections:(NSArray *)sections;
-- (instancetype)initWithSections:(NSArray *)sections adjustmentBlock:(WSCellAdjustmentBlock)adjustmentBlock;
+- (instancetype)initWithSections:(NSArray *)sections adjustmentBlock:(WSAdjustmentBlock)adjustmentBlock;
 - (instancetype)initWithSections:(NSArray *)sections scrollDelegate:(id<UIScrollViewDelegate>)scrollDelegate;
 
-- (void)setAdjustmentBlock:(WSCellAdjustmentBlock)cellAdjustmentBlock;
-- (void)setDisplayBlock:(WSCellDisplayBlock)displayBlock;
-- (void)setEventBlock:(WSCellEventBlock)eventBlock;
+// Xcode autocomplete helpers
+- (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
 @end
 
