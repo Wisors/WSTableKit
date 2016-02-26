@@ -193,17 +193,13 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     WSAction *action = [item actionForType:WSActionWillDisplay];
-    if (action) {
-        ws_invokeAction(action, cell, indexPath, item);
-    }
+    ws_invokeAction(action, cell, indexPath, item);
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     WSAction *action = [item actionForType:WSActionEndDisplay];
-    if (action) {
-        ws_invokeAction(action, cell, indexPath, item);
-    }
+    ws_invokeAction(action, cell, indexPath, item);
 }
 
 #pragma mark - UITableViewDelegate Higlighting -
@@ -212,7 +208,9 @@
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     WSAction *action = [item actionForType:WSActionShouldHiglight];
     if (action) {
-        return ws_findCellAndinvokeAction(action, tableView, indexPath, item);
+        id actionResult = ws_findCellAndinvokeAction(action, tableView, indexPath, item);
+        NSAssert([actionResult respondsToSelector:@selector(boolValue)], @"Need to return boolean type");
+        return [actionResult boolValue];
     }
     
     return YES;
@@ -226,8 +224,11 @@ static inline id ws_findCellAndinvokeAction(WSAction *action, UITableView *table
 }
 
 static inline id ws_invokeAction(WSAction *action, UITableViewCell<WSCellClass> *cell, NSIndexPath *indexPath, WSCellItem *item) {
-    WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell path:indexPath item:item  userInfo:nil];
-    return [action invokeActionWithInfo:actionInfo];
+    if (action) {
+        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:item path:indexPath userInfo:nil];
+        return [action invokeActionWithInfo:actionInfo];
+    }
+    return nil;
 }
 
 static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITableView *tableView, NSIndexPath *indexPath, WSSection *section) {

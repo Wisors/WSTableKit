@@ -156,7 +156,7 @@
     
     WSAction *action = [self actionForKey:key];
     if (action) {
-        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell path:nil item:self userInfo:userInfo];
+        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:self path:nil userInfo:userInfo];
         return [action invokeActionWithInfo:actionInfo];
     }
     return nil;

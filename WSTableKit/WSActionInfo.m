@@ -22,10 +22,10 @@
 @implementation WSActionInfo
 
 + (nonnull instancetype)actionInfoWithCell:(nonnull UITableViewCell<WSCellClass> *)cell
-                                      path:(nullable NSIndexPath *)path
                                       item:(nonnull WSCellItem *)item
+                                      path:(nullable NSIndexPath *)path
                                   userInfo:(nullable NSDictionary *)userInfo {
-    return [[self alloc] initWithCell:cell path:path item:item userInfo:userInfo];
+    return [[self alloc] initWithCell:cell item:item path:path userInfo:userInfo];
 }
 
 - (instancetype)init NS_UNAVAILABLE {
@@ -33,8 +33,8 @@
 }
 
 - (nonnull instancetype)initWithCell:(nonnull UITableViewCell<WSCellClass> *)cell
-                                path:(nullable NSIndexPath *)path
                                 item:(nonnull WSCellItem *)item
+                                path:(nullable NSIndexPath *)path
                             userInfo:(nullable NSDictionary *)userInfo {
     
     if ((self = [super init])) {
