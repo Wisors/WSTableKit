@@ -9,23 +9,20 @@
 
 @interface WSTableViewCell ()
 
-@property (nonatomic, strong) WSCellItem *item;
-
-@property (nonatomic, strong) CALayer *topBorderLayer;
-@property (nonatomic, strong) CALayer *bottomBorderLayer;
-@property (nonatomic, strong) UIColor *separatorColor;
+@property (nonatomic) WSCellItem *item;
 
 @end
 
 @implementation WSTableViewCell{
+    UIColor *_customSeparatorsColor;
+    CALayer *_topBorderLayer;
+    CALayer *_bottomBorderLayer;
     CGFloat _baseSize;
     UIEdgeInsets _topSeparatorInsets;
     UIEdgeInsets _bottomSeparatorInsets;
 }
-@synthesize separatorColor = _mySeparatorColor; //UITableViewCell allready has ivar _separatorColor
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    
+- (nonnull instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         [self doInit];
     }
@@ -33,36 +30,32 @@
 }
 
 - (void)awakeFromNib {
-    
     [super awakeFromNib];
     [self doInit];
 }
 
 - (void)prepareForReuse {
-    
     [super prepareForReuse];
     
     //separators are hidden by default
-    self.topBorderLayer.hidden = self.bottomBorderLayer.hidden = YES;
+    _topBorderLayer.hidden = _bottomBorderLayer.hidden = YES;
+    [self setSeparatorsInsets:UIEdgeInsetsMake(0, 15, 0, 0)];
 }
 
 - (void)doInit {
-    
     _baseSize = 1 / [UIScreen mainScreen].scale;
-    [self setSeparatorsInsets:UIEdgeInsetsMake(0, 12, 0, 0)];
+    [self setSeparatorsInsets:UIEdgeInsetsMake(0, 15, 0, 0)];
     
-    self.topBorderLayer = [[CALayer alloc] init];
-    self.topBorderLayer.backgroundColor = self.separatorColor.CGColor;
-    self.topBorderLayer.hidden = YES;
+    _topBorderLayer = [[CALayer alloc] init];
+    _topBorderLayer.hidden = YES;
     
-    self.bottomBorderLayer = [[CALayer alloc] init];
-    self.bottomBorderLayer.backgroundColor = self.separatorColor.CGColor;
-    self.bottomBorderLayer.hidden = YES;
+    _bottomBorderLayer = [[CALayer alloc] init];
+    _bottomBorderLayer.hidden = YES;
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    [self.layer addSublayer:self.topBorderLayer];
-    [self.layer addSublayer:self.bottomBorderLayer];
+    [self.layer addSublayer:_topBorderLayer];
+    [self.layer addSublayer:_bottomBorderLayer];
 }
 
 #pragma mark - CellClass protocol -
@@ -75,56 +68,29 @@
     return (_hasAutolayout) ? [self calculateHeightForAutolayoutCell] : 44; // Autolayout or default table cell size.
 }
 
-- (void)applyItem:(WSCellItem *)item {
+- (void)applyItem:(WSCellItem *)item heightCalculation:(BOOL)heightCalculation {
     self.item = item;
 }
 
 - (CGFloat)calculateHeightForAutolayoutCell {
-    
     [self setNeedsLayout];
     [self layoutIfNeeded];
     CGSize size = [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return size.height;
 }
 
-#pragma mark - Custom setters/getters -
-
-- (void)setSeparatorColor:(UIColor *)separatorColor {
-    
-    if (_mySeparatorColor != separatorColor) {
-        
-        _mySeparatorColor = separatorColor;
-        if (!self.customSeparatorColor) {
-            
-            self.topBorderLayer.backgroundColor = separatorColor.CGColor;
-            self.bottomBorderLayer.backgroundColor = separatorColor.CGColor;
-        }
-    }
-}
-
-- (void)setCustomSeparatorColor:(UIColor *)customSeparatorColor {
-    
-    if (_customSeparatorColor != customSeparatorColor) {
-        
-        _customSeparatorColor = customSeparatorColor;
-        self.topBorderLayer.backgroundColor = customSeparatorColor.CGColor;
-        self.bottomBorderLayer.backgroundColor = customSeparatorColor.CGColor;
-    }
-}
-
 #pragma mark - Layout -
 
 - (void)layoutSubviews {
-    
     [super layoutSubviews];
     
     UIEdgeInsets topInsets = self.topSeparatorInsets;
     CGFloat topWidth = self.frame.size.width - topInsets.left - topInsets.right;
-    self.topBorderLayer.frame = CGRectMake(topInsets.left, topInsets.top, topWidth, _baseSize);
+    _topBorderLayer.frame = CGRectMake(topInsets.left, topInsets.top, topWidth, _baseSize);
     
     UIEdgeInsets bottomInsets = self.bottomSeparatorInsets;
     CGFloat bottomWidth = self.frame.size.width - bottomInsets.left - bottomInsets.right;
-    self.bottomBorderLayer.frame = CGRectMake(bottomInsets.left, self.frame.size.height - _baseSize - bottomInsets.bottom, bottomWidth, _baseSize);
+    _bottomBorderLayer.frame = CGRectMake(bottomInsets.left, self.frame.size.height - _baseSize - bottomInsets.bottom, bottomWidth, _baseSize);
 }
 
 @end
@@ -132,7 +98,6 @@
 @implementation WSTableViewCell(SeparatorsInsets)
 
 - (void)setTopSeparatorInsets:(UIEdgeInsets)topSeparatorInsets {
-    
     if (!UIEdgeInsetsEqualToEdgeInsets(_topSeparatorInsets, topSeparatorInsets)) {
         _topSeparatorInsets = topSeparatorInsets;
         [self setNeedsLayout];
@@ -144,7 +109,6 @@
 }
 
 - (void)setBottomSeparatorInsets:(UIEdgeInsets)bottomSeparatorInsets {
-    
     if (!UIEdgeInsetsEqualToEdgeInsets(_bottomSeparatorInsets, bottomSeparatorInsets)) {
         _bottomSeparatorInsets = bottomSeparatorInsets;
         [self setNeedsLayout];
@@ -166,7 +130,6 @@
 }
 
 - (void)setLeftSeparatorsOffset:(CGFloat)leftSeparatorsOffset {
-    
     UIEdgeInsets topInsets = UIEdgeInsetsMake(_topSeparatorInsets.top, leftSeparatorsOffset, _topSeparatorInsets.bottom, _topSeparatorInsets.right);
     UIEdgeInsets bottomInsets = UIEdgeInsetsMake(_bottomSeparatorInsets.top, leftSeparatorsOffset, _bottomSeparatorInsets.bottom, _bottomSeparatorInsets.right);
     [self setTopSeparatorInsets:topInsets];
@@ -174,7 +137,6 @@
 }
 
 - (void)setRightSeparatorsOffset:(CGFloat)rightSeparatorsOffset {
-    
     UIEdgeInsets topInsets = UIEdgeInsetsMake(_topSeparatorInsets.top, _topSeparatorInsets.left, _topSeparatorInsets.bottom, rightSeparatorsOffset);
     UIEdgeInsets bottomInsets = UIEdgeInsetsMake(_bottomSeparatorInsets.top, _bottomSeparatorInsets.left, _bottomSeparatorInsets.bottom,rightSeparatorsOffset);
     [self setTopSeparatorInsets:topInsets];
@@ -183,26 +145,48 @@
 
 @end
 
-@implementation WSTableViewCell (SeparatorsShowing)
+@implementation WSTableViewCell (SeparatorsAppearance)
+
+#pragma mark - Custom setters/getters -
+
+// UITableView set separator color during cell initialization process
+- (void)setSeparatorColor:(UIColor *)separatorColor {
+    if (!self.customSeparatorsColor) {
+        _topBorderLayer.backgroundColor = separatorColor.CGColor;
+        _bottomBorderLayer.backgroundColor = separatorColor.CGColor;
+    }
+}
+
+- (UIColor *)customSeparatorsColor {
+    return _customSeparatorsColor;
+}
+
+- (void)setCustomSeparatorsColor:(UIColor *)customSeparatorsColor {
+    if (_customSeparatorsColor != customSeparatorsColor) {
+        _customSeparatorsColor = customSeparatorsColor;
+        _topBorderLayer.backgroundColor = customSeparatorsColor.CGColor;
+        _bottomBorderLayer.backgroundColor = customSeparatorsColor.CGColor;
+    }
+}
 
 - (BOOL)topSeparatorHidden {
-    return self.topBorderLayer.hidden;
+    return _topBorderLayer.hidden;
 }
 
 - (void)setTopSeparatorHidden:(BOOL)topSeparatorHidden {
-    self.topBorderLayer.hidden = topSeparatorHidden;
+    _topBorderLayer.hidden = topSeparatorHidden;
 }
 
 - (BOOL)bottomSeparatorHidden {
-    return self.bottomBorderLayer.hidden;
+    return _bottomBorderLayer.hidden;
 }
 
 - (void)setBottomSeparatorHidden:(BOOL)bottomSeparatorHidden {
-    self.bottomBorderLayer.hidden = bottomSeparatorHidden;
+    _bottomBorderLayer.hidden = bottomSeparatorHidden;
 }
 
 - (void)showBothSeparators:(BOOL)show {
-    self.topBorderLayer.hidden = self.bottomBorderLayer.hidden = !show;
+    _topBorderLayer.hidden = _bottomBorderLayer.hidden = !show;
 }
 
 @end

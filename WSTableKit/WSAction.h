@@ -13,16 +13,15 @@
 /**
  *  Action block. Should be invoked by some event inside cell (button click, textfield changes, etc.). It is possible to have only one block of this type per one action key.
  *
- *  @param cell      Cell object that cause this action occured.
- *  @param userInfo  Some additional parameters, may be nil as well.
+ *  @param actionInfo      Object, that agregate all the necessary info about invoked action.
  *
  *  @return Action result if you need it inside your cell object, may return nil as well.
  */
 typedef _Nonnull id (^WSReturnValueBlock)(WSActionInfo *_Nonnull actionInfo);
 /**
- *  Short version of previous block, for actions that don't require a return value. It is possible to have multiple blocks of this type per action key.
+ *  Short version of previous block, for actions that don't require a return value. It is possible to have multiple blocks of this type per one action key.
  *
- *  @param cell Cell that cause action.
+ *  @param actionInfo      Object, that agregate all the necessary info about invoked action.
  */
 typedef void (^WSActionBlock)(WSActionInfo * _Nonnull actionInfo);
 

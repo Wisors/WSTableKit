@@ -22,30 +22,23 @@
 + (nonnull NSString *)cellIdentifier;
 
 /**
- *  Apply item to cell to proper configure it and make design adjustment.
+ *  Apply item to cell to proper configure it and make design adjustment with possibility of performance optimization. No need to fully adjust your cell design for height calculation, just change only height dependent attributes.
  *
- *  @param item WSCellItem object for this cell.
+ *  @param item              WSCellItem object for this cell.
+ *  @param heightCalculation YES means that cell is preparing for height calculation and -cellHeight will be called as next method, NO - cell is preparing for showing in a tableview and requred full adjustment.
  */
-- (void)applyItem:(nullable WSCellItem *)item;
+- (void)applyItem:(nullable WSCellItem *)item heightCalculation:(BOOL)heightCalculation;
 
 @optional
 
 /**
- *  Apply item to cell to proper configure it and make design adjustment with possibility of performance optimization. No need to fully adjust your cell design for height calculation, just height dependent attributes.
- *
- *  @param item              WSCellItem object for this cell.
- *  @param heightCalculation YES means the cell is preparing for cell height calculation, NO - cell is preparing for showing in a tableview.
- */
-- (void)applyItem:(nullable WSCellItem *)item heightCalculation:(BOOL)heightCalculation;
-
-/**
- *  Calculate and return custom cell height.
+ *  Calculate and return custom cell height. Otherwised WSTableKit use UITableView
  *
  *  @return Value of cell height to proper showing in tableview.
  */
 - (CGFloat)cellHeight;
 
-// All NSObject classes responds to this methods, but not expose it in a <NSObject> protocol
+// All NSObject classes are responding to this methods, but are not exposing it in a <NSObject> protocol
 + (BOOL)instancesRespondToSelector:(nonnull SEL)aSelector;
 + (BOOL)respondsToSelector:(nonnull SEL)selector;
 

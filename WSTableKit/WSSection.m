@@ -103,7 +103,7 @@
     if (item.adjustmentBlock) {
         item.adjustmentBlock(cell, item, indexPath);
     }
-    [cell applyItem:item];
+    [cell applyItem:item heightCalculation:NO];
     
     return cell;
 }
@@ -141,11 +141,7 @@
         if (item.adjustmentBlock) {
             item.adjustmentBlock(proto, item, indexPath);
         }
-        if ([proto respondsToSelector:@selector(applyItem:heightCalculation:)]) {
-            [proto applyItem:item heightCalculation:YES];
-        } else {
-            [proto applyItem:item];
-        }
+        [proto applyItem:item heightCalculation:YES];
         
         return [proto cellHeight];
     } else {

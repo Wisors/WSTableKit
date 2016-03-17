@@ -12,6 +12,9 @@
 
 @class WSCellItem;
 
+/**
+ *  WSActionInfo class used overall by WSTableKit. It is agregating all the info provided for some cell action and associate it with cell.
+ */
 @interface WSActionInfo : NSObject
 
 @property (nonatomic, readonly, nonnull) UITableViewCell<WSCellClass> *cell;

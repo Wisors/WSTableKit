@@ -11,10 +11,14 @@
 
 @interface WSTableViewCell : UITableViewCell<WSCellClass>
 
-@property (nonatomic, strong, readonly, nullable) WSCellItem *item;
-@property (nonatomic, strong, nonnull) UIColor *customSeparatorColor;
-@property (nonatomic, assign) IBInspectable BOOL hasAutolayout;
+@property (nonatomic, readonly, nullable) WSCellItem *item;
+@property (nonatomic, assign) IBInspectable BOOL hasAutolayout; //Define the behavior of default implementation -cellHeigh method. Return default 44pt size or use autolayout.
 
+/**
+ *  Caclulate cell height using autolayot.
+ *
+ *  @return Cell height.
+ */
 - (CGFloat)calculateHeightForAutolayoutCell;
 
 @end
@@ -46,9 +50,10 @@
 
 @end
 
-@interface WSTableViewCell(SeparatorsShowing)
+@interface WSTableViewCell(SeparatorsAppearance)
 
 // Both separators is hidden by default
+@property (nonatomic, nonnull) UIColor *customSeparatorsColor; //As default behavior UITableView set separator color to cell. This property allow to ovveride color with per cell basis.
 @property (nonatomic, assign) BOOL topSeparatorHidden;
 @property (nonatomic, assign) BOOL bottomSeparatorHidden;
 
