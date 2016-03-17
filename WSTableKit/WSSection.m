@@ -19,7 +19,7 @@
 @end
 
 @implementation WSSection
-@synthesize adjustmentBlock = _adjustmentBlock;
+@synthesize adjustment = _adjustment;
 
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
                                      objects:(nullable NSArray *)objects
@@ -49,23 +49,22 @@
     
     if ((self = [super init])) {
         _items              = (cellItems) ? [cellItems mutableCopy] : [NSMutableArray new];;
-        _adjustmentBlock    = adjustmentBlock;
         _cellPrototypes     = [NSMutableDictionary new];
         _scrollDelegate     = delegate;
+        [self setAdjustmentBlock:adjustmentBlock];
     }
     
     return self;
 }
 
 - (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    [self applyAdjustmentBlock:adjustmentBlock];
+    _adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
+    }] : nil;
 }
 
 - (nonnull instancetype)applyAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    if (_adjustmentBlock != adjustmentBlock) {
-        _adjustmentBlock = adjustmentBlock;
-    }
-    
+    [self setAdjustmentBlock:adjustmentBlock];
     return self;
 }
 
@@ -97,12 +96,9 @@
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:[item.cellClass cellIdentifier]
                                                                          forIndexPath:indexPath];
-    if (_adjustmentBlock) {
-        _adjustmentBlock(cell, item, indexPath);
-    }
-    if (item.adjustmentBlock) {
-        item.adjustmentBlock(cell, item, indexPath);
-    }
+    WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:item path:indexPath userInfo:nil];
+    [_adjustment invokeActionWithInfo:actionInfo];
+    [item.adjustment invokeActionWithInfo:actionInfo];
     [cell applyItem:item heightCalculation:NO];
     
     return cell;
@@ -135,12 +131,9 @@
     Class<WSCellClass> cellClass = item.cellClass;
     UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Need to register cell
     if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
-        if (_adjustmentBlock) {
-            _adjustmentBlock(proto, item, indexPath);
-        }
-        if (item.adjustmentBlock) {
-            item.adjustmentBlock(proto, item, indexPath);
-        }
+        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:proto item:item path:indexPath userInfo:nil];
+        [_adjustment invokeActionWithInfo:actionInfo];
+        [item.adjustment invokeActionWithInfo:actionInfo];
         [proto applyItem:item heightCalculation:YES];
         
         return [proto cellHeight];

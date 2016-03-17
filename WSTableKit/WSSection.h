@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "WSCellClass.h"
+#import "WSCellItem.h"
 #import "WSSectionSupplementaryItem.h"
 #import "WSTableViewDirector.h"
 

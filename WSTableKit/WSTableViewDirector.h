@@ -8,12 +8,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "WSCellHandlingBlocks.h"
-
-@class WSCellItem;
+@class WSAction, WSCellItem;
 
 @protocol WSTableViewDirector <NSObject, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, nullable, copy) WSAdjustmentBlock adjustmentBlock;
+@property (nonatomic, nullable) WSAction *adjustment;
 
 @end

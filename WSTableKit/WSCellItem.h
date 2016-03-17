@@ -8,13 +8,14 @@
 #import <Foundation/Foundation.h>
 
 #import "WSAction.h"
-#import "WSCellHandlingBlocks.h"
+
+typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path);
 
 @interface WSCellItem : NSObject
 
 @property (nonatomic, assign, nonnull, readonly) Class<WSCellClass> cellClass;
 @property (nonatomic, nullable, readonly) id object;
-@property (nonatomic, nullable, copy) WSAdjustmentBlock adjustmentBlock;
+@property (nonatomic, nullable) WSAction *adjustment;
 
 ///-------------------------------------------------
 /// @name Base initilizers
@@ -32,15 +33,21 @@
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
                                    object:(nullable id)object
+                               adjustment:(nullable WSAction *)adjustment;
+
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
                           adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
 - (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
                                    object:(nullable id)object
                                   actions:(nullable NSArray<WSAction *> *)actions
-                          adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock NS_DESIGNATED_INITIALIZER;
+                          adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
-// Autocompletion syntax helpers for XCode
-- (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)cellAdjustmentBlock;
+- (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                                  actions:(nullable NSArray<WSAction *> *)actions
+                               adjustment:(nullable WSAction *)adjustment NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -143,5 +150,14 @@
                                 objects:(nullable NSArray *)objects
                                 actions:(nullable NSArray *)actions
                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
+
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
+                                objects:(nullable NSArray *)objects
+                             adjustment:(nullable WSAction *)adjustment;
+
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
+                                objects:(nullable NSArray *)objects
+                                actions:(nullable NSArray *)actions
+                             adjustment:(nullable WSAction *)adjustment;
 
 @end

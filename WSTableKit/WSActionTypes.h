@@ -10,6 +10,7 @@
 #define WSActionTypes_h
 
 typedef enum : NSUInteger {
+    WSActionAdjustment,
     WSActionSelect,
     WSActionDeselect,
     WSActionWillSelect,
@@ -22,6 +23,8 @@ typedef enum : NSUInteger {
 
 static inline NSString* ws_convertEnumTypeToString(WSActionType type) {
     switch (type) {
+        case WSActionAdjustment:
+            return @"WSActionAdjustment"; //Special type
         case WSActionSelect:
             return @"WSActionSelect";
         case WSActionDeselect:

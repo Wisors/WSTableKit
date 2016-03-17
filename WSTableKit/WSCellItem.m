@@ -10,15 +10,15 @@
 @interface WSCellItem()
 
 @property (nonatomic, assign) Class<WSCellClass> cellClass;
-@property (nonatomic, strong) id object;
-@property (nonatomic, strong) NSMutableArray *customActions;
+@property (nonatomic) id object;
+@property (nonatomic) NSMutableArray *customActions;
 
 @end
 
 @implementation WSCellItem : NSObject
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass object:(nullable id)object {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustmentBlock:nil];
+    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustment:nil];
 }
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
@@ -27,13 +27,19 @@
     return [[self alloc] initWithCellClass:cellClass
                                     object:object
                                    actions:(action) ? @[action] : nil
-                           adjustmentBlock:nil];
+                                adjustment:nil];
 }
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
                                    object:(nullable id)object
                             customActions:(nullable NSArray<WSAction *> *)actions {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:actions adjustmentBlock:nil];
+    return [[self alloc] initWithCellClass:cellClass object:object actions:actions adjustment:nil];
+}
+
++ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                               adjustment:(nullable WSAction *)adjustment {
+    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustment:adjustment];
 }
 
 + (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
@@ -50,10 +56,19 @@
                                    object:(nullable id)object
                                   actions:(nullable NSArray<WSAction *> *)actions
                           adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    
+    WSAction *adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
+    }] : nil;
+    return [self initWithCellClass:cellClass object:object actions:actions adjustment:adjustment];
+}
+
+- (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
+                                   object:(nullable id)object
+                                  actions:(nullable NSArray<WSAction *> *)actions
+                               adjustment:(nullable WSAction *)adjustment {
     if ((self = [super init])) {
         NSAssert([cellClass conformsToProtocol:@protocol(WSCellClass)], @"Cell class must conform to CellClass protocol");
-        _adjustmentBlock= adjustmentBlock;
+        _adjustment     = adjustment;
         _cellClass      = cellClass;
         _object         = object;
         _customActions  = [NSMutableArray new];
@@ -153,7 +168,6 @@
 - (nullable id)invokeActionForKey:(nonnull NSString *)key
                          withCell:(nonnull UITableViewCell<WSCellClass> *)cell
                          userInfo:(nullable NSDictionary *)userInfo {
-    
     WSAction *action = [self actionForKey:key];
     if (action) {
         WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:self path:nil userInfo:userInfo];
@@ -167,13 +181,19 @@
 @implementation WSCellItem(Fabrics)
 
 + (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass objects:(nullable NSArray *)objects {
-    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:nil adjustmentBlock:nil];
+    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:nil adjustment:nil];
 }
 
 + (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
                                 objects:(nullable NSArray *)objects
                           customActions:(nullable NSArray *)actions {
-    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:actions adjustmentBlock:nil];
+    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:actions adjustment:nil];
+}
+
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
+                                objects:(nullable NSArray *)objects
+                             adjustment:(nullable WSAction *)adjustment {
+    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:nil adjustment:adjustment];
 }
 
 + (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
@@ -186,13 +206,23 @@
                                 objects:(nullable NSArray *)objects
                                 actions:(nullable NSArray *)actions
                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    WSAction *adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
+    }] : nil;
+    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:actions adjustment:adjustment];
+}
+
++ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
+                                objects:(nullable NSArray *)objects
+                                actions:(nullable NSArray *)actions
+                             adjustment:(nullable WSAction *)adjustment {
     if (objects.count == 0) {
         return @[];
     }
     
     NSMutableArray *cellItems = [NSMutableArray new];
     for (id object in objects) {
-        WSCellItem *item = [[WSCellItem alloc] initWithCellClass:cellClass object:object actions:actions adjustmentBlock:adjustmentBlock];
+        WSCellItem *item = [[WSCellItem alloc] initWithCellClass:cellClass object:object actions:actions adjustment:adjustment];
         [cellItems addObject:item];
     }
     
