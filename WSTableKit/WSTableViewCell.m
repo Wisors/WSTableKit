@@ -61,7 +61,7 @@
 #pragma mark - CellClass protocol -
 
 + (nonnull NSString *)cellIdentifier {
-    return NSStringFromClass([self class]);
+    return [[NSStringFromClass([self class]) componentsSeparatedByString:@"."] lastObject];
 }
 
 - (CGFloat)cellHeight {

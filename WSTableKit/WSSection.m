@@ -244,7 +244,8 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
                 cell = [[(Class)cellClass alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
             }
         }
-        [_cellPrototypes setObject:cell forKey:identifier]; // If it crash, most likely you has some mess with your identifiers
+        NSAssert(cell, @"Most likely you have a mistake with your cell's identifier");
+        [_cellPrototypes setObject:cell forKey:identifier];
         cell.bounds = CGRectMake(0, 0, tableView.bounds.size.width, cell.bounds.size.height);
     }
     

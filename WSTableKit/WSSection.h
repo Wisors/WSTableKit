@@ -79,36 +79,36 @@
  *
  *  @param items Array if CellItem objects.
  */
-- (void)updateWithItems:(NSArray *)items;
+- (void)updateWithItems:(nonnull NSArray *)items;
 /**
  *  Add item at the end of section.
  *
  *  @param item CellItem object.
  */
-- (void)addItem:(WSCellItem *)item;
+- (void)addItem:(nullable WSCellItem *)item;
 /**
  *  Add items at the end of section.
  *
  *  @param items Array if CellItem objects.
  */
-- (void)addItems:(NSArray *)items;
+- (void)addItems:(nullable NSArray *)items;
 /**
  *  Add item at specific index. If index is already occupied, the objects at index and beyond are shifted by adding 1 to their indices to make room.
  *
  *  @param item  CellItem to insert.
  *  @param index Item index.
  */
-- (void)insertItem:(WSCellItem *)item atIndex:(NSInteger)index;
+- (void)insertItem:(nullable WSCellItem *)item atIndex:(NSInteger)index;
 
-- (void)replaceItemAtIndex:(NSInteger)index withItem:(WSCellItem *)item;
+- (void)replaceItemAtIndex:(NSInteger)index withItem:(nullable WSCellItem *)item;
 
 - (void)removeItemAtIndex:(NSInteger)index;
-- (void)removeItemsAtIndexes:(NSIndexSet *)set;
+- (void)removeItemsAtIndexes:(nullable NSIndexSet *)set;
 - (void)removeAllItems;
 
-- (void)enumerateObjectsUsingBlock:(void (^)(WSCellItem *item, NSUInteger idx, BOOL *stop))block;
-- (WSCellItem *)itemAtIndex:(NSInteger)index;
-- (NSInteger)indexOfItem:(WSCellItem *)item;
+- (void)enumerateObjectsUsingBlock:(nullable void (^)(WSCellItem * _Nonnull item, NSUInteger idx, BOOL * _Nullable stop))block;
+- (nullable WSCellItem *)itemAtIndex:(NSInteger)index;
+- (NSInteger)indexOfItem:(nullable WSCellItem *)item;
 
 - (NSUInteger)numberOfItems;
 

@@ -37,6 +37,7 @@
         cell.bottomSeparatorInsets = UIEdgeInsetsMake(0, 4, 1, 5);
         cell.topSeparatorInsets = UIEdgeInsetsMake(1, 4, 0, 5);
     }];
+    self.section.sectionHeader = [WSSectionSupplementaryItem itemWithTitle:@"Some title"];
         
     self.tableView.dataSource = self.section;
     self.tableView.delegate = self.section;
