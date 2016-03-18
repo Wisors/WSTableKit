@@ -46,7 +46,6 @@
                             tableView:(nullable UITableView *)tableView
                        scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate
                       adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    
     if ((self = [super init])) {
         _items              = ([cellItems count] > 0) ? [cellItems mutableCopy] : [NSMutableArray new];;
         _cellPrototypes     = [NSMutableDictionary new];

@@ -9,7 +9,7 @@
 #import "WSViewController.h"
 
 #import "CellWithButton.h"
-#import "WSTableKit.h"
+#import "WSSection.h"
 
 @interface WSViewController ()
 

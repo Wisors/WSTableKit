@@ -74,7 +74,6 @@
 		6D5FF9271BBADC61001DDD91 /* WSSectionSupplementaryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSectionSupplementaryItem.h; sourceTree = "<group>"; };
 		6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSectionSupplementaryItem.m; sourceTree = "<group>"; };
 		6D5FF9291BBADC61001DDD91 /* WSSortable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSortable.h; sourceTree = "<group>"; };
-		6D5FF92A1BBADC61001DDD91 /* WSTableKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTableKit.h; sourceTree = "<group>"; };
 		6D5FF92B1BBADC61001DDD91 /* WSSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSection.h; sourceTree = "<group>"; };
 		6D5FF92C1BBADC61001DDD91 /* WSSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSection.m; sourceTree = "<group>"; };
 		6D5FF92D1BBADC61001DDD91 /* WSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTableViewCell.h; sourceTree = "<group>"; };
@@ -219,7 +218,6 @@
 				6D5FF9271BBADC61001DDD91 /* WSSectionSupplementaryItem.h */,
 				6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */,
 				6D5FF9291BBADC61001DDD91 /* WSSortable.h */,
-				6D5FF92A1BBADC61001DDD91 /* WSTableKit.h */,
 				6D5FF92D1BBADC61001DDD91 /* WSTableViewCell.h */,
 				6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */,
 				6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */,

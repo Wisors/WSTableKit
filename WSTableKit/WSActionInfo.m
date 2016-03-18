@@ -8,8 +8,6 @@
 
 #import "WSActionInfo.h"
 
-#import "WSCellItem.h"
-
 @interface WSActionInfo()
 
 @property (nonatomic, nonnull) UITableViewCell<WSCellClass> *cell;

@@ -28,7 +28,7 @@
  *  @return Instance of WSTableSection class.
  */
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
-                                     objects:(nullable NSArray *)objects
+                                     objects:(nullable NSArray<WSCellItem *> *)objects
                                    tableView:(nullable UITableView *)tableView;
 
 /**
@@ -74,7 +74,7 @@
  *
  *  @param items Array if CellItem objects.
  */
-- (void)updateWithItems:(nonnull NSArray *)items;
+- (void)updateWithItems:(nonnull NSArray<WSCellItem *> *)items;
 /**
  *  Add item at the end of section.
  *
@@ -86,7 +86,7 @@
  *
  *  @param items Array if CellItem objects.
  */
-- (void)addItems:(nullable NSArray *)items;
+- (void)addItems:(nullable NSArray<WSCellItem *> *)items;
 /**
  *  Add item at specific index. If index is already occupied, the objects at index and beyond are shifted by adding 1 to their indices to make room.
  *
