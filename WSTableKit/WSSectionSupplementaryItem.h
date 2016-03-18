@@ -11,8 +11,8 @@
 
 @interface WSSectionSupplementaryItem : NSObject <WSSortable>
 
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) UIView *customView; // Choosed as preffered.
+@property (nonatomic) NSString *title;
+@property (nonatomic) UIView *customView; // Choosed as preffered.
 
 + (instancetype)itemWithCustomView:(UIView *)customView;
 + (instancetype)itemWithTitle:(NSString *)text;

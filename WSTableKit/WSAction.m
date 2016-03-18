@@ -26,6 +26,7 @@
 }
 
 + (nonnull instancetype)actionWithType:(WSActionType)type actionBlock:(nullable WSActionBlock)actionBlock {
+    NSAssert(type != WSActionWillSelect && type != WSActionWillDeselect && type != WSActionShouldHiglight, @"Warning: This action type requered return value. You should create action through invoking of -actionWithType:returnValueBlock init method or designated initializer");
     return [[self alloc] initWithKey:ws_convertEnumTypeToString(type) actionBlock:actionBlock returnValueBlock:nil];
 }
 

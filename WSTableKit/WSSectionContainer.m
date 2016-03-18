@@ -76,6 +76,10 @@
         _sections       = ([sections count] > 0) ? [sections mutableCopy] : [NSMutableArray new];
         _scrollDelegate = scrollDelegate;
         _tableView      = tableView;
+        if (tableView) {
+            tableView.delegate = self;
+            tableView.dataSource = self;
+        }
         [self setAdjustmentBlock:adjustmentBlock];
     }
     
@@ -216,14 +220,6 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
     return [[self sectionAtIndex:indexPath.section] tableView:tableView shouldHighlightRowAtIndexPath:indexPath];
-}
-
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    [[self sectionAtIndex:indexPath.section] tableView:tableView didHighlightRowAtIndexPath:indexPath];
-}
-
-- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    [[self sectionAtIndex:indexPath.section] tableView:tableView didUnhighlightRowAtIndexPath:indexPath];
 }
 
 @end

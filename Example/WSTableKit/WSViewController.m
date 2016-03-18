@@ -9,13 +9,13 @@
 #import "WSViewController.h"
 
 #import "CellWithButton.h"
-#import "WSSection.h"
+#import "WSSectionContainer.h"
 
 @interface WSViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (nonatomic, strong) WSSection *section;
+@property (nonatomic, strong) WSSectionContainer *sections;
 
 @end
 
@@ -30,18 +30,33 @@
     
     NSArray *cells = [WSCellItem cellItemsWithClass:[CellWithButton class] objects:@[@"One", @"Two", @"Three"] customActions:@[action]];
 
-    self.section = [WSSection sectionWithItems:cells tableView:self.tableView adjustmentBlock:^(CellWithButton *cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path) {
+    WSSection *section = [WSSection sectionWithItems:cells adjustmentBlock:^(CellWithButton *cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path) {
         cell.textLabel.text = item.object;
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.bottomSeparatorHidden = cell.topSeparatorHidden = NO;
         cell.bottomSeparatorInsets = UIEdgeInsetsMake(0, 4, 1, 5);
         cell.topSeparatorInsets = UIEdgeInsetsMake(1, 4, 0, 5);
     }];
-    self.section.sectionHeader = [WSSectionSupplementaryItem itemWithTitle:@"Some title"];
-        
-    self.tableView.dataSource = self.section;
-    self.tableView.delegate = self.section;
-    self.tableView.sectionFooterHeight = self.tableView.sectionHeaderHeight = 0;
+    section.sectionHeader = [WSSectionSupplementaryItem itemWithTitle:@"Some title"];
+    [[section itemAtIndex:0] addAction:WSActionWillDisplay actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        actionInfo.cell.contentView.backgroundColor = [UIColor whiteColor];
+        [UIView animateWithDuration:3.f animations:^{
+            actionInfo.cell.contentView.backgroundColor = [UIColor blueColor];
+        }];
+    }];
+    [[section itemAtIndex:1] addAction:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        NSLog(@"Cell clicked");
+    }];
+    [[section itemAtIndex:1] addAction:WSActionWillSelect returnValueBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        NSLog(@"Cell will selected");
+        return actionInfo.path;
+    }];
+    [[section itemAtIndex:2] addAction:WSActionSelect returnValueBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        NSLog(@"Cell selected");
+        return actionInfo.path;
+    }];
+    
+    self.sections = [WSSectionContainer containerWithSections:@[section] tableView:self.tableView];
 }
 
 @end

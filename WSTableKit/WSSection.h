@@ -18,6 +18,8 @@
 @property (nonatomic, nullable) WSSectionSupplementaryItem *sectionHeader;
 @property (nonatomic, nullable) WSSectionSupplementaryItem *sectionFooter;
 
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems;
+
 /**
  *  Fast factory method to create TableSection with specific CellClass and array of objects that fit this cell class.
  *
@@ -41,6 +43,8 @@
  */
 + (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nullable UITableView *)tableView;
 
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 /**
  *  Init flat colletion of table view CellItem objects and cell adjustment block. This object may behave as UITableView dataSource and delegate(optionaly).
  *
@@ -53,6 +57,7 @@
 + (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
                                tableView:(nullable UITableView *)tableView
                          adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
+
 
 /**
  *  Use this initializer if you wish to forward UIScrollVideDelegate events to you custom delegate.

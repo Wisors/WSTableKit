@@ -21,6 +21,10 @@
 @implementation WSSection
 @synthesize adjustment = _adjustment;
 
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems {
+    return [[self alloc] initWithItems:cellItems tableView:nil scrollDelegate:nil adjustmentBlock:nil];
+}
+
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
                                      objects:(nullable NSArray *)objects
                                    tableView:(nullable UITableView *)tableView {
@@ -30,6 +34,11 @@
 
 + (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nullable UITableView *)tableView {
     return [[self alloc] initWithItems:cellItems tableView:tableView scrollDelegate:nil adjustmentBlock:nil];
+}
+
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
+                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    return [[self alloc] initWithItems:cellItems tableView:nil scrollDelegate:nil adjustmentBlock:adjustmentBlock];
 }
 
 + (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
@@ -51,6 +60,10 @@
         _cellPrototypes     = [NSMutableDictionary new];
         _scrollDelegate     = delegate;
         [self setAdjustmentBlock:adjustmentBlock];
+        if (tableView) {
+            tableView.delegate = self;
+            tableView.dataSource = self;
+        }
     }
     
     return self;
@@ -102,20 +115,18 @@
 #pragma mark - UITableViewDelegate -
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    
     if ([_items count] == 0) {
         return 0;
     } else {
-        return _sectionHeader ? [_sectionHeader itemHeight] : tableView.sectionHeaderHeight;
+        return _sectionHeader ? [_sectionHeader itemHeight] : 0;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    
     if ([_items count] == 0) {
         return 0;
     } else {
-        return (_sectionFooter) ? [_sectionFooter itemHeight] : tableView.sectionFooterHeight;
+        return (_sectionFooter) ? [_sectionFooter itemHeight] : 0;
     }
 }
 
