@@ -11,14 +11,16 @@
 
 @interface WSSection()
 
-@property (nonatomic, nonnull) NSMutableArray<WSCellItem *> *items;
-@property (nonatomic, nonnull) NSMutableDictionary *cellPrototypes;
 @property (nonatomic, weak, nullable) id<UIScrollViewDelegate> scrollDelegate;
 @property (nonatomic, weak, nullable) UITableView *tableView;
 
 @end
 
-@implementation WSSection
+@implementation WSSection {
+    NSMutableArray<WSCellItem *> *_items;
+    NSMutableDictionary *_cellPrototypes;
+    NSMutableDictionary *_cellHeights;
+}
 @synthesize adjustment = _adjustment;
 
 + (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems {
@@ -56,9 +58,10 @@
                        scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate
                       adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     if ((self = [super init])) {
-        _items              = ([cellItems count] > 0) ? [cellItems mutableCopy] : [NSMutableArray new];;
-        _cellPrototypes     = [NSMutableDictionary new];
-        _scrollDelegate     = delegate;
+        _items          = ([cellItems count] > 0) ? [cellItems mutableCopy] : [NSMutableArray new];;
+        _cellPrototypes = [NSMutableDictionary new];
+        _cellHeights    = [NSMutableDictionary new];
+        _scrollDelegate = delegate;
         [self setAdjustmentBlock:adjustmentBlock];
         if (tableView) {
             tableView.delegate = self;
@@ -131,9 +134,15 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSNumber *cachedHeight = [_cellHeights objectForKey:@(indexPath.row)];
+    if (cachedHeight) {
+        return [cachedHeight floatValue];
+    }
+    
     WSCellItem *item = [self itemAtIndex:indexPath.row];
     NSAssert(item, @"Something goes wrong, you have to have an item here.");
 
+    CGFloat height = tableView.rowHeight;
     Class<WSCellClass> cellClass = item.cellClass;
     UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Need to register cell
     if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
@@ -141,11 +150,10 @@
         [_adjustment invokeActionWithInfo:actionInfo];
         [item.adjustment invokeActionWithInfo:actionInfo];
         [proto applyItem:item heightCalculation:YES];
-        
-        return [proto cellHeight];
-    } else {
-        return tableView.rowHeight;
+        height = [proto cellHeight];
     }
+    [_cellHeights setObject:@(height) forKey:@(indexPath.row)];
+    return height;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -272,15 +280,23 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 
 @implementation WSSection(ItemAccess)
 
+- (void)removeCachedHeightsAboveIndex:(NSInteger)index {
+    while (index < [_items count]) {
+        [_cellHeights removeObjectForKey:@(index)];
+        index++;
+    }
+}
+
 #pragma mark - Add & Insert & Update Items -
 
 - (void)updateWithItems:(NSArray *)items {
-    self.items = (items) ? [items mutableCopy] : [NSMutableArray new];;
+    _items = (items) ? [items mutableCopy] : [NSMutableArray new];
+    [_cellHeights removeAllObjects];
 }
 
 - (void)addItem:(WSCellItem *)item {
     if (item != nil) {
-        [self.items addObject:item];
+        [_items addObject:item];
     }
 }
 
@@ -288,7 +304,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
     if ([items count] == 0) {
         return;
     }
-    [self.items addObjectsFromArray:items];
+    [_items addObjectsFromArray:items];
 }
 
 - (void)insertItem:(WSCellItem *)item atIndex:(NSInteger)index {
@@ -296,8 +312,9 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
         return;
     }
     
-    if (index <= [self.items count]) {
-        [self.items insertObject:item atIndex:index];
+    if (index <= [_items count]) {
+        [self removeCachedHeightsAboveIndex:index];
+        [_items insertObject:item atIndex:index];
     }
 }
 
@@ -306,16 +323,18 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
         return;
     }
     
-    if (index < [self.items count]) {
-        [self.items replaceObjectAtIndex:index withObject:item];
+    if (index < [_items count]) {
+        [_cellHeights removeObjectForKey:@(index)];
+        [_items replaceObjectAtIndex:index withObject:item];
     }
 }
 
 #pragma mark - Remove Items -
 
 - (void)removeItemAtIndex:(NSInteger)index {
-    if (index < [self.items count]) {
-        [self.items removeObjectAtIndex:index];
+    if (index < [_items count]) {
+        [self removeCachedHeightsAboveIndex:index];
+        [_items removeObjectAtIndex:index];
     }
 }
 
@@ -326,29 +345,30 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 }
 
 - (void)removeAllItems {
-    self.items = [NSMutableArray new];
+    _items = [NSMutableArray new];
+    _cellHeights = [NSMutableDictionary new];
 }
 
 #pragma mark - Access Items -
 
 - (void)enumerateObjectsUsingBlock:(void (^)(WSCellItem *item, NSUInteger idx, BOOL *stop))block {
-    [self.items enumerateObjectsUsingBlock:block];
+    [_items enumerateObjectsUsingBlock:block];
 }
 
 - (WSCellItem *)itemAtIndex:(NSInteger)index {
-    if ([self.items count] > index) {
-        return [self.items objectAtIndex:index];
+    if ([_items count] > index) {
+        return [_items objectAtIndex:index];
     }
     
     return nil;
 }
 
 - (NSInteger)indexOfItem:(WSCellItem *)item {
-    return [self.items indexOfObject:item];
+    return [_items indexOfObject:item];
 }
 
 - (NSUInteger)numberOfItems {
-    return [self.items count];
+    return [_items count];
 }
 
 @end
