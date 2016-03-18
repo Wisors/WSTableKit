@@ -7,27 +7,37 @@
 
 #import <Foundation/Foundation.h>
 
-#import "WSTableViewDirector.h"
-
-@class WSSection;
+#import "WSSection.h"
 
 @interface WSSectionContainer : NSObject <WSTableViewDirector>
 
-@property (nonatomic, weak, nullable, readonly) UITableView *tableView;
 @property (nonatomic, assign) BOOL enableAlphabet;
 
-+ (instancetype)containerWithSections:(NSArray *)sestions;
-+ (instancetype)containerWithSections:(NSArray *)sections adjustmentBlock:(WSAdjustmentBlock)adjustmentBlock;
-+ (instancetype)containerWithSections:(NSArray *)sections scrollDelegate:(id<UIScrollViewDelegate>)scrollDelegate;
++ (nonnull instancetype)containerWithSections:(nullable NSArray<WSSection *> *)sections tableView:(nullable UITableView *)tableView;
++ (nonnull instancetype)containerWithSections:(nullable NSArray<WSSection *> *)sections
+                                    tableView:(nullable UITableView *)tableView
+                              adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
++ (nonnull instancetype)containerWithSections:(nullable NSArray<WSSection *> *)sections
+                                    tableView:(nullable UITableView *)tableView
+                               scrollDelegate:(nullable id<UIScrollViewDelegate>)scrollDelegate;
 
+- (nonnull instancetype)initWithTableView:(nullable UITableView *)tableView;
+- (nonnull instancetype)initWithSection:(nonnull WSSection *)section tableView:(nullable UITableView *)tableView;
+- (nonnull instancetype)initWithSections:(nullable NSArray<WSSection *> *)sections tableView:(nullable UITableView *)tableView;
+- (nonnull instancetype)initWithSections:(nullable NSArray<WSSection *> *)sections
+                               tableView:(nullable UITableView *)tableView
+                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
+- (nonnull instancetype)initWithSections:(nullable NSArray<WSSection *> *)sections
+                               tableView:(nullable UITableView *)tableView
+                          scrollDelegate:(nullable id<UIScrollViewDelegate>)scrollDelegate;
 
-- (instancetype)initWithSection:(WSSection *)section;
-- (instancetype)initWithSections:(NSArray *)sections;
-- (instancetype)initWithSections:(NSArray *)sections adjustmentBlock:(WSAdjustmentBlock)adjustmentBlock;
-- (instancetype)initWithSections:(NSArray *)sections scrollDelegate:(id<UIScrollViewDelegate>)scrollDelegate;
+- (nonnull instancetype)initWithSections:(nullable NSArray<WSSection *> *)sections
+                               tableView:(nullable UITableView *)tableView
+                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock
+                          scrollDelegate:(nullable id<UIScrollViewDelegate>)scrollDelegate NS_DESIGNATED_INITIALIZER;
 
 // Xcode autocomplete helpers
-- (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
+- (nonnull instancetype)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
 @end
 
@@ -38,34 +48,35 @@
  *
  *  @param section Section to insert.
  */
-- (void)addSection:(WSSection *)section;
+- (void)addSection:(nonnull WSSection *)section;
 /**
  *  Add section at specific index. If index is already occupied, the objects at index and beyond are shifted by adding 1 to their indices to make room.
  *
  *  @param section Section to insert.
  *  @param index Section index.
  */
-- (void)addSection:(WSSection *)section atIndex:(NSInteger)index;
+- (void)addSection:(nonnull WSSection *)section atIndex:(NSInteger)index;
 
-- (void)replaceSectionAtIndex:(NSInteger)index withSection:(WSSection *)section;
-- (void)updateSectionAtIndex:(NSInteger)index withItems:(NSArray *)items;
-
-
-- (WSSection *)sectionAtIndex:(NSInteger)index;
-- (void)enumerateObjectsUsingBlock:(void (^)(WSSection *section, NSUInteger idx, BOOL *stop))block;
-- (WSCellItem *)itemAtIndexPath:(NSIndexPath *)path;
-- (NSInteger)indexOfSection:(WSSection *)item;
-
-- (void)removeSectionAtIndex:(NSInteger)index;
-- (void)removeAllSections;
+- (void)replaceSectionAtIndex:(NSInteger)index withSection:(nonnull WSSection *)section;
+- (void)updateSectionAtIndex:(NSInteger)index withItems:(nonnull NSArray<WSCellItem *> *)items;
 
 - (NSInteger)numberOfSections;
 - (NSInteger)numberOfItemsInSection:(NSInteger)section;
+
+- (nullable WSSection *)sectionAtIndex:(NSInteger)index;
+- (nullable WSCellItem *)itemAtIndexPath:(nonnull NSIndexPath *)path;
+- (void)enumerateObjectsUsingBlock:(nullable void (^)(WSSection * _Nonnull section, NSUInteger idx, BOOL * _Nullable stop))block;
+- (NSInteger)indexOfSection:(nonnull WSSection *)item;
+
+- (void)removeSectionAtIndex:(NSInteger)index;
+- (void)removeAllSections;
 
 @end
 
 @interface WSSectionContainer(AlphabetBuilder)
 
-- (instancetype)initWithSortableObjects:(NSArray *)sortableObjects andCellItemInitBlock:(WSCellItem * (^)(id object))itemBlock;
+- (nonnull instancetype)initWithTableView:(nullable UITableView *)tableView
+                          sortableObjects:(nonnull NSArray *)sortableObjects
+                     andCellItemInitBlock:(nonnull WSCellItem * _Nonnull (^)(id _Nullable object))itemBlock;
 
 @end

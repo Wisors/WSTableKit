@@ -11,8 +11,8 @@
 
 @interface WSSection()
 
-@property (nonatomic, strong, nonnull) NSMutableArray *items;
-@property (nonatomic, strong, nonnull) NSMutableDictionary *cellPrototypes;
+@property (nonatomic, nonnull) NSMutableArray<WSCellItem *> *items;
+@property (nonatomic, nonnull) NSMutableDictionary *cellPrototypes;
 @property (nonatomic, weak, nullable) id<UIScrollViewDelegate> scrollDelegate;
 @property (nonatomic, weak, nullable) UITableView *tableView;
 
@@ -48,7 +48,7 @@
                       adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     
     if ((self = [super init])) {
-        _items              = (cellItems) ? [cellItems mutableCopy] : [NSMutableArray new];;
+        _items              = ([cellItems count] > 0) ? [cellItems mutableCopy] : [NSMutableArray new];;
         _cellPrototypes     = [NSMutableDictionary new];
         _scrollDelegate     = delegate;
         [self setAdjustmentBlock:adjustmentBlock];
@@ -57,14 +57,10 @@
     return self;
 }
 
-- (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+- (nonnull instancetype)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     _adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
         adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
     }] : nil;
-}
-
-- (nonnull instancetype)applyAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    [self setAdjustmentBlock:adjustmentBlock];
     return self;
 }
 

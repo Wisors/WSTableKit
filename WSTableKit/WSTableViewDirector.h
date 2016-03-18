@@ -12,6 +12,7 @@
 
 @protocol WSTableViewDirector <NSObject, UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, weak, nullable, readonly) UITableView *tableView;
 @property (nonatomic, nullable) WSAction *adjustment;
 
 @end

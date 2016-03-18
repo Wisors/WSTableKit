@@ -12,7 +12,7 @@
 
 @interface NSArray(WSSortable)
 
-- (NSArray *)sortSortableObjects;
-- (NSArray *)sortStingsAlphabeticaly;
+- (nonnull NSArray *)sortSortableObjects;
+- (nonnull NSArray *)sortStingsAlphabeticaly;
 
 @end

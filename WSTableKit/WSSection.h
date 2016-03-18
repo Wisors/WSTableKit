@@ -17,7 +17,6 @@
 
 @property (nonatomic, nullable) WSSectionSupplementaryItem *sectionHeader;
 @property (nonatomic, nullable) WSSectionSupplementaryItem *sectionFooter;
-@property (nonatomic, weak, readonly, nullable) UITableView *tableView;
 
 /**
  *  Fast factory method to create TableSection with specific CellClass and array of objects that fit this cell class.
@@ -64,11 +63,7 @@
                       adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock NS_DESIGNATED_INITIALIZER;
 
 // Xcode autocomplete helper
-- (void)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
-/**
- *  Chaining method for adjustment block.
- */
-- (nonnull instancetype)applyAdjustmentBlock:(nullable WSAdjustmentBlock)cellAdjustmentBlock;
+- (nonnull instancetype)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
 @end
 
