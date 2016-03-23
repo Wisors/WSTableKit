@@ -60,10 +60,6 @@
 
 #pragma mark - CellClass protocol -
 
-+ (nonnull NSString *)cellIdentifier {
-    return [[NSStringFromClass([self class]) componentsSeparatedByString:@"."] lastObject];
-}
-
 - (CGFloat)cellHeight {
     return (_hasAutolayout) ? [self calculateHeightForAutolayoutCell] : 44; // Autolayout or default table cell size.
 }

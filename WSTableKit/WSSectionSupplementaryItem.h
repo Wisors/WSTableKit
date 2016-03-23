@@ -11,12 +11,12 @@
 
 @interface WSSectionSupplementaryItem : NSObject <WSSortable>
 
-@property (nonatomic) NSString *title;
-@property (nonatomic) UIView *customView; // Choosed as preffered.
+@property (nonatomic, nullable, readonly) UIView *customView; // Choosed as preffered.
+@property (nonatomic, nullable) NSString *title;
 
-+ (instancetype)itemWithCustomView:(UIView *)customView;
-+ (instancetype)itemWithTitle:(NSString *)text;
-+ (instancetype)itemWithTitle:(NSString *)text height:(CGFloat)height;
++ (nonnull instancetype)itemWithCustomView:(nullable UIView *)customView;
++ (nonnull instancetype)itemWithTitle:(nullable NSString *)text;
++ (nonnull instancetype)itemWithTitle:(nullable NSString *)text height:(CGFloat)height;
 
 /**
  *  Use this initializer with default system base section header(footer) and height that provided by tableView. Default height is 22pt.
@@ -25,7 +25,7 @@
  *
  *  @return SectionSupplementaryItem instance.
  */
-- (instancetype)initWithTitle:(NSString *)title;
+- (nonnull instancetype)initWithTitle:(nullable NSString *)title;
 
 /**
  *  Use this initializer with default system base section header and custom height.
@@ -35,7 +35,7 @@
  *
  *  @return SectionSupplementaryItem instance.
  */
-- (instancetype)initWithTitle:(NSString *)title height:(CGFloat)height;
+- (nonnull instancetype)initWithTitle:(nullable NSString *)title height:(CGFloat)height;
 
 /**
  *  Initialize section header item that define UITableView section header(footer) apearance by custom UIView subclass.
@@ -44,9 +44,9 @@
  *
  *  @return SectionSupplementaryItem instance.
  */
-- (instancetype)initWithCustomView:(UIView *)customView;
+- (nonnull instancetype)initWithCustomView:(nullable UIView *)customView;
 
-- (void)setTitle:(NSString *)title height:(CGFloat)height;
+- (void)setTitle:(nullable NSString *)title height:(CGFloat)height;
 - (CGFloat)itemHeight;
 
 @end

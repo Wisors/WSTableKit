@@ -8,17 +8,19 @@
 #import <Foundation/Foundation.h>
 
 #import "WSCellItem.h"
-#import "WSSectionSupplementaryItem.h"
 #import "WSTableViewDirector.h"
 
 @class WSCellItem;
 
 @interface WSSection : NSObject <WSTableViewDirector>
 
-@property (nonatomic, nullable) WSSectionSupplementaryItem *sectionHeader;
-@property (nonatomic, nullable) WSSectionSupplementaryItem *sectionFooter;
+/**
+ *  Supplementary items of section.
+ */
+@property (nonatomic, nullable) WSCellItem *sectionHeader;
+@property (nonatomic, nullable) WSCellItem *sectionFooter;
 
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems;
+@property (nonatomic, readonly, nonnull) UITableView *tableView;
 
 /**
  *  Fast factory method to create TableSection with specific CellClass and array of objects that fit this cell class.
@@ -31,7 +33,7 @@
  */
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
                                      objects:(nullable NSArray<WSCellItem *> *)objects
-                                   tableView:(nullable UITableView *)tableView;
+                                   tableView:(nonnull UITableView *)tableView;
 
 /**
  *  Factory method with CellItem objects.
@@ -41,33 +43,22 @@
  *
  *  @return Instance of WSTableSection class.
  */
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nullable UITableView *)tableView;
-
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
-/**
- *  Init flat colletion of table view CellItem objects and cell adjustment block. This object may behave as UITableView dataSource and delegate(optionaly).
- *
- *  @param cellItems       Array if CellItem objects.
- *  @param tableView       Provide your table view to make fast initialization of delegates and preheated registration of prototype cells.
- *  @param adjustmentBlock CellAdjustmentBlock that will be invoked during cell preparating process. This is optional parameter, that can recieve nil.
- *
- *  @return Instance of WSTableSection class.
- */
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                               tableView:(nullable UITableView *)tableView
-                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
-
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nonnull UITableView *)tableView;
 
 /**
  *  Use this initializer if you wish to forward UIScrollVideDelegate events to you custom delegate.
  */
 - (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                            tableView:(nullable UITableView *)tableView
                        scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate
-                      adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock NS_DESIGNATED_INITIALIZER;
+                            tableView:(nonnull UITableView *)tableView NS_DESIGNATED_INITIALIZER;
 
-// Xcode autocomplete helper
+/**
+ *  Block that will be invoked during cell preparating process. This block will be called right before cell adjustment action. Passing nil will remove previously assigned block.
+ *
+ *  @param adjustmentBlock  Customization block
+ *
+ *  @return Return current section.
+ */
 - (nonnull instancetype)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock;
 
 @end

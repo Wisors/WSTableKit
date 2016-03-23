@@ -15,13 +15,6 @@
 @protocol WSCellClass <NSObject>
 
 /**
- *  Cell Identifier, that will be used for UITableView dequeue. It's good practice to name your identifier as your cell Class name, so you can use it as registerNib parameter as well.
- *
- *  @return Cell identifier.
- */
-+ (nonnull NSString *)cellIdentifier;
-
-/**
  *  Apply item to cell to proper configure it and make design adjustment with possibility of performance optimization. No need to fully adjust your cell design for height calculation, just change only height dependent attributes.
  *
  *  @param item              WSCellItem object for this cell.
@@ -43,3 +36,7 @@
 + (BOOL)respondsToSelector:(nonnull SEL)selector;
 
 @end
+
+static inline  NSString * _Nonnull  ws_className(_Nonnull Class classObject) {
+    return [[NSStringFromClass(classObject) componentsSeparatedByString:@"."] lastObject]; //For Swift Modules compatibility
+}

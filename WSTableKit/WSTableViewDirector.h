@@ -8,11 +8,14 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "WSCellsPrototyper.h"
+
 @class WSAction, WSCellItem;
 
 @protocol WSTableViewDirector <NSObject, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak, nullable, readonly) UITableView *tableView;
+@property (nonatomic, nullable, readonly) UITableView *tableView;
 @property (nonatomic, nullable) WSAction *adjustment;
+@property (nonatomic, nonnull) id<WSCellsPrototyper> cellPrototyper;
 
 @end

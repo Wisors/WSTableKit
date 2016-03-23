@@ -7,66 +7,51 @@
 
 #import "WSSection.h"
 
+#import "UITableView+WSTableExtension.h"
 #import "WSCellItem.h"
+#import "WSCellsPrototypeHolder.h"
 
 @interface WSSection()
 
+@property (nonatomic, nullable) UITableView *tableView;
 @property (nonatomic, weak, nullable) id<UIScrollViewDelegate> scrollDelegate;
-@property (nonatomic, weak, nullable) UITableView *tableView;
 
 @end
 
 @implementation WSSection {
     NSMutableArray<WSCellItem *> *_items;
-    NSMutableDictionary *_cellPrototypes;
     NSMutableDictionary *_cellHeights;
 }
 @synthesize adjustment = _adjustment;
-
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems {
-    return [[self alloc] initWithItems:cellItems tableView:nil scrollDelegate:nil adjustmentBlock:nil];
-}
+@synthesize cellPrototyper = _cellPrototyper;
 
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
-                                     objects:(nullable NSArray *)objects
-                                   tableView:(nullable UITableView *)tableView {
+                                     objects:(nullable NSArray<WSCellItem *> *)objects
+                                   tableView:(nonnull UITableView *)tableView {
     NSArray *cellItems = [WSCellItem cellItemsWithClass:cellClass objects:objects];
-    return [[self alloc] initWithItems:cellItems tableView:tableView scrollDelegate:nil adjustmentBlock:nil];
+    return [[self alloc] initWithItems:cellItems scrollDelegate:nil tableView:tableView];
 }
 
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nullable UITableView *)tableView {
-    return [[self alloc] initWithItems:cellItems tableView:tableView scrollDelegate:nil adjustmentBlock:nil];
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nonnull UITableView *)tableView {
+    return [[self alloc] initWithItems:cellItems scrollDelegate:nil tableView:tableView];
 }
 
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    return [[self alloc] initWithItems:cellItems tableView:nil scrollDelegate:nil adjustmentBlock:adjustmentBlock];
-}
-
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                               tableView:(nullable UITableView *)tableView
-                         adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    return [[self alloc] initWithItems:cellItems tableView:tableView scrollDelegate:nil adjustmentBlock:adjustmentBlock];
-}
-
-- (instancetype)init {
-    return [self initWithItems:nil tableView:nil scrollDelegate:nil adjustmentBlock:nil];
+- (instancetype)init NS_UNAVAILABLE{
+    return nil;
 }
 
 - (nonnull instancetype)initWithItems:(nullable NSArray<WSCellItem *> *)cellItems
-                            tableView:(nullable UITableView *)tableView
                        scrollDelegate:(nullable id<UIScrollViewDelegate>)delegate
-                      adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+                            tableView:(nonnull UITableView *)tableView {
     if ((self = [super init])) {
-        _items          = ([cellItems count] > 0) ? [cellItems mutableCopy] : [NSMutableArray new];;
-        _cellPrototypes = [NSMutableDictionary new];
-        _cellHeights    = [NSMutableDictionary new];
-        _scrollDelegate = delegate;
-        [self setAdjustmentBlock:adjustmentBlock];
-        if (tableView) {
-            tableView.delegate = self;
-            tableView.dataSource = self;
-        }
+        _items              = ([cellItems count] > 0) ? [cellItems mutableCopy] : [NSMutableArray new];
+        _cellPrototyper     = [[WSCellsPrototypeHolder alloc] initWithTableView:tableView];
+        _cellHeights        = [NSMutableDictionary new];
+        _scrollDelegate     = delegate;
+        _tableView          = tableView;
+        tableView.delegate  = (tableView.delegate) ?: self;
+        tableView.dataSource = (tableView.dataSource) ?: self;
+        [self ws_registerItemsCells:cellItems];
     }
     
     return self;
@@ -77,6 +62,32 @@
         adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
     }] : nil;
     return self;
+}
+
+- (void)setSectionHeader:(WSCellItem *)sectionHeader {
+    if (_sectionHeader != sectionHeader) {
+        _sectionHeader = sectionHeader;
+        if (sectionHeader.cellClass && ![_cellPrototyper headerFooterPrototypeForCellClass:sectionHeader.cellClass]) {
+            [_tableView ws_registerHeaderFooterClass:sectionHeader.cellClass];
+        }
+    }
+}
+
+- (void)setSectionFooter:(WSCellItem *)sectionFooter {
+    if (_sectionFooter != sectionFooter) {
+        _sectionFooter = sectionFooter;
+        if (sectionFooter.cellClass && ![_cellPrototyper headerFooterPrototypeForCellClass:sectionFooter.cellClass]) {
+            [_tableView ws_registerHeaderFooterClass:sectionFooter.cellClass];
+        }
+    }
+}
+
+- (void)ws_registerItemsCells:(NSArray<WSCellItem *> *)items {
+    NSMutableSet *set = [NSMutableSet set];
+    [items enumerateObjectsUsingBlock:^(WSCellItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+        [set addObject:item.cellClass];
+    }];
+    [_tableView ws_registerCellClasses:[set copy]];
 }
 
 #pragma mark - UIScrollViewDelegate forwarding -
@@ -95,17 +106,9 @@
     return [_items count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return (!_sectionHeader.customView && _sectionHeader.title.length > 0) ? _sectionHeader.title : nil;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    return (!_sectionFooter.customView && _sectionFooter.title.length > 0) ? _sectionFooter.title : nil;
-}
-
 - (UITableViewCell<WSCellClass> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:[item.cellClass cellIdentifier]
+    UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:ws_className(item.cellClass)
                                                                          forIndexPath:indexPath];
     WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:item path:indexPath userInfo:nil];
     [_adjustment invokeActionWithInfo:actionInfo];
@@ -118,19 +121,42 @@
 #pragma mark - UITableViewDelegate -
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if ([_items count] == 0) {
-        return 0;
-    } else {
-        return _sectionHeader ? [_sectionHeader itemHeight] : 0;
+    if (_sectionHeader && [_items count] != 0) {
+        UITableViewHeaderFooterView<WSCellClass> *header = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionHeader.cellClass];
+        [header applyItem:_sectionHeader heightCalculation:YES];
+        return ([header respondsToSelector:@selector(cellHeight)]) ? [header cellHeight] : tableView.sectionHeaderHeight;
     }
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if ([_items count] == 0) {
-        return 0;
-    } else {
-        return (_sectionFooter) ? [_sectionFooter itemHeight] : 0;
+    if (_sectionFooter && [_items count] != 0) {
+        UITableViewHeaderFooterView<WSCellClass> *footer = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionFooter.cellClass];
+        [footer applyItem:_sectionHeader heightCalculation:YES];
+        return ([footer respondsToSelector:@selector(cellHeight)]) ? [footer cellHeight] : tableView.sectionFooterHeight;
     }
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UITableViewHeaderFooterView<WSCellClass> *header;
+    if (_sectionHeader) {
+        header = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:ws_className(_sectionHeader.cellClass)];
+        [header applyItem:_sectionHeader heightCalculation:NO];
+    }
+    
+    return header;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    
+    UITableViewHeaderFooterView<WSCellClass> *footer;
+    if (_sectionFooter) {
+        footer = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:ws_className(_sectionFooter.cellClass)];
+        [footer applyItem:_sectionFooter heightCalculation:NO];
+    }
+
+    return footer;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -144,7 +170,7 @@
 
     CGFloat height = tableView.rowHeight;
     Class<WSCellClass> cellClass = item.cellClass;
-    UITableViewCell<WSCellClass> *proto = [self ws_cellPrototypeInTableView:tableView withCellClass:cellClass]; //Need to register cell
+    UITableViewCell<WSCellClass> *proto = [_cellPrototyper cellPrototypeForCellClass:cellClass];
     if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
         WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:proto item:item path:indexPath userInfo:nil];
         [_adjustment invokeActionWithInfo:actionInfo];
@@ -154,14 +180,6 @@
     }
     [_cellHeights setObject:@(height) forKey:@(indexPath.row)];
     return height;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return _sectionHeader.customView;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return _sectionFooter.customView;
 }
 
 #pragma mark - UITableViewDelegate Selection -
@@ -217,7 +235,7 @@
     }
     
     return YES;
-}
+} 
 
 #pragma mark - Actions -
 
@@ -244,37 +262,6 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
     return indexPath;
 }
 
-#pragma mark - Prototyping -
-
-- (nonnull UITableViewCell<WSCellClass> *)ws_cellPrototypeInTableView:(nonnull UITableView *)tableView withCellClass:(nonnull Class<WSCellClass>)cellClass {
-    NSString *identifier = [cellClass cellIdentifier];
-    UITableViewCell<WSCellClass> *cell = [_cellPrototypes objectForKey:identifier];
-    if (!cell) {
-        cell = [tableView dequeueReusableCellWithIdentifier:identifier]; // Deque from Storyboard
-        if (!cell) {
-            [self ws_registerCell:identifier tableView:tableView cellClass:cellClass];
-            cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-            if (!cell) { // Last resort case
-                cell = [[(Class)cellClass alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-            }
-        }
-        NSAssert(cell, @"Most likely you have a mistake with your cell's identifier");
-        [_cellPrototypes setObject:cell forKey:identifier];
-        cell.bounds = CGRectMake(0, 0, tableView.bounds.size.width, cell.bounds.size.height);
-    }
-    
-    return cell;
-}
-
-- (void)ws_registerCell:(NSString *)identifier tableView:(UITableView *)tableView cellClass:(Class<WSCellClass>)cellClass {
-    NSBundle *bundle = [NSBundle bundleForClass:cellClass];
-    if ([bundle pathForResource:identifier ofType:@"nib"] != nil) {// Xib
-        [tableView registerNib:[UINib nibWithNibName:identifier bundle:bundle] forCellReuseIdentifier:identifier];
-    } else {
-        [tableView registerClass:cellClass forCellReuseIdentifier:identifier]; // Code generated cell
-    }
-}
-
 @end
 
 
@@ -297,6 +284,9 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 - (void)addItem:(WSCellItem *)item {
     if (item != nil) {
         [_items addObject:item];
+        if (![_cellPrototyper cellPrototypeForCellClass:item.cellClass]) {
+            [_tableView ws_registerCellClass:item.cellClass];
+        }
     }
 }
 
@@ -305,6 +295,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
         return;
     }
     [_items addObjectsFromArray:items];
+    [self ws_registerItemsCells:items];
 }
 
 - (void)insertItem:(WSCellItem *)item atIndex:(NSInteger)index {
@@ -315,6 +306,9 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
     if (index <= [_items count]) {
         [self removeCachedHeightsAboveIndex:index];
         [_items insertObject:item atIndex:index];
+        if (![_cellPrototyper cellPrototypeForCellClass:item.cellClass]) {
+            [_tableView ws_registerCellClass:item.cellClass];
+        }
     }
 }
 

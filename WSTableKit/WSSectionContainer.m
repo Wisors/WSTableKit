@@ -13,13 +13,14 @@
 @interface WSSectionContainer()
 
 @property (nonatomic, nonnull) NSMutableArray<WSSection *> *sections;
-@property (nonatomic, weak, nullable) UITableView *tableView;
+@property (nonatomic, nonnull) UITableView *tableView;
 @property (nonatomic, weak, nullable) id<UIScrollViewDelegate> scrollDelegate;
 
 @end
 
 @implementation WSSectionContainer
 @synthesize adjustment = _adjustment;
+@synthesize cellPrototyper = _cellPrototyper;
 
 
 + (nonnull instancetype)containerWithSections:(nullable NSArray *)sections tableView:(nullable UITableView *)tableView {
@@ -114,37 +115,37 @@
     return [[self sectionAtIndex:section] tableView:tableView titleForHeaderInSection:section];
 }
 
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    if (self.enableAlphabet) {
-        NSMutableSet *set = [NSMutableSet set];
-        [self enumerateObjectsUsingBlock:^(WSSection *section, NSUInteger idx, BOOL *stop) {
-            WSSectionSupplementaryItem *header = section.sectionHeader;
-            if ([header.title length] > 0) {
-                [set addObject:[header.title substringToIndex:1]];
-            }
-        }];
-        
-        return [[set allObjects] sortStingsAlphabeticaly];
-    }
-    
-    return @[];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-    if (self.enableAlphabet) {
-        __block NSUInteger index = 0;
-        [self enumerateObjectsUsingBlock:^(WSSection *section, NSUInteger idx, BOOL *stop) {
-            WSSectionSupplementaryItem *header = section.sectionHeader;
-            if ([header.title length] > 0 && [[header.title substringToIndex:1] isEqualToString:title]) {
-                *stop = YES;
-                index = idx;
-            }
-        }];
-        return index;
-    }
-    
-    return 0;
-}
+//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+//    if (self.enableAlphabet) {
+//        NSMutableSet *set = [NSMutableSet set];
+//        [self enumerateObjectsUsingBlock:^(WSSection *section, NSUInteger idx, BOOL *stop) {
+//            WSSectionSupplementaryItem *header = section.sectionHeader;
+//            if ([header.title length] > 0) {
+//                [set addObject:[header.title substringToIndex:1]];
+//            }
+//        }];
+//        
+//        return [[set allObjects] sortStingsAlphabeticaly];
+//    }
+//    
+//    return @[];
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+//    if (self.enableAlphabet) {
+//        __block NSUInteger index = 0;
+//        [self enumerateObjectsUsingBlock:^(WSSection *section, NSUInteger idx, BOOL *stop) {
+//            WSSectionSupplementaryItem *header = section.sectionHeader;
+//            if ([header.title length] > 0 && [[header.title substringToIndex:1] isEqualToString:title]) {
+//                *stop = YES;
+//                index = idx;
+//            }
+//        }];
+//        return index;
+//    }
+//    
+//    return 0;
+//}
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     return [[self sectionAtIndex:section] tableView:tableView titleForFooterInSection:section];
@@ -313,7 +314,7 @@
         
         if (![lastKey isEqualToString:key]) {
             currentSection = [WSSection new];
-            currentSection.sectionHeader = [[WSSectionSupplementaryItem alloc] initWithTitle:[key uppercaseString]];
+//            currentSection.sectionHeader = [[WSSectionSupplementaryItem alloc] initWithTitle:[key uppercaseString]];
             [sections addObject:currentSection];
         }
         

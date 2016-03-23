@@ -30,14 +30,14 @@
     
     NSArray *cells = [WSCellItem cellItemsWithClass:[CellWithButton class] objects:@[@"One", @"Two", @"Three"] customActions:@[action]];
 
-    WSSection *section = [WSSection sectionWithItems:cells adjustmentBlock:^(CellWithButton *cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path) {
+    WSSection *section = [[WSSection sectionWithItems:cells tableView:self.tableView] setAdjustmentBlock:^(CellWithButton *cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path) {
         cell.textLabel.text = item.object;
         cell.textLabel.backgroundColor = [UIColor clearColor];
         cell.bottomSeparatorHidden = cell.topSeparatorHidden = NO;
         cell.bottomSeparatorInsets = UIEdgeInsetsMake(0, 4, 1, 5);
         cell.topSeparatorInsets = UIEdgeInsetsMake(1, 4, 0, 5);
     }];
-    section.sectionHeader = [WSSectionSupplementaryItem itemWithTitle:@"Some title"];
+//    section.sectionHeader = [WSSectionSupplementaryItem itemWithTitle:@"Some title"];
     [[section itemAtIndex:0] addAction:WSActionWillDisplay actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
         actionInfo.cell.contentView.backgroundColor = [UIColor whiteColor];
         [UIView animateWithDuration:3.f animations:^{
