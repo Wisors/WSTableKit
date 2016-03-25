@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-static inline  NSString * _Nonnull  ws_className(_Nonnull Class classObject) {
-    return [[NSStringFromClass(classObject) componentsSeparatedByString:@"."] lastObject]; //For Swift Modules compatibility
-}
+#import "WSIdentifierConvention.h"
 
 @interface UITableView (WSTableExtension)
 
-- (void)ws_registerCellClass:(nonnull Class)cellClass;
-- (void)ws_registerCellClasses:(nullable NSSet<Class> *)cellClasses;
-- (void)ws_registerHeaderFooterClass:(nonnull Class)headerFooterClass;
+- (void)ws_registerCellClass:(nonnull Class)cellClass identifierConvention:(nonnull id<WSIdentifierConvention>)convention;
+- (void)ws_registerCellClasses:(nullable NSSet<Class> *)cellClasses identifierConvention:(nonnull id<WSIdentifierConvention>)convention;
+- (void)ws_registerHeaderFooterClass:(nonnull Class)headerFooterClass identifierConvention:(nonnull id<WSIdentifierConvention>)convention;
 
 @end

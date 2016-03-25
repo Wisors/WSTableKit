@@ -9,7 +9,8 @@
 
 #import "UITableView+WSTableExtension.h"
 #import "WSCellItem.h"
-#import "WSCellsPrototypeHolder.h"
+#import "WSDefaultCellsPrototyper.h"
+#import "WSDefaultIdentifierConvention.h"
 
 @interface WSSection()
 
@@ -45,7 +46,7 @@
                             tableView:(nonnull UITableView *)tableView {
     if ((self = [super init])) {
         _items              = ([cellItems count] > 0) ? [cellItems mutableCopy] : [NSMutableArray new];
-        _cellPrototyper     = [[WSCellsPrototypeHolder alloc] initWithTableView:tableView];
+        _cellPrototyper     = [[WSDefaultCellsPrototyper alloc] initWithTableView:tableView identifierConvention:[WSDefaultIdentifierConvention new]];
         _cellHeights        = [NSMutableDictionary new];
         _scrollDelegate     = delegate;
         _tableView          = tableView;
@@ -68,7 +69,7 @@
     if (_sectionHeader != sectionHeader) {
         _sectionHeader = sectionHeader;
         if (sectionHeader.cellClass && ![_cellPrototyper headerFooterPrototypeForCellClass:sectionHeader.cellClass]) {
-            [_tableView ws_registerHeaderFooterClass:sectionHeader.cellClass];
+            [_tableView ws_registerHeaderFooterClass:sectionHeader.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
         }
     }
 }
@@ -77,7 +78,7 @@
     if (_sectionFooter != sectionFooter) {
         _sectionFooter = sectionFooter;
         if (sectionFooter.cellClass && ![_cellPrototyper headerFooterPrototypeForCellClass:sectionFooter.cellClass]) {
-            [_tableView ws_registerHeaderFooterClass:sectionFooter.cellClass];
+            [_tableView ws_registerHeaderFooterClass:sectionFooter.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
         }
     }
 }
@@ -87,7 +88,7 @@
     [items enumerateObjectsUsingBlock:^(WSCellItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
         [set addObject:item.cellClass];
     }];
-    [_tableView ws_registerCellClasses:[set copy]];
+    [_tableView ws_registerCellClasses:[set copy] identifierConvention:[_cellPrototyper identifierConvention]];
 }
 
 #pragma mark - UIScrollViewDelegate forwarding -
@@ -108,8 +109,8 @@
 
 - (UITableViewCell<WSCellClass> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:ws_className(item.cellClass)
-                                                                         forIndexPath:indexPath];
+    NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:item.cellClass];
+    UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:item path:indexPath userInfo:nil];
     [_adjustment invokeActionWithInfo:actionInfo];
     [item.adjustment invokeActionWithInfo:actionInfo];
@@ -141,7 +142,8 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UITableViewHeaderFooterView<WSCellClass> *header;
     if (_sectionHeader) {
-        header = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:ws_className(_sectionHeader.cellClass)];
+        NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionHeader.cellClass];
+        header = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
         [header applyItem:_sectionHeader heightCalculation:NO];
     }
     
@@ -152,7 +154,8 @@
     
     UITableViewHeaderFooterView<WSCellClass> *footer;
     if (_sectionFooter) {
-        footer = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:ws_className(_sectionFooter.cellClass)];
+        NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionFooter.cellClass];
+        footer = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
         [footer applyItem:_sectionFooter heightCalculation:NO];
     }
 
@@ -285,7 +288,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
     if (item != nil) {
         [_items addObject:item];
         if (![_cellPrototyper cellPrototypeForCellClass:item.cellClass]) {
-            [_tableView ws_registerCellClass:item.cellClass];
+            [_tableView ws_registerCellClass:item.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
         }
     }
 }
@@ -307,7 +310,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
         [self removeCachedHeightsAboveIndex:index];
         [_items insertObject:item atIndex:index];
         if (![_cellPrototyper cellPrototypeForCellClass:item.cellClass]) {
-            [_tableView ws_registerCellClass:item.cellClass];
+            [_tableView ws_registerCellClass:item.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
         }
     }
 }

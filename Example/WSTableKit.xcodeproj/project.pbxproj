@@ -32,7 +32,8 @@
 		6D7034BA1C5A175E005B178C /* CellWithButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7034B91C5A175E005B178C /* CellWithButton.m */; };
 		6D816B691BBBBF5C00F175AC /* NSArray+WSSortable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D816B681BBBBF5C00F175AC /* NSArray+WSSortable.m */; };
 		6D87A39B1CA304B400FEE1AA /* UITableView+WSTableExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D87A39A1CA304B400FEE1AA /* UITableView+WSTableExtension.m */; };
-		6D87A39E1CA305FC00FEE1AA /* WSCellsPrototypeHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D87A39D1CA305FC00FEE1AA /* WSCellsPrototypeHolder.m */; };
+		6D87A39E1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D87A39D1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m */; };
+		6DB043811CA5B396002CF38D /* WSDefaultIdentifierConvention.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */; };
 		6DF5A0EA1C6F2281004D5DDB /* WSActionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
@@ -91,9 +92,12 @@
 		6D816B681BBBBF5C00F175AC /* NSArray+WSSortable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+WSSortable.m"; sourceTree = "<group>"; };
 		6D87A3991CA304B400FEE1AA /* UITableView+WSTableExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WSTableExtension.h"; sourceTree = "<group>"; };
 		6D87A39A1CA304B400FEE1AA /* UITableView+WSTableExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+WSTableExtension.m"; sourceTree = "<group>"; };
-		6D87A39C1CA305FC00FEE1AA /* WSCellsPrototypeHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSCellsPrototypeHolder.h; sourceTree = "<group>"; };
-		6D87A39D1CA305FC00FEE1AA /* WSCellsPrototypeHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSCellsPrototypeHolder.m; sourceTree = "<group>"; };
+		6D87A39C1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSDefaultCellsPrototyper.h; sourceTree = "<group>"; };
+		6D87A39D1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSDefaultCellsPrototyper.m; sourceTree = "<group>"; };
 		6D87A3A11CA30C9D00FEE1AA /* WSCellsPrototyper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSCellsPrototyper.h; sourceTree = "<group>"; };
+		6DB0437D1CA5B220002CF38D /* WSIdentifierConvention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSIdentifierConvention.h; sourceTree = "<group>"; };
+		6DB0437F1CA5B396002CF38D /* WSDefaultIdentifierConvention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSDefaultIdentifierConvention.h; sourceTree = "<group>"; };
+		6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSDefaultIdentifierConvention.m; sourceTree = "<group>"; };
 		6DF5A0E81C6F2281004D5DDB /* WSActionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSActionInfo.h; sourceTree = "<group>"; };
 		6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSActionInfo.m; sourceTree = "<group>"; };
 		6DF5A0EB1C6F2595004D5DDB /* WSActionTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSActionTypes.h; sourceTree = "<group>"; };
@@ -223,26 +227,25 @@
 			isa = PBXGroup;
 			children = (
 				6D87A3A01CA3063300FEE1AA /* Categories */,
+				6DB0437E1CA5B360002CF38D /* Protocols */,
 				6D118C121C82476B004A4AAF /* Supplementary */,
 				6D5FF91F1BBADC61001DDD91 /* WSAction.h */,
 				6D5FF9201BBADC61001DDD91 /* WSAction.m */,
 				6DF5A0E81C6F2281004D5DDB /* WSActionInfo.h */,
 				6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */,
 				6DF5A0EB1C6F2595004D5DDB /* WSActionTypes.h */,
-				6D5FF9211BBADC61001DDD91 /* WSCellClass.h */,
 				6D5FF9231BBADC61001DDD91 /* WSCellItem.h */,
 				6D5FF9241BBADC61001DDD91 /* WSCellItem.m */,
-				6D87A39C1CA305FC00FEE1AA /* WSCellsPrototypeHolder.h */,
-				6D87A39D1CA305FC00FEE1AA /* WSCellsPrototypeHolder.m */,
+				6D87A39C1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.h */,
+				6D87A39D1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m */,
+				6DB0437F1CA5B396002CF38D /* WSDefaultIdentifierConvention.h */,
+				6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */,
 				6D5FF92B1BBADC61001DDD91 /* WSSection.h */,
 				6D5FF92C1BBADC61001DDD91 /* WSSection.m */,
 				6D5FF9251BBADC61001DDD91 /* WSSectionContainer.h */,
 				6D5FF9261BBADC61001DDD91 /* WSSectionContainer.m */,
-				6D5FF9291BBADC61001DDD91 /* WSSortable.h */,
 				6D5FF92D1BBADC61001DDD91 /* WSTableViewCell.h */,
 				6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */,
-				6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */,
-				6D87A3A11CA30C9D00FEE1AA /* WSCellsPrototyper.h */,
 			);
 			name = WSTableKit;
 			path = ../../WSTableKit;
@@ -257,6 +260,18 @@
 				6D87A39A1CA304B400FEE1AA /* UITableView+WSTableExtension.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		6DB0437E1CA5B360002CF38D /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6D5FF9211BBADC61001DDD91 /* WSCellClass.h */,
+				6D87A3A11CA30C9D00FEE1AA /* WSCellsPrototyper.h */,
+				6DB0437D1CA5B220002CF38D /* WSIdentifierConvention.h */,
+				6D5FF9291BBADC61001DDD91 /* WSSortable.h */,
+				6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -421,9 +436,10 @@
 				6003F5A7195388D20070C39A /* WSViewController.m in Sources */,
 				6D816B691BBBBF5C00F175AC /* NSArray+WSSortable.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				6D87A39E1CA305FC00FEE1AA /* WSCellsPrototypeHolder.m in Sources */,
+				6D87A39E1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m in Sources */,
 				6D5FF9341BBADC61001DDD91 /* WSSection.m in Sources */,
 				6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */,
+				6DB043811CA5B396002CF38D /* WSDefaultIdentifierConvention.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

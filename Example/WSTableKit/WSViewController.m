@@ -59,4 +59,10 @@
     self.sections = [WSSectionContainer containerWithSections:@[section] tableView:self.tableView];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    
+}
+
 @end

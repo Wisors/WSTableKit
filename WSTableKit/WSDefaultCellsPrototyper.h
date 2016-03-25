@@ -10,8 +10,8 @@
 
 #import "WSCellsPrototyper.h"
 
-@interface WSCellsPrototypeHolder : NSObject<WSCellsPrototyper>
+@interface WSDefaultCellsPrototyper : NSObject<WSCellsPrototyper>
 
-- (nonnull instancetype)initWithTableView:(nonnull UITableView *)tableView;
+- (nonnull instancetype)initWithTableView:(nonnull UITableView *)tableView identifierConvention:(nonnull id<WSIdentifierConvention>)convention;
 
 @end

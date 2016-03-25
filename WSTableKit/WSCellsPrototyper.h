@@ -7,10 +7,14 @@
 //
 
 #import "WSCellClass.h"
+#import "WSIdentifierConvention.h"
 
 @protocol WSCellsPrototyper<NSObject>
 
 @property (nonatomic, nonnull, readonly) UITableView *tableView;
+@property (nonatomic, nonnull, readonly) id<WSIdentifierConvention> identifierConvention;
+
+- (void)registerIfNeededCellClass:(nonnull Class<WSCellClass>)cellClass;
 
 - (nullable UITableViewHeaderFooterView<WSCellClass> *)headerFooterPrototypeForCellClass:(nonnull Class<WSCellClass>)cellClass;
 - (nullable UITableViewCell<WSCellClass> *)cellPrototypeForCellClass:(nonnull Class<WSCellClass>)cellClass;
