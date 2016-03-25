@@ -68,8 +68,8 @@
 - (void)setSectionHeader:(WSCellItem *)sectionHeader {
     if (_sectionHeader != sectionHeader) {
         _sectionHeader = sectionHeader;
-        if (sectionHeader.cellClass && ![_cellPrototyper headerFooterPrototypeForCellClass:sectionHeader.cellClass]) {
-            [_tableView ws_registerHeaderFooterClass:sectionHeader.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
+        if (sectionHeader.cellClass) {
+            [_cellPrototyper registerIfNeededHeaderFooterViewClass:sectionHeader.cellClass];
         }
     }
 }
@@ -77,8 +77,8 @@
 - (void)setSectionFooter:(WSCellItem *)sectionFooter {
     if (_sectionFooter != sectionFooter) {
         _sectionFooter = sectionFooter;
-        if (sectionFooter.cellClass && ![_cellPrototyper headerFooterPrototypeForCellClass:sectionFooter.cellClass]) {
-            [_tableView ws_registerHeaderFooterClass:sectionFooter.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
+        if (sectionFooter.cellClass) {
+            [_cellPrototyper registerIfNeededHeaderFooterViewClass:sectionFooter.cellClass];
         }
     }
 }
@@ -88,7 +88,7 @@
     [items enumerateObjectsUsingBlock:^(WSCellItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
         [set addObject:item.cellClass];
     }];
-    [_tableView ws_registerCellClasses:[set copy] identifierConvention:[_cellPrototyper identifierConvention]];
+    [_cellPrototyper registerIfNeededCellClasses:[set copy]];
 }
 
 #pragma mark - UIScrollViewDelegate forwarding -
@@ -287,9 +287,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 - (void)addItem:(WSCellItem *)item {
     if (item != nil) {
         [_items addObject:item];
-        if (![_cellPrototyper cellPrototypeForCellClass:item.cellClass]) {
-            [_tableView ws_registerCellClass:item.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
-        }
+        [_cellPrototyper registerIfNeededCellClass:item.cellClass];
     }
 }
 
@@ -309,9 +307,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
     if (index <= [_items count]) {
         [self removeCachedHeightsAboveIndex:index];
         [_items insertObject:item atIndex:index];
-        if (![_cellPrototyper cellPrototypeForCellClass:item.cellClass]) {
-            [_tableView ws_registerCellClass:item.cellClass identifierConvention:[_cellPrototyper identifierConvention]];
-        }
+        [_cellPrototyper registerIfNeededCellClass:item.cellClass];
     }
 }
 

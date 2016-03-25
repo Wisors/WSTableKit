@@ -11,10 +11,10 @@
 @implementation WSDefaultIdentifierConvention
 
 - (NSString *)identifierForClass:(Class)cellClass {
-#ifdef EMBEDDED_CONTENT_CONTAINS_SWIFT
-    return [[NSStringFromClass(cellClass) componentsSeparatedByString:@"."] lastObject]; //For Swift Modules compatibility
-#else
+#ifdef STRICT_OBJC
     return NSStringFromClass(cellClass);
+#else
+    return [[NSStringFromClass(cellClass) componentsSeparatedByString:@"."] lastObject]; //For Swift Modules compatibility
 #endif
 }
 

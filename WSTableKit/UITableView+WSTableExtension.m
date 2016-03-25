@@ -12,8 +12,7 @@
 
 @implementation UITableView (WSTableExtension)
 
-- (void)ws_registerCellClass:(nonnull Class)cellClass identifierConvention:(nonnull id<WSIdentifierConvention>)convention {
-    NSString *identifier = [convention identifierForClass:cellClass];
+- (void)ws_registerCellClass:(nonnull Class)cellClass forReuseIdentifier:(nonnull NSString *)identifier {
     NSBundle *bundle = [NSBundle bundleForClass:cellClass];
     if ([bundle pathForResource:NSStringFromClass(cellClass) ofType:@"nib"] != nil) {
         [self registerNib:[UINib nibWithNibName:identifier bundle:bundle] forCellReuseIdentifier:identifier]; // Xib cell
@@ -22,14 +21,7 @@
     }
 }
 
-- (void)ws_registerCellClasses:(nullable NSSet<Class> *)cellClasses identifierConvention:(nonnull id<WSIdentifierConvention>)convention {
-    [cellClasses enumerateObjectsUsingBlock:^(Class  _Nonnull cellClass, BOOL * _Nonnull stop) {
-        [self ws_registerCellClass:cellClass identifierConvention:convention];
-    }];
-}
-
-- (void)ws_registerHeaderFooterClass:(nonnull Class)headerFooterClass identifierConvention:(nonnull id<WSIdentifierConvention>)convention {
-    NSString *identifier = [convention identifierForClass:headerFooterClass];
+- (void)ws_registerHeaderFooterClass:(nonnull Class)headerFooterClass forReuseIdentifier:(nonnull NSString *)identifier {
     NSBundle *bundle = [NSBundle bundleForClass:headerFooterClass];
     if ([bundle pathForResource:NSStringFromClass(headerFooterClass) ofType:@"nib"] != nil) {
         [self registerNib:[UINib nibWithNibName:identifier bundle:bundle] forHeaderFooterViewReuseIdentifier:identifier]; // Xib cell
