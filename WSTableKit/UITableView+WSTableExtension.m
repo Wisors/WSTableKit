@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 #import "UITableView+WSTableExtension.h"
-#import "WSCellClass.h"
 
 @implementation UITableView (WSTableExtension)
 

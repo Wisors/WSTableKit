@@ -7,6 +7,7 @@
 //
 
 #import "WSCellsPrototypeHolder.h"
+#import "UITableView+WSTableExtension.h"
 
 @interface WSCellsPrototypeHolder()
 

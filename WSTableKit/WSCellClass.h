@@ -37,6 +37,3 @@
 
 @end
 
-static inline  NSString * _Nonnull  ws_className(_Nonnull Class classObject) {
-    return [[NSStringFromClass(classObject) componentsSeparatedByString:@"."] lastObject]; //For Swift Modules compatibility
-}
