@@ -22,6 +22,7 @@
 
 - (nonnull instancetype)initWithTableView:(nonnull UITableView *)tableView identifierConvention:(nonnull id<WSIdentifierConvention>)convention {
     if ((self = [super init])) {
+        NSAssert(convention, @"Convetion is required property");
         _tableView              = tableView;
         _prototypes             = [NSMutableDictionary new];
         _identifierConvention   = convention;

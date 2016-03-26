@@ -20,8 +20,6 @@
 @property (nonatomic, nullable) WSCellItem *sectionHeader;
 @property (nonatomic, nullable) WSCellItem *sectionFooter;
 
-@property (nonatomic, readonly, nonnull) UITableView *tableView;
-
 /**
  *  Fast factory method to create TableSection with specific CellClass and array of objects that fit this cell class.
  *
@@ -64,6 +62,8 @@
 @end
 
 @interface WSSection(ItemAccess)
+
+- (void)cleanHeightsCache;
 
 /**
  *  Update section with completely new array of CellItem objects.

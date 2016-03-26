@@ -14,8 +14,8 @@
 
 @protocol WSTableViewDirector <NSObject, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, nullable, readonly) UITableView *tableView;
-@property (nonatomic, nullable) WSAction *adjustment;
+@property (nonatomic, nonnull, readonly) UITableView *tableView;
 @property (nonatomic, nonnull) id<WSCellsPrototyper> cellPrototyper;
+@property (nonatomic, nullable) WSAction *adjustment;
 
 @end

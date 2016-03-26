@@ -14,7 +14,7 @@
 
 @interface WSSection()
 
-@property (nonatomic, nullable) UITableView *tableView;
+@property (nonatomic, nonnull) UITableView *tableView;
 @property (nonatomic, weak, nullable) id<UIScrollViewDelegate> scrollDelegate;
 
 @end
@@ -127,6 +127,7 @@
         [header applyItem:_sectionHeader heightCalculation:YES];
         return ([header respondsToSelector:@selector(cellHeight)]) ? [header cellHeight] : tableView.sectionHeaderHeight;
     }
+    
     return 0;
 }
 
@@ -136,6 +137,7 @@
         [footer applyItem:_sectionHeader heightCalculation:YES];
         return ([footer respondsToSelector:@selector(cellHeight)]) ? [footer cellHeight] : tableView.sectionFooterHeight;
     }
+    
     return 0;
 }
 
@@ -151,14 +153,13 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    
     UITableViewHeaderFooterView<WSCellClass> *footer;
     if (_sectionFooter) {
         NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionFooter.cellClass];
         footer = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
         [footer applyItem:_sectionFooter heightCalculation:NO];
     }
-
+    
     return footer;
 }
 
@@ -269,6 +270,10 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 
 
 @implementation WSSection(ItemAccess)
+
+- (void)cleanHeightsCache {
+    [_cellHeights removeAllObjects];
+}
 
 - (void)removeCachedHeightsAboveIndex:(NSInteger)index {
     while (index < [_items count]) {
