@@ -57,6 +57,10 @@
     [self.actions removeObjectForKey:key];
 }
 
+- (void)removeActionForType:(WSActionType)type {
+    return [self.actions removeObjectForKey:ws_convertEnumTypeToString(type)];
+}
+
 @end
 
 @implementation WSActionsHolder(WSActionInvocation)

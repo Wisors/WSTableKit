@@ -6,9 +6,6 @@
 //  Copyright © 2016 Alex Nikishin. All rights reserved.
 //
 
-#ifndef WSActionTypes_h
-#define WSActionTypes_h
-
 typedef enum : NSUInteger {
     WSActionAdjustment,
     WSActionSelect,
@@ -43,5 +40,3 @@ static inline NSString* ws_convertEnumTypeToString(WSActionType type) {
             return @"WSActionShouldHiglight";
     }
 }
-
-#endif /* WSActionTypes_h */

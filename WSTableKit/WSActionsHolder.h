@@ -59,6 +59,12 @@
  *  @param action Action key.
  */
 - (void)removeActionForKey:(nonnull NSString *)key;
+/**
+ *  Delete action with provided type.
+ *
+ *  @param action Action key.
+ */
+- (void)removeActionForType:(WSActionType)type;
 
 @end
 

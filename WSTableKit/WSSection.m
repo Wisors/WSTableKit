@@ -26,14 +26,18 @@
 @synthesize adjustment = _adjustment;
 @synthesize cellPrototyper = _cellPrototyper;
 
++ (nonnull instancetype)sectionWithTableView:(nonnull UITableView *)tableView {
+    return [[self alloc] initWithItems:nil scrollDelegate:nil tableView:tableView];
+}
+
++ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nonnull UITableView *)tableView {
+    return [[self alloc] initWithItems:cellItems scrollDelegate:nil tableView:tableView];
+}
+
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
                                      objects:(nullable NSArray<WSCellItem *> *)objects
                                    tableView:(nonnull UITableView *)tableView {
     NSArray *cellItems = [WSCellItem itemsWithClass:cellClass objects:objects];
-    return [[self alloc] initWithItems:cellItems scrollDelegate:nil tableView:tableView];
-}
-
-+ (nonnull instancetype)sectionWithItems:(nullable NSArray<WSCellItem *> *)cellItems tableView:(nonnull UITableView *)tableView {
     return [[self alloc] initWithItems:cellItems scrollDelegate:nil tableView:tableView];
 }
 
