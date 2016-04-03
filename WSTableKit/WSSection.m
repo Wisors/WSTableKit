@@ -120,6 +120,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (_sectionHeader && [_items count] != 0) {
         UITableViewHeaderFooterView<WSCellClass> *header = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionHeader.viewClass];
+        [_sectionHeader.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:header item:_sectionHeader path:nil userInfo:nil]];
         [header applyItem:_sectionHeader heightCalculation:YES];
         return ([header respondsToSelector:@selector(cellHeight)]) ? [header cellHeight] : tableView.sectionHeaderHeight;
     }
@@ -130,6 +131,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if (_sectionFooter && [_items count] != 0) {
         UITableViewHeaderFooterView<WSCellClass> *footer = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionFooter.viewClass];
+        [_sectionFooter.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:footer item:_sectionFooter path:nil userInfo:nil]];
         [footer applyItem:_sectionFooter heightCalculation:YES];
         return ([footer respondsToSelector:@selector(cellHeight)]) ? [footer cellHeight] : tableView.sectionFooterHeight;
     }
@@ -142,6 +144,7 @@
     if (_sectionHeader) {
         NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionHeader.viewClass];
         header = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
+        [_sectionHeader.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:header item:_sectionHeader path:nil userInfo:nil]];
         [header applyItem:_sectionHeader heightCalculation:NO];
     }
     
@@ -153,6 +156,7 @@
     if (_sectionFooter) {
         NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionFooter.viewClass];
         footer = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
+        [_sectionFooter.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:footer item:_sectionFooter path:nil userInfo:nil]];
         [footer applyItem:_sectionFooter heightCalculation:NO];
     }
     
