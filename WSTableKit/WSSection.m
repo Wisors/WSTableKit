@@ -134,9 +134,8 @@
     if (_sectionFooter && [_items count] != 0) {
         UITableViewHeaderFooterView<WSCellClass> *footer = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionFooter.viewClass];
         if (_sectionFooter.adjustment) {
-
+            [_sectionFooter.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:footer item:_sectionFooter path:nil userInfo:nil]];
         }
-        [_sectionFooter.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:footer item:_sectionFooter path:nil userInfo:nil]];
         [footer applyItem:_sectionFooter heightCalculation:YES];
         return ([footer respondsToSelector:@selector(cellHeight)]) ? [footer cellHeight] : tableView.sectionFooterHeight;
     }
