@@ -292,10 +292,10 @@
 - (nonnull instancetype)initWithTableView:(nullable UITableView *)tableView
                           sortableObjects:(nonnull NSArray *)sortableObjects
                      andCellItemInitBlock:(nonnull WSCellItem * _Nonnull (^)(id _Nullable object))itemBlock {
-    return [self initWithSections:[self splitCurrentItemsToSections:sortableObjects andCellItemInitBlock:itemBlock] tableView:tableView];
+    return [self initWithSections:[self splitCurrentItemsToSections:sortableObjects inTableView:tableView andCellItemInitBlock:itemBlock] tableView:tableView];
 }
 
-- (NSArray *)splitCurrentItemsToSections:(NSArray *)objects andCellItemInitBlock:(WSCellItem * (^)(id object))itemBlock {
+- (NSArray *)splitCurrentItemsToSections:(NSArray *)objects inTableView:(UITableView *)tableView andCellItemInitBlock:(WSCellItem * (^)(id object))itemBlock {
     NSAssert((![objects firstObject] || [[objects firstObject] conformsToProtocol:@protocol(WSSortable)]), @"Objects have to conform to Sortable protocol");
     NSAssert(itemBlock, @"You must pass an cellitem initialization block");
     
@@ -310,7 +310,7 @@
         }
         
         if (![lastKey isEqualToString:key]) {
-            currentSection = [WSSection new];
+            currentSection = [WSSection sectionWithTableView:tableView];
             currentSection.sectionHeader = [WSSupplementaryItem itemWithTitle:[key uppercaseString]];
             [sections addObject:currentSection];
         }
