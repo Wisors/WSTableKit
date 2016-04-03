@@ -122,7 +122,7 @@
 }
 
 + (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass objects:(nullable NSArray *)objects customActions:(nullable NSArray *)actions {
-    return [self itemsWithClass:viewClass objects:objects actions:nil adjustment:actions];
+    return [self itemsWithClass:viewClass objects:objects actions:actions adjustment:nil];
 }
 
 + (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass objects:(nullable NSArray *)objects adjustment:(nullable WSAction *)adjustment {
