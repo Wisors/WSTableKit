@@ -9,6 +9,8 @@
 
 #import "NSArray+WSSortable.h"
 #import "WSSortable.h"
+#import "WSDefaultCellsPrototyper.h"
+#import "WSDefaultIdentifierConvention.h"
 
 @interface WSSectionContainer()
 
@@ -21,7 +23,6 @@
 @implementation WSSectionContainer
 @synthesize adjustment = _adjustment;
 @synthesize cellPrototyper = _cellPrototyper;
-
 
 + (nonnull instancetype)containerWithSections:(nullable NSArray *)sections tableView:(nullable UITableView *)tableView {
     return [[self alloc] initWithSections:sections tableView:tableView adjustmentBlock:nil scrollDelegate:nil];
@@ -75,6 +76,8 @@
     NSAssert(sections != nil, @"Can't be initialized with nil sections");
     if ((self = [super init])) {
         _sections       = ([sections count] > 0) ? [sections mutableCopy] : [NSMutableArray new];
+        _cellPrototyper = [[WSDefaultCellsPrototyper alloc] initWithTableView:tableView identifierConvention:[WSDefaultIdentifierConvention new]];
+        [_sections makeObjectsPerformSelector:@selector(setCellPrototyper:) withObject:_cellPrototyper];
         _scrollDelegate = scrollDelegate;
         _tableView      = tableView;
         if (tableView) {

@@ -22,10 +22,11 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		6D118C161C8341F3004A4AAF /* WSHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D118C151C8341F3004A4AAF /* WSHeaderFooterView.m */; };
+		6D13554D1CB11A1500A16DED /* UITableViewCell+WSAutoLayoutHeigh.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D13554C1CB11A1500A16DED /* UITableViewCell+WSAutoLayoutHeigh.m */; };
 		6D5FF9301BBADC61001DDD91 /* WSAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9201BBADC61001DDD91 /* WSAction.m */; };
 		6D5FF9311BBADC61001DDD91 /* WSCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9241BBADC61001DDD91 /* WSCellItem.m */; };
 		6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9261BBADC61001DDD91 /* WSSectionContainer.m */; };
-		6D5FF9331BBADC61001DDD91 /* WSSectionSupplementaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */; };
+		6D5FF9331BBADC61001DDD91 /* WSSupplementaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF9281BBADC61001DDD91 /* WSSupplementaryItem.m */; };
 		6D5FF9341BBADC61001DDD91 /* WSSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92C1BBADC61001DDD91 /* WSSection.m */; };
 		6D5FF9351BBADC61001DDD91 /* WSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5FF92E1BBADC61001DDD91 /* WSTableViewCell.m */; };
 		6D5FF9371BBAF15D001DDD91 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D5FF9361BBAF15D001DDD91 /* Launch Screen.storyboard */; };
@@ -70,6 +71,9 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		6D118C141C8341F3004A4AAF /* WSHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSHeaderFooterView.h; sourceTree = "<group>"; };
 		6D118C151C8341F3004A4AAF /* WSHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSHeaderFooterView.m; sourceTree = "<group>"; };
+		6D13554A1CB10DCF00A16DED /* WSItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSItem.h; sourceTree = "<group>"; };
+		6D13554B1CB11A1500A16DED /* UITableViewCell+WSAutoLayoutHeigh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+WSAutoLayoutHeigh.h"; sourceTree = "<group>"; };
+		6D13554C1CB11A1500A16DED /* UITableViewCell+WSAutoLayoutHeigh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+WSAutoLayoutHeigh.m"; sourceTree = "<group>"; };
 		6D5FF91F1BBADC61001DDD91 /* WSAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSAction.h; sourceTree = "<group>"; };
 		6D5FF9201BBADC61001DDD91 /* WSAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSAction.m; sourceTree = "<group>"; };
 		6D5FF9211BBADC61001DDD91 /* WSCellClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSCellClass.h; sourceTree = "<group>"; };
@@ -77,8 +81,8 @@
 		6D5FF9241BBADC61001DDD91 /* WSCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSCellItem.m; sourceTree = "<group>"; };
 		6D5FF9251BBADC61001DDD91 /* WSSectionContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSectionContainer.h; sourceTree = "<group>"; };
 		6D5FF9261BBADC61001DDD91 /* WSSectionContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSectionContainer.m; sourceTree = "<group>"; };
-		6D5FF9271BBADC61001DDD91 /* WSSectionSupplementaryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSectionSupplementaryItem.h; sourceTree = "<group>"; };
-		6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSectionSupplementaryItem.m; sourceTree = "<group>"; };
+		6D5FF9271BBADC61001DDD91 /* WSSupplementaryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSupplementaryItem.h; sourceTree = "<group>"; };
+		6D5FF9281BBADC61001DDD91 /* WSSupplementaryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSupplementaryItem.m; sourceTree = "<group>"; };
 		6D5FF9291BBADC61001DDD91 /* WSSortable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSortable.h; sourceTree = "<group>"; };
 		6D5FF92B1BBADC61001DDD91 /* WSSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSSection.h; sourceTree = "<group>"; };
 		6D5FF92C1BBADC61001DDD91 /* WSSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSection.m; sourceTree = "<group>"; };
@@ -215,8 +219,8 @@
 		6D118C121C82476B004A4AAF /* Supplementary */ = {
 			isa = PBXGroup;
 			children = (
-				6D5FF9271BBADC61001DDD91 /* WSSectionSupplementaryItem.h */,
-				6D5FF9281BBADC61001DDD91 /* WSSectionSupplementaryItem.m */,
+				6D5FF9271BBADC61001DDD91 /* WSSupplementaryItem.h */,
+				6D5FF9281BBADC61001DDD91 /* WSSupplementaryItem.m */,
 				6D118C141C8341F3004A4AAF /* WSHeaderFooterView.h */,
 				6D118C151C8341F3004A4AAF /* WSHeaderFooterView.m */,
 			);
@@ -258,6 +262,8 @@
 				6D816B681BBBBF5C00F175AC /* NSArray+WSSortable.m */,
 				6D87A3991CA304B400FEE1AA /* UITableView+WSTableExtension.h */,
 				6D87A39A1CA304B400FEE1AA /* UITableView+WSTableExtension.m */,
+				6D13554B1CB11A1500A16DED /* UITableViewCell+WSAutoLayoutHeigh.h */,
+				6D13554C1CB11A1500A16DED /* UITableViewCell+WSAutoLayoutHeigh.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -268,6 +274,7 @@
 				6D5FF9211BBADC61001DDD91 /* WSCellClass.h */,
 				6D87A3A11CA30C9D00FEE1AA /* WSCellsPrototyper.h */,
 				6DB0437D1CA5B220002CF38D /* WSIdentifierConvention.h */,
+				6D13554A1CB10DCF00A16DED /* WSItem.h */,
 				6D5FF9291BBADC61001DDD91 /* WSSortable.h */,
 				6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */,
 			);
@@ -424,8 +431,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D5FF9331BBADC61001DDD91 /* WSSectionSupplementaryItem.m in Sources */,
+				6D5FF9331BBADC61001DDD91 /* WSSupplementaryItem.m in Sources */,
 				6DF5A0EA1C6F2281004D5DDB /* WSActionInfo.m in Sources */,
+				6D13554D1CB11A1500A16DED /* UITableViewCell+WSAutoLayoutHeigh.m in Sources */,
 				6003F59E195388D20070C39A /* WSAppDelegate.m in Sources */,
 				6D5FF9301BBADC61001DDD91 /* WSAction.m in Sources */,
 				6D5FF9311BBADC61001DDD91 /* WSCellItem.m in Sources */,

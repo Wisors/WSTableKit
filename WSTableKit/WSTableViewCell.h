@@ -8,18 +8,11 @@
 #import <UIKit/UIKit.h>
 
 #import "WSCellItem.h"
+#import "UITableViewCell+WSAutoLayoutHeigh.h"
 
 @interface WSTableViewCell : UITableViewCell<WSCellClass>
 
 @property (nonatomic, readonly, nullable) WSCellItem *item;
-@property (nonatomic, assign) IBInspectable BOOL hasAutolayout; //Define the behavior of default implementation -cellHeigh method. Return default 44pt size or use autolayout.
-
-/**
- *  Caclulate cell height using autolayot.
- *
- *  @return Cell height.
- */
-- (CGFloat)calculateHeightForAutolayoutCell;
 
 @end
 

@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class WSCellItem;
+@protocol WSItem;
 
 /**
  *  CellClass is an UITableViewCell extension protocol, that helps you work with different UITableViewCell classes as abstract objects.
@@ -20,7 +20,7 @@
  *  @param item              WSCellItem object for this cell.
  *  @param heightCalculation YES means that cell is preparing for height calculation and -cellHeight will be called as next method, NO - cell is preparing for showing in a tableview and requred full adjustment.
  */
-- (void)applyItem:(nullable WSCellItem *)item heightCalculation:(BOOL)heightCalculation;
+- (void)applyItem:(nullable id<WSItem>)item heightCalculation:(BOOL)heightCalculation;
 
 @optional
 

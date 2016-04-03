@@ -6,12 +6,12 @@
 //  Copyright © 2016 Alex Nikishin. All rights reserved.
 //
 
-#import "WSCellClass.h"
 #import <UIKit/UIKit.h>
+
+#import "WSSupplementaryItem.h"
 
 @interface WSHeaderFooterView : UITableViewHeaderFooterView<WSCellClass>
 
-@property (nonatomic, nullable) WSCellItem *item;
-@property (nonatomic, assign) IBInspectable BOOL hasAutolayout;
+@property (nonatomic, nullable) WSSupplementaryItem *item;
 
 @end

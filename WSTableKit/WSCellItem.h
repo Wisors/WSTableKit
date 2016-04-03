@@ -8,10 +8,11 @@
 #import <Foundation/Foundation.h>
 
 #import "WSAction.h"
+#import "WSItem.h"
 
 typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path);
 
-@interface WSCellItem : NSObject
+@interface WSCellItem : NSObject <WSItem>
 
 @property (nonatomic, assign, nonnull, readonly) Class<WSCellClass> cellClass;
 @property (nonatomic, nullable, readonly) id object;

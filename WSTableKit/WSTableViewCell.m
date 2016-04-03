@@ -61,18 +61,12 @@
 #pragma mark - CellClass protocol -
 
 - (CGFloat)cellHeight {
-    return (_hasAutolayout) ? [self calculateHeightForAutolayoutCell] : 44; // Autolayout or default table cell size.
+    return 44; // Default table height
 }
 
 - (void)applyItem:(WSCellItem *)item heightCalculation:(BOOL)heightCalculation {
+    NSAssert([item isKindOfClass:[WSCellItem class]], @"Wrong item passed, expect WSCellItem");
     self.item = item;
-}
-
-- (CGFloat)calculateHeightForAutolayoutCell {
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
-    CGSize size = [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-    return size.height;
 }
 
 #pragma mark - Layout -
