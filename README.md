@@ -11,8 +11,8 @@
 
 # Installation
 
-### Cocoapods
-The recommended way to install `WSTableKit` is via [Cocoapods](http://cocoapods.org) package manager.
+### CocoaPods
+The recommended way to install `WSTableKit` is via [CocoaPods](http://cocoapods.org) package manager.
 ```ruby
 # Podfile example
 platform :ios, '7.0'
