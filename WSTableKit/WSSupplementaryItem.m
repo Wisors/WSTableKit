@@ -6,41 +6,65 @@
 //
 
 #import "WSSupplementaryItem.h"
+#import "WSHeaderFooterView.h"
 
 static CGFloat kSectionDefaultHeight = 22;
 
 @implementation WSSupplementaryItem
 
 + (instancetype)itemWithTitle:(NSString *)text {
-    return [[self alloc] initWithTitle:text height:kSectionDefaultHeight];
+    return [[self alloc] initWithHeaderFooterClass:[WSHeaderFooterView class] object:text actions:nil height:kSectionDefaultHeight];
 }
 
 + (instancetype)itemWithTitle:(NSString *)text height:(CGFloat)height {
-    return [[self alloc] initWithTitle:text height:height];
+    return [[self alloc] initWithHeaderFooterClass:[WSHeaderFooterView class] object:text actions:nil height:height];
 }
 
-- (instancetype)initWithTitle:(NSString *)title {
-    return [self initWithTitle:title height:kSectionDefaultHeight];
++ (nonnull instancetype)itemWithClass:(nonnull Class)viewClass
+                               object:(nullable id)object
+                               height:(CGFloat)height {
+    return [[self alloc] initWithHeaderFooterClass:viewClass object:object actions:nil height:height];
 }
 
-- (instancetype)initWithTitle:(NSString *)title height:(CGFloat)height {
-    if ((self = [super init])) {
-        _object         = title;
-        _customHeight   = height;
++ (nonnull instancetype)itemWithClass:(nonnull Class)viewClass
+                               object:(nullable id)object
+                              actions:(nullable NSArray<WSAction *> *)actions
+                               height:(CGFloat)height {
+    return [[self alloc] initWithHeaderFooterClass:viewClass object:object actions:actions height:height];
+}
+
+- (nonnull instancetype)initWithHeaderFooterClass:(nonnull Class)headerFooterClass
+                                           object:(nullable id)object
+                                          actions:(nullable NSArray<WSAction *> *)actions
+                                           height:(CGFloat)height {
+    if (self = [super initWithViewClass:headerFooterClass object:object actions:actions adjustment:nil]) {
+        _customHeight = height;
     }
     
     return self;
+}
+
+- (void)setClickBlock:(WSSupplementaryClickBlock)block {
+    if (!block) {
+        return;
+    }
+    __weak __typeof(self) weakSelf = self;
+    [self.actionsHolder addAction:[WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        if (block) {
+            block(actionInfo.headerFooter, weakSelf);
+        }
+    }]];
 }
 
 - (NSString *)sortKey {
     if (_sortKey) {
         return _sortKey;
     }
-    if ([_object isKindOfClass:[NSString class]]) {
-        return _object;
+    if ([self.object isKindOfClass:[NSString class]]) {
+        return self.object;
     }
-    if ([_object conformsToProtocol:@protocol(WSSortable)]) {
-        return [(id<WSSortable>)_object sortKey];
+    if ([self.object conformsToProtocol:@protocol(WSSortable)]) {
+        return [self.object sortKey];
     }
     
     return @"";

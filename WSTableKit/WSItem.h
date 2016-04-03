@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 
 #import "WSCellClass.h"
+#import "WSActionsHolder.h"
 
 @protocol WSItem <NSObject>
 
-@property (nonatomic, assign, nonnull, readonly) Class<WSCellClass> cellClass;
+@property (nonatomic, assign, nonnull, readonly) Class<WSCellClass> viewClass;
 @property (nonatomic, nullable, readonly) id object;
+@property (nonatomic, nonnull, readonly) WSActionsHolder *actionsHolder;
+@property (nonatomic, nullable) WSAction *adjustment;
 
 @end

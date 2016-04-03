@@ -10,8 +10,8 @@
 
 @interface WSActionInfo()
 
-@property (nonatomic, nonnull) UITableViewCell<WSCellClass> *cell;
-@property (nonatomic, nonnull) WSCellItem *item;
+@property (nonatomic, nonnull) UIView<WSCellClass> *view;
+@property (nonatomic, nonnull) id<WSItem> item;
 @property (nonatomic, nullable) NSIndexPath *path;
 @property (nonatomic, nullable) NSDictionary *userInfo;
 
@@ -19,30 +19,38 @@
 
 @implementation WSActionInfo
 
-+ (nonnull instancetype)actionInfoWithCell:(nonnull UITableViewCell<WSCellClass> *)cell
-                                      item:(nonnull WSCellItem *)item
++ (nonnull instancetype)actionInfoWithView:(nonnull UIView<WSCellClass> *)view
+                                      item:(nonnull id<WSItem>)item
                                       path:(nullable NSIndexPath *)path
                                   userInfo:(nullable NSDictionary *)userInfo {
-    return [[self alloc] initWithCell:cell item:item path:path userInfo:userInfo];
+    return [[self alloc] initWithView:view item:item path:path userInfo:userInfo];
 }
 
 - (instancetype)init NS_UNAVAILABLE {
     return nil;
 }
 
-- (nonnull instancetype)initWithCell:(nonnull UITableViewCell<WSCellClass> *)cell
-                                item:(nonnull WSCellItem *)item
+- (nonnull instancetype)initWithView:(nonnull UIView<WSCellClass> *)view
+                                item:(nonnull id<WSItem>)item
                                 path:(nullable NSIndexPath *)path
                             userInfo:(nullable NSDictionary *)userInfo {
     
     if ((self = [super init])) {
-        _cell = cell;
+        _view = view;
         _path = path;
         _item = item;
         _userInfo = userInfo;
     }
     
     return self;
+}
+
+- (nonnull UITableViewCell *)cell {
+    return (UITableViewCell *)_view;
+}
+
+- (nonnull UITableViewHeaderFooterView *)headerFooter {
+    return (UITableViewHeaderFooterView *)_view;
 }
 
 @end

@@ -1,80 +1,86 @@
 //
-//  CellItem.m
+//  WSBaseItem.m
+//  WSTableKit
 //
-//  Created by Alex Nikishin on 30/09/15.
-//  Copyright © 2015 Alex Nikishin. All rights reserved.
+//  Created by Alexandr Nikishin on 03/04/16.
+//  Copyright © 2016 Alex Nikishin. All rights reserved.
 //
 
 #import "WSCellItem.h"
 
 @interface WSCellItem()
 
-@property (nonatomic, assign) Class<WSCellClass> cellClass;
-@property (nonatomic) id object;
-@property (nonatomic) NSMutableArray *customActions;
+@property (nonatomic, assign, nonnull) Class<WSCellClass> viewClass;
+@property (nonatomic, nullable) id object;
+@property (nonatomic, nonnull) WSActionsHolder *actionsHolder;
 
 @end
 
-@implementation WSCellItem : NSObject
+@implementation WSCellItem
+@synthesize adjustment = _adjustment;
 
-+ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass object:(nullable id)object {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustment:nil];
++ (nonnull instancetype)itemWithClass:(nonnull Class)cellClass object:(nullable id)object {
+    return [[self alloc] initWithViewClass:cellClass object:object actions:nil adjustment:nil];
 }
 
-+ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
-                                   object:(nullable id)object
-                             customAction:(nullable WSAction *)action {
-    return [[self alloc] initWithCellClass:cellClass
++ (nonnull instancetype)itemWithClass:(nonnull Class)cellClass
+                               object:(nullable id)object
+                         customAction:(nullable WSAction *)action {
+    return [[self alloc] initWithViewClass:cellClass
                                     object:object
                                    actions:(action) ? @[action] : nil
                                 adjustment:nil];
 }
 
-+ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
-                                   object:(nullable id)object
-                            customActions:(nullable NSArray<WSAction *> *)actions {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:actions adjustment:nil];
++ (nonnull instancetype)itemWithClass:(nonnull Class)cellClass
+                               object:(nullable id)object
+                        customActions:(nullable NSArray<WSAction *> *)actions {
+    return [[self alloc] initWithViewClass:cellClass object:object actions:actions adjustment:nil];
 }
 
-+ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
-                                   object:(nullable id)object
-                               adjustment:(nullable WSAction *)adjustment {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustment:adjustment];
++ (nonnull instancetype)itemWithClass:(nonnull Class)cellClass
+                               object:(nullable id)object
+                           adjustment:(nullable WSAction *)adjustment {
+    return [[self alloc] initWithViewClass:cellClass object:object actions:nil adjustment:adjustment];
 }
 
-+ (nonnull instancetype)itemWithCellClass:(nonnull Class)cellClass
-                                   object:(nullable id)object
-                          adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    return [[self alloc] initWithCellClass:cellClass object:object actions:nil adjustmentBlock:adjustmentBlock];
++ (nonnull instancetype)itemWithClass:(nonnull Class)viewClass
+                               object:(nullable id)object
+                      adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    return [[self alloc] initWithViewClass:viewClass object:object actions:nil adjustmentBlock:adjustmentBlock];
 }
 
-- (instancetype)init NS_UNAVAILABLE {
-    return nil;
++ (nonnull instancetype)itemWithClass:(nonnull Class)viewClass
+                               object:(nullable id)object
+                              actions:(nullable NSArray<WSAction *> *)actions
+                      adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    return [[self alloc] initWithViewClass:viewClass object:object actions:actions adjustmentBlock:adjustmentBlock];
 }
 
-- (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
+- (nonnull instancetype)initWithViewClass:(nonnull Class)viewClass
                                    object:(nullable id)object
                                   actions:(nullable NSArray<WSAction *> *)actions
                           adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     WSAction *adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
         adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
     }] : nil;
-    return [self initWithCellClass:cellClass object:object actions:actions adjustment:adjustment];
+    return [self initWithViewClass:viewClass object:object actions:actions adjustment:adjustment];
 }
 
-- (nonnull instancetype)initWithCellClass:(nonnull Class)cellClass
+- (instancetype)init NS_UNAVAILABLE {
+    return nil;
+}
+
+- (nonnull instancetype)initWithViewClass:(nonnull Class<WSCellClass>)viewClass
                                    object:(nullable id)object
                                   actions:(nullable NSArray<WSAction *> *)actions
                                adjustment:(nullable WSAction *)adjustment {
     if ((self = [super init])) {
-        NSAssert([cellClass conformsToProtocol:@protocol(WSCellClass)], @"Cell class must conform to CellClass protocol");
+        NSAssert([(id)viewClass conformsToProtocol:@protocol(WSCellClass)], @"Cell class must conform to CellClass protocol");
         _adjustment     = adjustment;
-        _cellClass      = cellClass;
+        _viewClass      = viewClass;
         _object         = object;
-        _customActions  = [NSMutableArray new];
-        if ([actions count] > 0 ) {
-            [self addActions:actions];
-        }
+        _actionsHolder  = [[WSActionsHolder alloc] initWithActions:actions];
     }
     
     return self;
@@ -84,81 +90,13 @@
 
 @implementation WSCellItem(Actions)
 
-- (nullable NSArray<WSAction *> *)cellActions {
-    return [_customActions copy];
-}
-
-- (nonnull instancetype)addAction:(WSActionType)type actionBlock:(nullable WSActionBlock)block {
-    [self addAction:[WSAction actionWithType:type actionBlock:block]];
+- (nonnull instancetype)addAction:(nullable WSAction *)action {
+    [_actionsHolder addAction:action];
     return self;
 }
-
-- (nonnull instancetype)addAction:(WSActionType)type returnValueBlock:(nullable WSReturnValueBlock)block {
-    [self addAction:[WSAction actionWithType:type returnValueBlock:block]];
+- (nonnull instancetype)addActions:(nullable NSArray<WSAction *> *)actions {
+    [_actionsHolder addActions:actions];
     return self;
-}
-
-- (void)addAction:(nullable WSAction *)action {
-    if (!action) {
-        return;
-    }
-    
-    [self removeActionForKey:action.key];
-    [_customActions addObject:action];
-}
-
-- (void)addActions:(nullable NSArray<WSAction *> *)actions {
-    if ([actions count] == 0) {
-        return;
-    }
-    
-    if ([_customActions count] == 0) {
-        _customActions = [actions mutableCopy];
-    } else {
-        for (WSAction *action in actions) {
-            [self addAction:action];
-        }
-    }
-}
-
-- (nullable WSAction *)actionForKey:(nonnull NSString *)key {
-    __block WSAction *foundAction;
-    [_customActions enumerateObjectsUsingBlock:^(WSAction *action, NSUInteger idx, BOOL *stop) {
-        if ([action.key isEqualToString:key]) {
-            foundAction = action;
-            *stop = YES;
-        }
-    }];
-    
-    return foundAction;
-}
-
-- (nullable WSAction *)actionForType:(WSActionType)type {
-    return [self actionForKey:ws_convertEnumTypeToString(type)];
-}
-
-- (void)removeActionForKey:(nonnull NSString *)key {
-    if (!key || [_customActions count] == 0) {
-        return;
-    }
-    
-    NSMutableIndexSet *set = [NSMutableIndexSet indexSet];
-    [_customActions enumerateObjectsUsingBlock:^(WSAction *action, NSUInteger idx, BOOL *stop) {
-        if ([action.key isEqualToString:key]) {
-            [set addIndex:idx];
-        }
-    }];
-    [_customActions removeObjectsAtIndexes:set];
-}
-
-- (nullable id)invokeActionForType:(WSActionType)type withCell:(nonnull UITableViewCell<WSCellClass> *)cell {
-    return [self invokeActionForKey:ws_convertEnumTypeToString(type) withCell:cell userInfo:nil];
-}
-
-- (nullable id)invokeActionForType:(WSActionType)type
-                          withCell:(nonnull UITableViewCell<WSCellClass> *)cell
-                          userInfo:(nullable NSDictionary *)userInfo {
-    return [self invokeActionForKey:ws_convertEnumTypeToString(type) withCell:cell userInfo:userInfo];
 }
 
 - (nullable id)invokeActionForKey:(nonnull NSString *)key withCell:(nonnull UITableViewCell<WSCellClass> *)cell {
@@ -168,61 +106,54 @@
 - (nullable id)invokeActionForKey:(nonnull NSString *)key
                          withCell:(nonnull UITableViewCell<WSCellClass> *)cell
                          userInfo:(nullable NSDictionary *)userInfo {
-    WSAction *action = [self actionForKey:key];
-    if (action) {
-        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:self path:nil userInfo:userInfo];
-        return [action invokeActionWithInfo:actionInfo];
-    }
-    return nil;
+    return [_actionsHolder invokeActionForKey:key
+                               withActionInfo:[WSActionInfo actionInfoWithView:cell
+                                                                          item:self
+                                                                          path:nil
+                                                                      userInfo:userInfo]];
 }
 
 @end
 
 @implementation WSCellItem(Fabrics)
 
-+ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass objects:(nullable NSArray *)objects {
-    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:nil adjustment:nil];
++ (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass objects:(nullable NSArray *)objects {
+    return [self itemsWithClass:viewClass objects:objects actions:nil adjustment:nil];
 }
 
-+ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
-                                objects:(nullable NSArray *)objects
-                          customActions:(nullable NSArray *)actions {
-    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:actions adjustment:nil];
++ (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass objects:(nullable NSArray *)objects customActions:(nullable NSArray *)actions {
+    return [self itemsWithClass:viewClass objects:objects actions:nil adjustment:nil];
 }
 
-+ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
-                                objects:(nullable NSArray *)objects
-                             adjustment:(nullable WSAction *)adjustment {
-    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:nil adjustment:adjustment];
++ (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass objects:(nullable NSArray *)objects adjustment:(nullable WSAction *)adjustment {
+    return [self itemsWithClass:viewClass objects:objects actions:nil adjustment:adjustment];
 }
 
-+ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
-                                objects:(nullable NSArray *)objects
-                        adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
-    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:nil adjustmentBlock:adjustmentBlock];
++ (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass objects:(nullable NSArray *)objects adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
+    return [self itemsWithClass:viewClass objects:objects actions:nil adjustmentBlock:adjustmentBlock];
 }
 
-+ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
-                                objects:(nullable NSArray *)objects
-                                actions:(nullable NSArray *)actions
-                        adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
++ (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass
+                            objects:(nullable NSArray *)objects
+                            actions:(nullable NSArray *)actions
+                    adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     WSAction *adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
         adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
     }] : nil;
-    return [WSCellItem cellItemsWithClass:cellClass objects:objects actions:actions adjustment:adjustment];
+    return [self itemsWithClass:viewClass objects:objects actions:actions adjustment:adjustment];
 }
 
-+ (nonnull NSArray *)cellItemsWithClass:(nonnull Class)cellClass
-                                objects:(nullable NSArray *)objects
-                                actions:(nullable NSArray *)actions
-                             adjustment:(nullable WSAction *)adjustment {
++ (nonnull NSArray *)itemsWithClass:(nonnull Class)viewClass
+                            objects:(nullable NSArray *)objects
+                            actions:(nullable NSArray *)actions
+                         adjustment:(nullable WSAction *)adjustment {
     if (objects.count == 0) {
         return @[];
     }
     
     NSMutableArray *cellItems = [NSMutableArray new];
     for (id object in objects) {
-        WSCellItem *item = [[WSCellItem alloc] initWithCellClass:cellClass object:object actions:actions adjustment:adjustment];
+        WSCellItem *item = [[self alloc] initWithViewClass:viewClass object:object actions:actions adjustment:adjustment];
         [cellItems addObject:item];
     }
     

@@ -92,7 +92,7 @@
 
 - (nonnull instancetype)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     _adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
-        adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
+        adjustmentBlock(actionInfo.view, actionInfo.item, actionInfo.path);
     }] : nil;
     
     return self;
@@ -112,10 +112,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [self.sections count];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [[self sectionAtIndex:section] tableView:tableView titleForHeaderInSection:section];
 }
 
 //- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
@@ -150,10 +146,6 @@
 //    return 0;
 //}
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    return [[self sectionAtIndex:section] tableView:tableView titleForFooterInSection:section];
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [[self sectionAtIndex:section] tableView:tableView numberOfRowsInSection:section];
 }
@@ -163,7 +155,7 @@
     UITableViewCell<WSCellClass> *cell = (UITableViewCell<WSCellClass> *)[section tableView:tableView cellForRowAtIndexPath:indexPath];
     if (_adjustment) {
         WSCellItem *item = [section itemAtIndex:indexPath.row];
-        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:item path:indexPath userInfo:nil];
+        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithView:cell item:item path:indexPath userInfo:nil];
         [_adjustment invokeActionWithInfo:actionInfo];
     }
 

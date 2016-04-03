@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 #import "WSCellItem.h"
+#import "WSSupplementaryItem.h"
 #import "WSTableViewDirector.h"
 
 @class WSCellItem;
@@ -17,8 +18,8 @@
 /**
  *  Supplementary items of section.
  */
-@property (nonatomic, nullable) WSCellItem *sectionHeader;
-@property (nonatomic, nullable) WSCellItem *sectionFooter;
+@property (nonatomic, nullable) WSSupplementaryItem *sectionHeader;
+@property (nonatomic, nullable) WSSupplementaryItem *sectionFooter;
 
 /**
  *  Fast factory method to create TableSection with specific CellClass and array of objects that fit this cell class.

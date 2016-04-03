@@ -29,7 +29,7 @@
 + (nonnull instancetype)sectionWithCellClass:(nonnull Class<WSCellClass>)cellClass
                                      objects:(nullable NSArray<WSCellItem *> *)objects
                                    tableView:(nonnull UITableView *)tableView {
-    NSArray *cellItems = [WSCellItem cellItemsWithClass:cellClass objects:objects];
+    NSArray *cellItems = [WSCellItem itemsWithClass:cellClass objects:objects];
     return [[self alloc] initWithItems:cellItems scrollDelegate:nil tableView:tableView];
 }
 
@@ -60,33 +60,29 @@
 
 - (nonnull instancetype)setAdjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock {
     _adjustment = (adjustmentBlock) ? [WSAction actionWithType:WSActionAdjustment actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
-        adjustmentBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
+        adjustmentBlock(actionInfo.view, actionInfo.item, actionInfo.path);
     }] : nil;
     return self;
 }
 
-- (void)setSectionHeader:(WSCellItem *)sectionHeader {
+- (void)setSectionHeader:(WSSupplementaryItem *)sectionHeader {
     if (_sectionHeader != sectionHeader) {
         _sectionHeader = sectionHeader;
-        if (sectionHeader.cellClass) {
-            [_cellPrototyper registerIfNeededHeaderFooterViewClass:sectionHeader.cellClass];
-        }
+        [_cellPrototyper registerIfNeededHeaderFooterViewClass:sectionHeader.viewClass];
     }
 }
 
-- (void)setSectionFooter:(WSCellItem *)sectionFooter {
+- (void)setSectionFooter:(WSSupplementaryItem *)sectionFooter {
     if (_sectionFooter != sectionFooter) {
         _sectionFooter = sectionFooter;
-        if (sectionFooter.cellClass) {
-            [_cellPrototyper registerIfNeededHeaderFooterViewClass:sectionFooter.cellClass];
-        }
+        [_cellPrototyper registerIfNeededHeaderFooterViewClass:sectionFooter.viewClass];
     }
 }
 
 - (void)ws_registerItemsCells:(NSArray<WSCellItem *> *)items {
     NSMutableSet *set = [NSMutableSet set];
     [items enumerateObjectsUsingBlock:^(WSCellItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-        [set addObject:item.cellClass];
+        [set addObject:item.viewClass];
     }];
     [_cellPrototyper registerIfNeededCellClasses:[set copy]];
 }
@@ -109,9 +105,9 @@
 
 - (UITableViewCell<WSCellClass> *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:item.cellClass];
+    NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:item.viewClass];
     UITableViewCell<WSCellClass> *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-    WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:item path:indexPath userInfo:nil];
+    WSActionInfo *actionInfo = [WSActionInfo actionInfoWithView:cell item:item path:indexPath userInfo:nil];
     [_adjustment invokeActionWithInfo:actionInfo];
     [item.adjustment invokeActionWithInfo:actionInfo];
     [cell applyItem:item heightCalculation:NO];
@@ -123,7 +119,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (_sectionHeader && [_items count] != 0) {
-        UITableViewHeaderFooterView<WSCellClass> *header = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionHeader.cellClass];
+        UITableViewHeaderFooterView<WSCellClass> *header = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionHeader.viewClass];
         [header applyItem:_sectionHeader heightCalculation:YES];
         return ([header respondsToSelector:@selector(cellHeight)]) ? [header cellHeight] : tableView.sectionHeaderHeight;
     }
@@ -133,8 +129,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if (_sectionFooter && [_items count] != 0) {
-        UITableViewHeaderFooterView<WSCellClass> *footer = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionFooter.cellClass];
-        [footer applyItem:_sectionHeader heightCalculation:YES];
+        UITableViewHeaderFooterView<WSCellClass> *footer = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionFooter.viewClass];
+        [footer applyItem:_sectionFooter heightCalculation:YES];
         return ([footer respondsToSelector:@selector(cellHeight)]) ? [footer cellHeight] : tableView.sectionFooterHeight;
     }
     
@@ -144,7 +140,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UITableViewHeaderFooterView<WSCellClass> *header;
     if (_sectionHeader) {
-        NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionHeader.cellClass];
+        NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionHeader.viewClass];
         header = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
         [header applyItem:_sectionHeader heightCalculation:NO];
     }
@@ -155,7 +151,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     UITableViewHeaderFooterView<WSCellClass> *footer;
     if (_sectionFooter) {
-        NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionFooter.cellClass];
+        NSString *identifier = [[_cellPrototyper identifierConvention] identifierForClass:_sectionFooter.viewClass];
         footer = [_tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
         [footer applyItem:_sectionFooter heightCalculation:NO];
     }
@@ -173,10 +169,10 @@
     NSAssert(item, @"Something goes wrong, you have to have an item here.");
 
     CGFloat height = tableView.rowHeight;
-    Class<WSCellClass> cellClass = item.cellClass;
+    Class<WSCellClass> cellClass = item.viewClass;
     UITableViewCell<WSCellClass> *proto = [_cellPrototyper cellPrototypeForCellClass:cellClass];
     if ([cellClass instancesRespondToSelector:@selector(cellHeight)]) {
-        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:proto item:item path:indexPath userInfo:nil];
+        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithView:proto item:item path:indexPath userInfo:nil];
         [_adjustment invokeActionWithInfo:actionInfo];
         [item.adjustment invokeActionWithInfo:actionInfo];
         [proto applyItem:item heightCalculation:YES];
@@ -198,11 +194,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    WSAction *action = [item actionForType:WSActionClick];
+    WSAction *action = [item.actionsHolder actionForType:WSActionClick];
     if (action) {
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     } else {
-        action = [item actionForType:WSActionSelect];
+        action = [item.actionsHolder actionForType:WSActionSelect];
     }
     if (action) {
         ws_findCellAndinvokeAction(action, tableView, indexPath, item);
@@ -217,13 +213,13 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    WSAction *action = [item actionForType:WSActionWillDisplay];
+    WSAction *action = [item.actionsHolder actionForType:WSActionWillDisplay];
     ws_invokeAction(action, cell, indexPath, item);
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell<WSCellClass> *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    WSAction *action = [item actionForType:WSActionEndDisplay];
+    WSAction *action = [item.actionsHolder actionForType:WSActionEndDisplay];
     ws_invokeAction(action, cell, indexPath, item);
 }
 
@@ -231,7 +227,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
     WSCellItem *item = [self itemAtIndex:indexPath.row];
-    WSAction *action = [item actionForType:WSActionShouldHiglight];
+    WSAction *action = [item.actionsHolder actionForType:WSActionShouldHiglight];
     if (action) {
         id actionResult = ws_findCellAndinvokeAction(action, tableView, indexPath, item);
         NSAssert([actionResult respondsToSelector:@selector(boolValue)], @"Need to return boolean type");
@@ -250,7 +246,7 @@ static inline id ws_findCellAndinvokeAction(WSAction *action, UITableView *table
 
 static inline id ws_invokeAction(WSAction *action, UITableViewCell<WSCellClass> *cell, NSIndexPath *indexPath, WSCellItem *item) {
     if (action) {
-        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithCell:cell item:item path:indexPath userInfo:nil];
+        WSActionInfo *actionInfo = [WSActionInfo actionInfoWithView:cell item:item path:indexPath userInfo:nil];
         return [action invokeActionWithInfo:actionInfo];
     }
     return nil;
@@ -258,7 +254,7 @@ static inline id ws_invokeAction(WSAction *action, UITableViewCell<WSCellClass> 
 
 static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITableView *tableView, NSIndexPath *indexPath, WSSection *section) {
     WSCellItem *item = [section itemAtIndex:indexPath.row];
-    WSAction *action = [item actionForType:type];
+    WSAction *action = [item.actionsHolder actionForType:type];
     if (action) {
         return ws_findCellAndinvokeAction(action, tableView, indexPath, item);
     }
@@ -292,7 +288,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 - (void)addItem:(WSCellItem *)item {
     if (item != nil) {
         [_items addObject:item];
-        [_cellPrototyper registerIfNeededCellClass:item.cellClass];
+        [_cellPrototyper registerIfNeededCellClass:item.viewClass];
     }
 }
 
@@ -312,7 +308,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
     if (index <= [_items count]) {
         [self removeCachedHeightsAboveIndex:index];
         [_items insertObject:item atIndex:index];
-        [_cellPrototyper registerIfNeededCellClass:item.cellClass];
+        [_cellPrototyper registerIfNeededCellClass:item.viewClass];
     }
 }
 

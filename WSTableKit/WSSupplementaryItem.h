@@ -7,20 +7,35 @@
 
 #import <Foundation/Foundation.h>
 
-#import "WSItem.h"
+#import "WSCellItem.h"
 #import "WSSortable.h"
 
-@interface WSSupplementaryItem : NSObject <WSItem, WSSortable>
+@class WSSupplementaryItem;
 
-@property (nonatomic, assign, nonnull, readonly) Class<WSCellClass> cellClass;
-@property (nonatomic, nullable, readonly) id object;
+typedef void (^WSSupplementaryClickBlock)(UITableViewHeaderFooterView<WSCellClass> * _Nonnull headerFooter, WSSupplementaryItem * _Nonnull item);
+
+@interface WSSupplementaryItem : WSCellItem<WSSortable>
+
 @property (nonatomic, nonnull) NSString *sortKey;
 @property (nonatomic, assign) CGFloat customHeight;
 
 + (nonnull instancetype)itemWithTitle:(nullable NSString *)text;
 + (nonnull instancetype)itemWithTitle:(nullable NSString *)text height:(CGFloat)height;
 
-- (nonnull instancetype)initWithTitle:(nullable NSString *)title;
-- (nonnull instancetype)initWithTitle:(nullable NSString *)title height:(CGFloat)height;
++ (nonnull instancetype)itemWithClass:(nonnull Class)viewClass
+                               object:(nullable id)object
+                               height:(CGFloat)height;
+
++ (nonnull instancetype)itemWithClass:(nonnull Class)viewClass
+                               object:(nullable id)object
+                              actions:(nullable NSArray<WSAction *> *)actions
+                               height:(CGFloat)height;
+
+- (nonnull instancetype)initWithHeaderFooterClass:(nonnull Class)headerFooterClass
+                                           object:(nullable id)object
+                                          actions:(nullable NSArray<WSAction *> *)actions
+                                           height:(CGFloat)height;
+
+- (void)setClickBlock:(nullable WSSupplementaryClickBlock)block;
 
 @end
