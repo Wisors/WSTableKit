@@ -295,6 +295,7 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 - (void)updateWithItems:(NSArray *)items {
     _items = (items) ? [items mutableCopy] : [NSMutableArray new];
     [_cellHeights removeAllObjects];
+    [self ws_registerItemsCells:items];
 }
 
 - (void)addItem:(WSCellItem *)item {
