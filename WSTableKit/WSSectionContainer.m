@@ -223,10 +223,12 @@
 @implementation WSSectionContainer(SectionAccess)
 
 - (void)addSection:(nonnull WSSection *)section {
+    section.cellPrototyper = self.cellPrototyper;
     [self.sections addObject:section];
 }
 
 - (void)addSection:(nonnull WSSection *)section atIndex:(NSInteger)index {
+    section.cellPrototyper = self.cellPrototyper;
     if (index >= [self.sections count]) {
         [self.sections addObject:section];
     } else {
@@ -235,6 +237,7 @@
 }
 
 - (void)replaceSectionAtIndex:(NSInteger)index withSection:(nonnull WSSection *)section {
+    section.cellPrototyper = self.cellPrototyper;
     if ([self.sections count] > index) {
         [self.sections replaceObjectAtIndex:index withObject:section];
     }
@@ -243,7 +246,6 @@
 - (void)updateSectionAtIndex:(NSInteger)index withItems:(nonnull NSArray<WSCellItem *> *)items {
     [[self sectionAtIndex:index] updateWithItems:items];
 }
-
 
 - (NSInteger)numberOfSections {
     return [self.sections count];
