@@ -10,12 +10,12 @@
 @protocol WSItem;
 
 /**
- *  CellClass is an UITableViewCell extension protocol, that helps you work with different UITableViewCell classes as abstract objects.
+ *  WSCellClass is an UITableViewCell extension protocol, that provides unified interface of cell configuration.
  */
 @protocol WSCellClass <NSObject>
 
 /**
- *  Apply item to cell to proper configure it and make design adjustment with possibility of performance optimization. No need to fully adjust your cell design for height calculation, just change only height dependent attributes.
+ *  Apply item to cell to proper configure it and make design adjustment with possibility of performance optimization. No need to fully adjust your cell design for height calculation, only change height dependent attributes.
  *
  *  @param item              WSCellItem object for this cell.
  *  @param heightCalculation YES means that cell is preparing for height calculation and -cellHeight will be called as next method, NO - cell is preparing for showing in a tableview and requred full adjustment.
@@ -25,7 +25,7 @@
 @optional
 
 /**
- *  Calculate and return custom cell height. Otherwised WSTableKit use UITableView
+ *  Calculate and return custom cell height.
  *
  *  @return Value of cell height to proper showing in tableview.
  */

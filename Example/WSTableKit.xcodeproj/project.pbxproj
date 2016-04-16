@@ -37,6 +37,7 @@
 		6D87A39E1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D87A39D1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m */; };
 		6DB043811CA5B396002CF38D /* WSDefaultIdentifierConvention.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */; };
 		6DF5A0EA1C6F2281004D5DDB /* WSActionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */; };
+		6DFDDB6D1CC2079500F39F9D /* NSArray+WSAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DFDDB6C1CC2079500F39F9D /* NSArray+WSAction.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -108,6 +109,8 @@
 		6DF5A0E81C6F2281004D5DDB /* WSActionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSActionInfo.h; sourceTree = "<group>"; };
 		6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSActionInfo.m; sourceTree = "<group>"; };
 		6DF5A0EB1C6F2595004D5DDB /* WSActionTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSActionTypes.h; sourceTree = "<group>"; };
+		6DFDDB6B1CC2079500F39F9D /* NSArray+WSAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+WSAction.h"; sourceTree = "<group>"; };
+		6DFDDB6C1CC2079500F39F9D /* NSArray+WSAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+WSAction.m"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A27BB152640CA4A5BA22430B /* Pods_WSTableKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WSTableKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E59B4E71602994E8E29B6F /* Pods_WSTableKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WSTableKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,6 +243,8 @@
 				6DF5A0EB1C6F2595004D5DDB /* WSActionTypes.h */,
 				6D13554F1CB13F0E00A16DED /* WSActionsHolder.h */,
 				6D1355501CB13F0E00A16DED /* WSActionsHolder.m */,
+				6DFDDB6B1CC2079500F39F9D /* NSArray+WSAction.h */,
+				6DFDDB6C1CC2079500F39F9D /* NSArray+WSAction.m */,
 			);
 			name = Actions;
 			sourceTree = "<group>";
@@ -462,6 +467,7 @@
 				6D5FF9341BBADC61001DDD91 /* WSSection.m in Sources */,
 				6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */,
 				6DB043811CA5B396002CF38D /* WSDefaultIdentifierConvention.m in Sources */,
+				6DFDDB6D1CC2079500F39F9D /* NSArray+WSAction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

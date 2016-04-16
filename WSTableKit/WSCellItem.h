@@ -12,7 +12,8 @@
 
 @class WSCellItem;
 
-typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _Nonnull item, NSIndexPath * _Nonnull path);
+typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _Nullable item, NSIndexPath * _Nonnull path);
+typedef void (^WSClickBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _Nullable item, NSIndexPath * _Nonnull path);
 
 @interface WSCellItem : NSObject<WSItem>
 ///-------------------------------------------------
@@ -55,7 +56,10 @@ typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _N
 
 @end
 
+
 @interface WSCellItem(Actions)
+
+- (nonnull instancetype)setClickBlock:(nullable WSClickBlock)clickBlock;
 
 /**
  *  Add new custom action. If CellItem already contains action with the same key - it will override previous action with new one.
@@ -66,6 +70,9 @@ typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _N
  */
 - (nonnull instancetype)addAction:(nullable WSAction *)action;
 - (nonnull instancetype)addActions:(nullable NSArray<WSAction *> *)actions;
+
+- (nonnull instancetype)removeAction:(WSActionType)actionType;
+- (nonnull instancetype)removeActionForKey:(nonnull NSString *)key;
 
 // Invoke
 
@@ -92,6 +99,7 @@ typedef void (^WSAdjustmentBlock)(_Nonnull id<WSCellClass> cell, WSCellItem * _N
                          userInfo:(nullable NSDictionary *)userInfo;
 
 @end
+
 
 @interface WSCellItem(Fabrics)
 

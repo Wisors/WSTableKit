@@ -44,9 +44,9 @@ static CGFloat kSectionDefaultHeight = 22;
     return self;
 }
 
-- (void)setClickBlock:(WSSupplementaryClickBlock)block {
+- (nonnull instancetype)setClickBlock:(WSSupplementaryClickBlock)block {
     if (!block) {
-        return;
+        return self;
     }
     __weak __typeof(self) weakSelf = self;
     [self.actionsHolder addAction:[WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
@@ -54,6 +54,8 @@ static CGFloat kSectionDefaultHeight = 22;
             block(actionInfo.headerFooter, weakSelf);
         }
     }]];
+    
+    return self;
 }
 
 - (NSString *)sortKey {

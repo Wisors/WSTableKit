@@ -90,12 +90,29 @@
 
 @implementation WSCellItem(Actions)
 
+- (nonnull instancetype)setClickBlock:(nullable WSClickBlock)clickBlock {
+    WSAction *click = (clickBlock) ? [WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
+        clickBlock(actionInfo.cell, actionInfo.item, actionInfo.path);
+    }] : nil;
+    (click) ? [_actionsHolder addAction:click] : [_actionsHolder removeActionForType:WSActionClick];
+    return self;
+}
+
 - (nonnull instancetype)addAction:(nullable WSAction *)action {
     [_actionsHolder addAction:action];
     return self;
 }
 - (nonnull instancetype)addActions:(nullable NSArray<WSAction *> *)actions {
     [_actionsHolder addActions:actions];
+    return self;
+}
+
+- (nonnull instancetype)removeAction:(WSActionType)actionType {
+    [_actionsHolder removeActionForType:actionType];
+    return self;
+}
+- (nonnull instancetype)removeActionForKey:(nonnull NSString *)key {
+    [_actionsHolder removeActionForKey:key];
     return self;
 }
 

@@ -36,6 +36,6 @@ typedef void (^WSSupplementaryClickBlock)(UITableViewHeaderFooterView<WSCellClas
                                           actions:(nullable NSArray<WSAction *> *)actions
                                            height:(CGFloat)height;
 
-- (void)setClickBlock:(nullable WSSupplementaryClickBlock)block;
+- (nonnull instancetype)setClickBlock:(nullable WSSupplementaryClickBlock)block;
 
 @end
