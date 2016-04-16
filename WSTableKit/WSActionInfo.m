@@ -11,7 +11,7 @@
 @interface WSActionInfo()
 
 @property (nonatomic, nonnull) UIView<WSCellClass> *view;
-@property (nonatomic, nonnull) id<WSItem> item;
+@property (nonatomic, nullable) id<WSItem> item;
 @property (nonatomic, nullable) NSIndexPath *path;
 @property (nonatomic, nullable) NSDictionary *userInfo;
 
@@ -20,7 +20,7 @@
 @implementation WSActionInfo
 
 + (nonnull instancetype)actionInfoWithView:(nonnull UIView<WSCellClass> *)view
-                                      item:(nonnull id<WSItem>)item
+                                      item:(nullable id<WSItem>)item
                                       path:(nullable NSIndexPath *)path
                                   userInfo:(nullable NSDictionary *)userInfo {
     return [[self alloc] initWithView:view item:item path:path userInfo:userInfo];
@@ -31,7 +31,7 @@
 }
 
 - (nonnull instancetype)initWithView:(nonnull UIView<WSCellClass> *)view
-                                item:(nonnull id<WSItem>)item
+                                item:(nullable id<WSItem>)item
                                 path:(nullable NSIndexPath *)path
                             userInfo:(nullable NSDictionary *)userInfo {
     

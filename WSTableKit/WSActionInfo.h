@@ -18,17 +18,17 @@
 @interface WSActionInfo : NSObject
 
 @property (nonatomic, readonly, nonnull) UIView<WSCellClass> *view;
-@property (nonatomic, readonly, nonnull) id<WSItem> item;
+@property (nonatomic, readonly, nullable) id<WSItem> item;
 @property (nonatomic, readonly, nullable) NSIndexPath *path;
 @property (nonatomic, readonly, nullable) NSDictionary *userInfo;
 
 + (nonnull instancetype)actionInfoWithView:(nonnull UIView<WSCellClass> *)view
-                                      item:(nonnull id<WSItem>)item
+                                      item:(nullable id<WSItem>)item
                                       path:(nullable NSIndexPath *)path
                                   userInfo:(nullable NSDictionary *)userInfo;
 
 - (nonnull instancetype)initWithView:(nonnull UIView<WSCellClass> *)view
-                                item:(nonnull id<WSItem>)item
+                                item:(nullable id<WSItem>)item
                                 path:(nullable NSIndexPath *)path
                             userInfo:(nullable NSDictionary *)userInfo NS_DESIGNATED_INITIALIZER;
 

@@ -8,7 +8,41 @@
 #import <Foundation/Foundation.h>
 
 #import "WSActionInfo.h"
-#import "WSActionTypes.h"
+
+typedef enum : NSUInteger {
+    WSActionAdjustment,
+    WSActionSelect,
+    WSActionDeselect,
+    WSActionWillSelect,
+    WSActionWillDeselect,
+    WSActionClick,
+    WSActionWillDisplay,
+    WSActionEndDisplay,
+    WSActionShouldHiglight
+} WSActionType;
+
+NS_INLINE  NSString* _Nonnull  ws_convertEnumTypeToString(WSActionType type) {
+    switch (type) {
+        case WSActionAdjustment:
+            return @"WSActionAdjustment"; //Special type
+        case WSActionSelect:
+            return @"WSActionSelect";
+        case WSActionDeselect:
+            return @"WSActionDeselect";
+        case WSActionWillSelect:
+            return @"WSActionWillSelect";
+        case WSActionWillDeselect:
+            return @"WSActionWillDeselect";
+        case WSActionClick:
+            return @"WSActionClick";
+        case WSActionWillDisplay:
+            return @"WSActionDisplay";
+        case WSActionEndDisplay:
+            return @"WSActionEndDisplay";
+        case WSActionShouldHiglight:
+            return @"WSActionShouldHiglight";
+    }
+}
 
 /**
  *  Action block. Should be invoked by some event inside cell (button click, textfield changes, etc.). It is possible to have only one block of this type per one action key.
@@ -28,6 +62,7 @@ typedef void (^WSActionBlock)(WSActionInfo * _Nonnull actionInfo);
 @interface WSAction : NSObject
 
 @property (nonatomic, readonly, nonnull) NSString *key;
+@property (nonatomic, nullable, copy) WSReturnValueBlock returnValueBlock;
 
 + (nonnull instancetype)actionWithKey:(nonnull NSString *)key actionBlock:(nullable WSActionBlock)actionBlock;
 + (nonnull instancetype)actionWithKey:(nonnull NSString *)key returnValueBlock:(nullable WSReturnValueBlock)returnValueBlock;

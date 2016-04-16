@@ -10,8 +10,7 @@
 @interface WSAction()
 
 @property (nonatomic, nonnull) NSString *key;
-@property (nonatomic, nonnull) NSMutableArray *actionBlocks;
-@property (nonatomic, nullable, copy) WSReturnValueBlock returnValueBlock;
+@property (nonatomic, nonnull) NSMutableArray<WSActionBlock> *actionBlocks;
 
 @end
 
