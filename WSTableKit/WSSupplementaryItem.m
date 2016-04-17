@@ -8,7 +8,7 @@
 #import "WSSupplementaryItem.h"
 #import "WSHeaderFooterView.h"
 
-static CGFloat kSectionDefaultHeight = 22;
+const CGFloat kSectionDefaultHeight = 22;
 
 @implementation WSSupplementaryItem
 
@@ -46,6 +46,7 @@ static CGFloat kSectionDefaultHeight = 22;
 
 - (nonnull instancetype)setClickBlock:(WSSupplementaryClickBlock)block {
     if (!block) {
+        [self.actionsHolder removeActionForType:WSActionClick];
         return self;
     }
     __weak __typeof(self) weakSelf = self;

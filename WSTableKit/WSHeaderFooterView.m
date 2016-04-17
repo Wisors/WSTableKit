@@ -10,6 +10,14 @@
 
 @implementation WSHeaderFooterView
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    if ([self.item.object isKindOfClass:[UIView class]]) {
+        [self.item.object removeFromSuperview];
+    }
+}
+
 #pragma mark - WSCellClass protocol -
 
 - (CGFloat)cellHeight {

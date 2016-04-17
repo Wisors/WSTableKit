@@ -23,20 +23,11 @@
 
 @implementation WSActionsHolderTests
 
-- (void)setUp {
-    [super setUp];
-}
-
-- (void)tearDown {
-    [super tearDown];
-}
-
 - (WSAction *)mocAction {
     return [WSAction actionWithType:WSActionClick actionBlock:nil];
 }
 
 - (void)testInitializer {
-    
     WSActionsHolder *holder = [[WSActionsHolder alloc] initWithActions:@[[self mocAction]]];
     
     XCTAssertNotNil(holder.actions, @"Action holder miss actions");
@@ -44,7 +35,6 @@
 }
 
 - (void)testCellItemsGetter {
-    
     WSAction *action = [self mocAction];
     WSActionsHolder *holder = [[WSActionsHolder alloc] initWithActions:@[action]];
     
@@ -54,7 +44,6 @@
 }
 
 - (void)testAddAction {
-    
     WSActionsHolder *holder = [WSActionsHolder new];
     XCTAssertTrue(holder.actions.count == 0, @"Actions is not empty");
     
@@ -65,7 +54,6 @@
 }
 
 - (void)testAddActions {
-    
     WSActionsHolder *holder = [WSActionsHolder new];
     XCTAssertTrue(holder.actions.count == 0, @"Actions is not empty");
     
@@ -79,7 +67,6 @@
 }
 
 - (void)testActionForKey {
-    
     WSActionsHolder *holder = [WSActionsHolder new];
     WSAction *action1 = [WSAction actionWithType:WSActionClick actionBlock:nil];
     WSAction *action2 = [WSAction actionWithType:WSActionWillDisplay actionBlock:nil];
@@ -92,7 +79,6 @@
 }
 
 - (void)testActionForType {
-    
     WSActionsHolder *holder = [WSActionsHolder new];
     WSAction *action1 = [WSAction actionWithType:WSActionClick actionBlock:nil];
     WSAction *action2 = [WSAction actionWithType:WSActionWillDisplay actionBlock:nil];
@@ -105,7 +91,6 @@
 }
 
 - (void)testRemoveActionForKey {
-    
     WSAction *action = [WSAction actionWithType:WSActionClick actionBlock:nil];
     WSActionsHolder *holder = [[WSActionsHolder alloc] initWithActions:@[action]];
     XCTAssertTrue(holder.actions.count == 1, @"Actions is empty");
@@ -116,7 +101,6 @@
 
 
 - (void)testRemoveActionForType {
-    
     WSAction *action = [WSAction actionWithType:WSActionClick actionBlock:nil];
     WSActionsHolder *holder = [[WSActionsHolder alloc] initWithActions:@[action]];
     XCTAssertTrue(holder.actions.count == 1, @"Actions is empty");
@@ -126,7 +110,6 @@
 }
 
 - (void)testInvocationForKey {
-    
     XCTestExpectation *invocationExp = [self expectationWithDescription:@"wait for invokation"];
     WSAction *action = [WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
         [invocationExp fulfill];
@@ -140,7 +123,6 @@
 }
 
 - (void)testInvocationForType {
-    
     XCTestExpectation *invocationExp = [self expectationWithDescription:@"wait for invokation"];
     WSAction *action = [WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {
         [invocationExp fulfill];
@@ -154,7 +136,6 @@
 }
 
 - (void)testActionWithSameKeyOverrideOldOne {
-    
     WSAction *action = [self mocAction];
     WSActionsHolder *holder = [[WSActionsHolder alloc] initWithActions:@[action]];
     

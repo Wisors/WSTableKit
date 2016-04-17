@@ -29,7 +29,6 @@
 }
 
 - (void)testAddAction {
-
     WSAction *action = [WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {}];
     [self.items addAction:action];
     
@@ -39,7 +38,6 @@
 }
 
 - (void)testAddActions {
-    
     WSAction *action1 = [WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {}];
     WSAction *action2 = [WSAction actionWithType:WSActionWillDisplay actionBlock:^(WSActionInfo * _Nonnull actionInfo) {}];
     
@@ -52,7 +50,6 @@
 }
 
 - (void)testSetClickBlock {
-    
     [self.items setClickBlock:^(id<WSCellClass>  _Nonnull cell, WSCellItem * _Nullable item, NSIndexPath * _Nonnull path) {}];
     
     [self.items enumerateObjectsUsingBlock:^(WSCellItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {

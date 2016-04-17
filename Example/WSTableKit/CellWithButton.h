@@ -12,4 +12,6 @@ static NSString * const WSButtonClickedActionKey = @"WSButtonClickedActionKey";
 
 @interface CellWithButton : WSTableViewCell
 
+@property (strong) UIButton *button;
+
 @end

@@ -18,7 +18,6 @@
 @implementation WSActionInfoTests
 
 - (void)testDesignatedInitializer {
-    
     WSTableViewCell *cell = [WSTableViewCell new];
     WSCellItem *item = [WSCellItem itemWithClass:[WSTableViewCell class] object:nil];
     NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:0];

@@ -25,11 +25,11 @@
 }
 
 - (void)addButton {
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 60, 0, 60, self.frame.size.height)];
-    [button setTitle:@"Click" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [button setBackgroundColor:[UIColor redColor]];
-    [self.contentView addSubview:button];
+    self.button = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 60, 0, 60, self.frame.size.height)];
+    [self.button setTitle:@"Click" forState:UIControlStateNormal];
+    [self.button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self.button setBackgroundColor:[UIColor redColor]];
+    [self.contentView addSubview:self.button];
 }
 
 - (void)buttonClicked:(id)sender {

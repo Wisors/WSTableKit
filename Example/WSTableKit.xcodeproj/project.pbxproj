@@ -35,6 +35,13 @@
 		6D87A39E1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D87A39D1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m */; };
 		6DB043811CA5B396002CF38D /* WSDefaultIdentifierConvention.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */; };
 		6DF5A0EA1C6F2281004D5DDB /* WSActionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */; };
+		6DF704FB1CC3DFDB0097B127 /* WSTestXibTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF704F91CC3DFDB0097B127 /* WSTestXibTableViewCell.m */; };
+		6DF704FC1CC3DFDB0097B127 /* WSTestXibTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DF704FA1CC3DFDB0097B127 /* WSTestXibTableViewCell.xib */; };
+		6DF704FF1CC3E07F0097B127 /* UITableViewExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF704FE1CC3E07F0097B127 /* UITableViewExtensionsTests.m */; };
+		6DF705021CC3E41D0097B127 /* WSTestClassHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF705011CC3E41D0097B127 /* WSTestClassHeaderFooterView.m */; };
+		6DF705051CC3E7F20097B127 /* WSTestNibHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF705041CC3E7F20097B127 /* WSTestNibHeaderFooterView.m */; };
+		6DF705071CC3E80C0097B127 /* WSTestNibHeaderFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DF705061CC3E80C0097B127 /* WSTestNibHeaderFooterView.xib */; };
+		6DF7050A1CC3ECEE0097B127 /* WSSupplementaryItemTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF705091CC3ECEE0097B127 /* WSSupplementaryItemTests.m */; };
 		6DFDDB6D1CC2079500F39F9D /* NSArray+WSAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DFDDB6C1CC2079500F39F9D /* NSArray+WSAction.m */; };
 		6DFDDB701CC20B7600F39F9D /* WSActionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DFDDB6F1CC20B7600F39F9D /* WSActionTests.m */; };
 		6DFDDB721CC229DF00F39F9D /* WSActionInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DFDDB711CC229DF00F39F9D /* WSActionInfoTests.m */; };
@@ -109,6 +116,16 @@
 		6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSDefaultIdentifierConvention.m; sourceTree = "<group>"; };
 		6DF5A0E81C6F2281004D5DDB /* WSActionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSActionInfo.h; sourceTree = "<group>"; };
 		6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSActionInfo.m; sourceTree = "<group>"; };
+		6DF704F81CC3DFDB0097B127 /* WSTestXibTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTestXibTableViewCell.h; sourceTree = "<group>"; };
+		6DF704F91CC3DFDB0097B127 /* WSTestXibTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSTestXibTableViewCell.m; sourceTree = "<group>"; };
+		6DF704FA1CC3DFDB0097B127 /* WSTestXibTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WSTestXibTableViewCell.xib; sourceTree = "<group>"; };
+		6DF704FE1CC3E07F0097B127 /* UITableViewExtensionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITableViewExtensionsTests.m; sourceTree = "<group>"; };
+		6DF705001CC3E41D0097B127 /* WSTestClassHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTestClassHeaderFooterView.h; sourceTree = "<group>"; };
+		6DF705011CC3E41D0097B127 /* WSTestClassHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSTestClassHeaderFooterView.m; sourceTree = "<group>"; };
+		6DF705031CC3E7F20097B127 /* WSTestNibHeaderFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTestNibHeaderFooterView.h; sourceTree = "<group>"; };
+		6DF705041CC3E7F20097B127 /* WSTestNibHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSTestNibHeaderFooterView.m; sourceTree = "<group>"; };
+		6DF705061CC3E80C0097B127 /* WSTestNibHeaderFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WSTestNibHeaderFooterView.xib; sourceTree = "<group>"; };
+		6DF705091CC3ECEE0097B127 /* WSSupplementaryItemTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSupplementaryItemTests.m; sourceTree = "<group>"; };
 		6DFDDB6B1CC2079500F39F9D /* NSArray+WSAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+WSAction.h"; sourceTree = "<group>"; };
 		6DFDDB6C1CC2079500F39F9D /* NSArray+WSAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+WSAction.m"; sourceTree = "<group>"; };
 		6DFDDB6F1CC20B7600F39F9D /* WSActionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSActionTests.m; sourceTree = "<group>"; };
@@ -190,6 +207,14 @@
 				6D5FF9361BBAF15D001DDD91 /* Launch Screen.storyboard */,
 				6D7034B81C5A175E005B178C /* CellWithButton.h */,
 				6D7034B91C5A175E005B178C /* CellWithButton.m */,
+				6DF704F81CC3DFDB0097B127 /* WSTestXibTableViewCell.h */,
+				6DF704F91CC3DFDB0097B127 /* WSTestXibTableViewCell.m */,
+				6DF704FA1CC3DFDB0097B127 /* WSTestXibTableViewCell.xib */,
+				6DF705001CC3E41D0097B127 /* WSTestClassHeaderFooterView.h */,
+				6DF705011CC3E41D0097B127 /* WSTestClassHeaderFooterView.m */,
+				6DF705031CC3E7F20097B127 /* WSTestNibHeaderFooterView.h */,
+				6DF705041CC3E7F20097B127 /* WSTestNibHeaderFooterView.m */,
+				6DF705061CC3E80C0097B127 /* WSTestNibHeaderFooterView.xib */,
 			);
 			name = "Example for WSTableKit";
 			path = WSTableKit;
@@ -209,6 +234,8 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				6DF705081CC3ECB00097B127 /* Supplementary */,
+				6DF704FD1CC3E04F0097B127 /* Categories */,
 				6DFDDB6E1CC20B5E00F39F9D /* Actions */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
@@ -301,6 +328,22 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
+		6DF704FD1CC3E04F0097B127 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				6DF704FE1CC3E07F0097B127 /* UITableViewExtensionsTests.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		6DF705081CC3ECB00097B127 /* Supplementary */ = {
+			isa = PBXGroup;
+			children = (
+				6DF705091CC3ECEE0097B127 /* WSSupplementaryItemTests.m */,
+			);
+			name = Supplementary;
+			sourceTree = "<group>";
+		};
 		6DFDDB6E1CC20B5E00F39F9D /* Actions */ = {
 			isa = PBXGroup;
 			children = (
@@ -389,10 +432,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DF705071CC3E80C0097B127 /* WSTestNibHeaderFooterView.xib in Resources */,
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6D5FF9371BBAF15D001DDD91 /* Launch Screen.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				6DF704FC1CC3DFDB0097B127 /* WSTestXibTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,11 +466,14 @@
 				6D5FF9351BBADC61001DDD91 /* WSTableViewCell.m in Sources */,
 				6D87A39B1CA304B400FEE1AA /* UITableView+WSTableExtension.m in Sources */,
 				6D7034BA1C5A175E005B178C /* CellWithButton.m in Sources */,
+				6DF705051CC3E7F20097B127 /* WSTestNibHeaderFooterView.m in Sources */,
+				6DF705021CC3E41D0097B127 /* WSTestClassHeaderFooterView.m in Sources */,
 				6D118C161C8341F3004A4AAF /* WSHeaderFooterView.m in Sources */,
 				6003F5A7195388D20070C39A /* WSViewController.m in Sources */,
 				6D816B691BBBBF5C00F175AC /* NSArray+WSSortable.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				6D87A39E1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m in Sources */,
+				6DF704FB1CC3DFDB0097B127 /* WSTestXibTableViewCell.m in Sources */,
 				6D5FF9341BBADC61001DDD91 /* WSSection.m in Sources */,
 				6D5FF9321BBADC61001DDD91 /* WSSectionContainer.m in Sources */,
 				6DB043811CA5B396002CF38D /* WSDefaultIdentifierConvention.m in Sources */,
@@ -438,8 +486,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DFDDB761CC2351300F39F9D /* WSNSArrayActionsTests.m in Sources */,
+				6DF704FF1CC3E07F0097B127 /* UITableViewExtensionsTests.m in Sources */,
 				6DFDDB701CC20B7600F39F9D /* WSActionTests.m in Sources */,
 				6DFDDB741CC22BE300F39F9D /* WSActionsHolderTests.m in Sources */,
+				6DF7050A1CC3ECEE0097B127 /* WSSupplementaryItemTests.m in Sources */,
 				6DFDDB721CC229DF00F39F9D /* WSActionInfoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

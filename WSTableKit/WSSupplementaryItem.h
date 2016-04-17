@@ -12,7 +12,9 @@
 
 @class WSSupplementaryItem;
 
-typedef void (^WSSupplementaryClickBlock)(UITableViewHeaderFooterView<WSCellClass> * _Nonnull headerFooter, WSSupplementaryItem * _Nonnull item);
+typedef void (^WSSupplementaryClickBlock)(_Nonnull id<WSCellClass> headerFooter, WSSupplementaryItem * _Nonnull item);
+
+extern const CGFloat kSectionDefaultHeight;
 
 @interface WSSupplementaryItem : WSCellItem<WSSortable>
 

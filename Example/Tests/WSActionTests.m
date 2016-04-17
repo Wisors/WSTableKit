@@ -28,7 +28,6 @@
 }
 
 - (void)testDesignatedInitializer {
-    
     NSString *testkey = @"TestKey";
     XCTestExpectation *actionBlockExp = [self expectationWithDescription:@"wait for action block"];
     XCTestExpectation *returnValueBlockExp = [self expectationWithDescription:@"wait for return block"];
@@ -54,7 +53,6 @@
 }
 
 - (void)testAddAction {
-    
     WSAction *action = [[WSAction alloc] initWithKey:@"test" actionBlock:nil returnValueBlock:nil];
     XCTAssertNotNil(action.actionBlocks, @"There is an empty action blocks array");
     XCTAssertTrue(action.actionBlocks.count == 0, @"Actions blocks array is empty");
@@ -75,7 +73,6 @@
 }
 
 - (void)testRemoveAllActionBlocks {
-    
     WSActionBlock actionBlock = ^(WSActionInfo *actionInfo){};
     WSAction *action = [[WSAction alloc] initWithKey:@"test" actionBlock:actionBlock returnValueBlock:nil];
     
@@ -85,7 +82,6 @@
 }
 
 - (void)testActionTypeInits {
-    
     WSAction *action1 = [WSAction actionWithType:WSActionClick actionBlock:^(WSActionInfo * _Nonnull actionInfo) {}];
     WSAction *action2 = [WSAction actionWithType:WSActionClick returnValueBlock:^id _Nonnull(WSActionInfo * _Nonnull actionInfo) {return nil;}];
     
@@ -94,7 +90,6 @@
 }
 
 - (void)testActionInvocation {
-    
     XCTestExpectation *actionBlockExp = [self expectationWithDescription:@"wait for action block"];
     XCTestExpectation *returnValueBlockExp = [self expectationWithDescription:@"wait for return block"];
     WSActionBlock actionBlock = ^(WSActionInfo *actionInfo){
