@@ -34,14 +34,6 @@
     [self doInit];
 }
 
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    
-    //separators are hidden by default
-    _topBorderLayer.hidden = _bottomBorderLayer.hidden = YES;
-    [self setSeparatorsInsets:UIEdgeInsetsMake(0, 15, 0, 0)];
-}
-
 - (void)doInit {
     _baseSize = 1 / [UIScreen mainScreen].scale;
     [self setSeparatorsInsets:UIEdgeInsetsMake(0, 15, 0, 0)];

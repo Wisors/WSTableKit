@@ -34,6 +34,7 @@
 		6D87A39B1CA304B400FEE1AA /* UITableView+WSTableExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D87A39A1CA304B400FEE1AA /* UITableView+WSTableExtension.m */; };
 		6D87A39E1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D87A39D1CA305FC00FEE1AA /* WSDefaultCellsPrototyper.m */; };
 		6DB043811CA5B396002CF38D /* WSDefaultIdentifierConvention.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */; };
+		6DF2A9C61CE0FC9E00F530B2 /* WSSectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2A9C51CE0FC9E00F530B2 /* WSSectionTests.m */; };
 		6DF5A0EA1C6F2281004D5DDB /* WSActionInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */; };
 		6DF704FB1CC3DFDB0097B127 /* WSTestXibTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DF704F91CC3DFDB0097B127 /* WSTestXibTableViewCell.m */; };
 		6DF704FC1CC3DFDB0097B127 /* WSTestXibTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DF704FA1CC3DFDB0097B127 /* WSTestXibTableViewCell.xib */; };
@@ -114,6 +115,7 @@
 		6DB0437D1CA5B220002CF38D /* WSIdentifierConvention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSIdentifierConvention.h; sourceTree = "<group>"; };
 		6DB0437F1CA5B396002CF38D /* WSDefaultIdentifierConvention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSDefaultIdentifierConvention.h; sourceTree = "<group>"; };
 		6DB043801CA5B396002CF38D /* WSDefaultIdentifierConvention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSDefaultIdentifierConvention.m; sourceTree = "<group>"; };
+		6DF2A9C51CE0FC9E00F530B2 /* WSSectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSSectionTests.m; sourceTree = "<group>"; };
 		6DF5A0E81C6F2281004D5DDB /* WSActionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSActionInfo.h; sourceTree = "<group>"; };
 		6DF5A0E91C6F2281004D5DDB /* WSActionInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSActionInfo.m; sourceTree = "<group>"; };
 		6DF704F81CC3DFDB0097B127 /* WSTestXibTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSTestXibTableViewCell.h; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				6DF2A9C41CE0FC7B00F530B2 /* Section */,
 				6DF705081CC3ECB00097B127 /* Supplementary */,
 				6DF704FD1CC3E04F0097B127 /* Categories */,
 				6DFDDB6E1CC20B5E00F39F9D /* Actions */,
@@ -326,6 +329,14 @@
 				6D5FF92F1BBADC61001DDD91 /* WSTableViewDirector.h */,
 			);
 			name = Protocols;
+			sourceTree = "<group>";
+		};
+		6DF2A9C41CE0FC7B00F530B2 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				6DF2A9C51CE0FC9E00F530B2 /* WSSectionTests.m */,
+			);
+			name = Section;
 			sourceTree = "<group>";
 		};
 		6DF704FD1CC3E04F0097B127 /* Categories */ = {
@@ -485,6 +496,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DF2A9C61CE0FC9E00F530B2 /* WSSectionTests.m in Sources */,
 				6DFDDB761CC2351300F39F9D /* WSNSArrayActionsTests.m in Sources */,
 				6DF704FF1CC3E07F0097B127 /* UITableViewExtensionsTests.m in Sources */,
 				6DFDDB701CC20B7600F39F9D /* WSActionTests.m in Sources */,

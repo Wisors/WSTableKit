@@ -122,7 +122,7 @@
 #pragma mark - UITableViewDelegate -
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (_sectionHeader && [_items count] != 0) {
+    if (_sectionHeader && ((_showSupplementaryInEmptySection) ? YES : [_items count] != 0)) {
         UITableViewHeaderFooterView<WSCellClass> *header = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionHeader.viewClass];
         if (_sectionHeader.adjustment) {
             [_sectionHeader.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:header item:_sectionHeader path:nil userInfo:nil]];
@@ -135,7 +135,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (_sectionFooter && [_items count] != 0) {
+    if (_sectionFooter && ((_showSupplementaryInEmptySection) ? YES : [_items count] != 0)) {
         UITableViewHeaderFooterView<WSCellClass> *footer = [_cellPrototyper headerFooterPrototypeForCellClass:_sectionFooter.viewClass];
         if (_sectionFooter.adjustment) {
             [_sectionFooter.adjustment invokeActionWithInfo:[WSActionInfo actionInfoWithView:footer item:_sectionFooter path:nil userInfo:nil]];
@@ -337,12 +337,14 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
     if (index < [_items count]) {
         [_cellHeights removeObjectForKey:@(index)];
         [_items replaceObjectAtIndex:index withObject:item];
+        [_cellPrototyper registerIfNeededCellClass:item.viewClass];
     }
 }
 
 #pragma mark - Remove Items -
 
 - (void)removeItemAtIndex:(NSInteger)index {
+    NSAssert(index < [_items count], @"Remove item beyond items range");
     if (index < [_items count]) {
         [self removeCachedHeightsAboveIndex:index];
         [_items removeObjectAtIndex:index];
@@ -350,9 +352,16 @@ static inline id ws_invokeIndexPathReturnActionWithType(WSActionType type, UITab
 }
 
 - (void)removeItemsAtIndexes:(NSIndexSet *)set {
-    [set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        [self removeItemAtIndex:idx];
+    [_items removeObjectsAtIndexes:set];
+    __block NSUInteger minIndex = NSUIntegerMax;
+    [set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx < minIndex) {
+            minIndex = idx;
+        }
     }];
+    if (minIndex != NSUIntegerMax) {
+        [self removeCachedHeightsAboveIndex:minIndex];
+    }
 }
 
 - (void)removeAllItems {

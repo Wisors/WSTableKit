@@ -48,14 +48,14 @@
  *
  *  @param section Section to insert.
  */
-- (void)addSection:(nonnull WSSection *)section;
+- (void)addSection:(nullable WSSection *)section;
 /**
  *  Add section at specific index. If index is already occupied, the objects at index and beyond are shifted by adding 1 to their indices to make room.
  *
  *  @param section Section to insert.
  *  @param index Section index.
  */
-- (void)addSection:(nonnull WSSection *)section atIndex:(NSInteger)index;
+- (void)addSection:(nullable WSSection *)section atIndex:(NSInteger)index;
 
 - (void)replaceSectionAtIndex:(NSInteger)index withSection:(nonnull WSSection *)section;
 - (void)updateSectionAtIndex:(NSInteger)index withItems:(nonnull NSArray<WSCellItem *> *)items;

@@ -21,6 +21,11 @@
 @property (nonatomic, nullable) WSSupplementaryItem *sectionHeader;
 @property (nonatomic, nullable) WSSupplementaryItem *sectionFooter;
 
+/**
+ *  Define either show or not sectionHeader/sectionFooter even if sections contains no cells.
+ */
+@property (nonatomic, assign) BOOL showSupplementaryInEmptySection; // Default - NO
+
 + (nonnull instancetype)sectionWithTableView:(nonnull UITableView *)tableView;
 
 /**
@@ -73,7 +78,7 @@
  *
  *  @param items Array if CellItem objects.
  */
-- (void)updateWithItems:(nonnull NSArray<WSCellItem *> *)items;
+- (void)updateWithItems:(nullable NSArray<WSCellItem *> *)items;
 /**
  *  Add item at the end of section.
  *

@@ -8,14 +8,39 @@
 
 #import "WSHeaderFooterView.h"
 
+@interface WSHeaderFooterView()
+
+@property (nonatomic) UITapGestureRecognizer *clickRecognizer;
+
+@end
+
 @implementation WSHeaderFooterView
 
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    
-    if ([self.item.object isKindOfClass:[UIView class]]) {
-        [self.item.object removeFromSuperview];
+#pragma mark - Click action -
+
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
+    if ((self = [super initWithReuseIdentifier:reuseIdentifier])) {
+        [self ws_doInit];
     }
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if ((self = [super initWithCoder:aDecoder])) {
+        [self ws_doInit];
+    }
+    
+    return self;
+}
+
+- (void)ws_doInit {
+    _clickRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ws_headerClicked:)];
+}
+
+- (void)ws_headerClicked:(id)sender {
+    WSAction *action = [self.item.actionsHolder actionForType:WSActionClick];
+    [action invokeActionWithInfo:[WSActionInfo actionInfoWithView:self item:self.item path:nil userInfo:nil]];
 }
 
 #pragma mark - WSCellClass protocol -
@@ -38,6 +63,7 @@
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[view]|" options:0 metrics:nil views:@{@"view" : view}]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view" : view}]];
     }
+    self.clickRecognizer.enabled = ([self.item.actionsHolder actionForType:WSActionClick]) ? YES : NO;
 }
 
 - (CGFloat)calculateHeightForAutolayoutCell {

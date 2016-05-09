@@ -72,8 +72,6 @@
                                tableView:(nullable UITableView *)tableView
                          adjustmentBlock:(nullable WSAdjustmentBlock)adjustmentBlock
                           scrollDelegate:(nullable id<UIScrollViewDelegate>)scrollDelegate {
-
-    NSAssert(sections != nil, @"Can't be initialized with nil sections");
     if ((self = [super init])) {
         _sections       = ([sections count] > 0) ? [sections mutableCopy] : [NSMutableArray new];
         _cellPrototyper = [[WSDefaultCellsPrototyper alloc] initWithTableView:tableView identifierConvention:[WSDefaultIdentifierConvention new]];
@@ -222,17 +220,21 @@
 
 @implementation WSSectionContainer(SectionAccess)
 
-- (void)addSection:(nonnull WSSection *)section {
-    section.cellPrototyper = self.cellPrototyper;
-    [self.sections addObject:section];
+- (void)addSection:(nullable WSSection *)section {
+    if (section) {
+        section.cellPrototyper = self.cellPrototyper;
+        [self.sections addObject:section];
+    }
 }
 
-- (void)addSection:(nonnull WSSection *)section atIndex:(NSInteger)index {
-    section.cellPrototyper = self.cellPrototyper;
-    if (index >= [self.sections count]) {
-        [self.sections addObject:section];
-    } else {
-        [self.sections insertObject:section atIndex:index];
+- (void)addSection:(nullable WSSection *)section atIndex:(NSInteger)index {
+    if (section) {
+        section.cellPrototyper = self.cellPrototyper;
+        if (index >= [self.sections count]) {
+            [self.sections addObject:section];
+        } else {
+            [self.sections insertObject:section atIndex:index];
+        }
     }
 }
 
