@@ -36,6 +36,7 @@
 
 - (void)ws_doInit {
     _clickRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ws_headerClicked:)];
+    [self.contentView addGestureRecognizer:_clickRecognizer];
 }
 
 - (void)ws_headerClicked:(id)sender {
