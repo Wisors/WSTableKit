@@ -26,6 +26,14 @@
 @synthesize adjustment = _adjustment;
 @synthesize cellPrototyper = _cellPrototyper;
 
+- (void)dealloc {
+    if (_tableView.delegate == self) { // Because we retain tableView it may call scroll event to us even after release of object
+        _tableView.dataSource = nil;
+        _tableView.delegate = nil;
+        _tableView = nil;
+    }
+}
+
 + (nonnull instancetype)sectionWithTableView:(nonnull UITableView *)tableView {
     return [[self alloc] initWithItems:nil scrollDelegate:nil tableView:tableView];
 }
